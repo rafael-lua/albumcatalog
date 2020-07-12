@@ -1,0 +1,48 @@
+/* Simple style */
+
+.main
+{
+	width: 95%;
+	margin: auto;
+	text-align: center;
+	border: 1px solid black;
+}
+
+.homeuser
+{
+	margin-right: 10px;
+	text-align: right;
+}
+
+.searchresults
+{
+	width: 80%;
+	text-align: left;
+	padding: 25px;
+}
+
+.showalbum
+{
+	text-align: left;
+	padding: 50px;
+}
+
+.showalbum .albumtable
+{
+	width: 100%;
+	position: relative;
+	border-collapse: collapse;
+}
+
+::placeholder
+{
+	text-align: center;
+}
+
+.review
+{
+	margin: 5px;
+	padding: 10px;
+	border: 1px solid black;
+    /*white-space: pre-wrap;*/
+}
