@@ -1,6 +1,24 @@
-<h3>Bem-vindo! <br> Aqui você pode pesquisar as informações de diversos álbuns musicais. <br> 
-<i>Caso tenha interesse em montar coleções e acessar outras funcionalidades:
-Acesse ou crie uma conta!</i></h3>
+<div class="columns is-centered">
+	<div class="column is-narrow">
+		<h1 class="title is-1 my-6">CATÁLOGO DE ÁLBUNS MUSICAIS</h1>
+	</div>
+</div>
+
+<div class="columns is-centered">
+	<div class="column is-narrow">
+		<h3 class="subtitle is-3">Bem-vindo!</h3>
+	</div>
+</div>
+
+<div class="columns is-centered">
+	<div class="column is-narrow">
+		<p style="text-align: center;">
+		Aqui você pode pesquisar as informações de diversos álbuns musicais. 
+		<br><em>Caso tenha interesse em montar coleções e acessar outras funcionalidades:
+		<strong>Acesse ou crie uma conta!</strong></em>
+		</p>
+	</div>
+</div>
 
 <br><br><br>
 
@@ -9,7 +27,7 @@ Acesse ou crie uma conta!</i></h3>
 <form action="<?php echo base_url('albums');?>" method="post">
 	<?= csrf_field() ?> <!-- Function that creates a hidden input with a CSRF token that helps protect against some common attacks. -->
 
-    <input type="text" name="album"/><br><br>
+    <input type="text" name="album" required /><br><br>
 	<input type="submit" name="submit" value="Pesquisar" style="width:10%"/>
 
 </form>
