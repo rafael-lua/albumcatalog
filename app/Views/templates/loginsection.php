@@ -6,7 +6,7 @@
 				<div class="box">					
 						<form action="<?php echo base_url('login'); ?>" method="post">
 							<p class="title" style="text-align: center;"><strong> LOGIN </strong></p>
-							<i class="fas fa-users fa-3x" style="text-align: center; width: 100%;"></i>
+							<i class="fas fa-users fa-2x" style="text-align: center; width: 100%;"></i>
 							<hr>
 							<div class="field">
 								<label class="label">Username</label>

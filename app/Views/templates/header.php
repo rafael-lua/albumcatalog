@@ -16,31 +16,33 @@
 	<body>
 	<header>
 		<nav class="navbar is-dark" role="navigation" aria-label="main navigation">
-			<div class="navbar-brand">
-				<p class="navbar-item mr-5">LOGOTIPO</p>
+		<div class="container">
+				<div class="navbar-brand">
+					<p class="navbar-item mr-5">LOGOTIPO</p>
 
-				<a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarMain">
-					<span aria-hidden="true"></span>
-					<span aria-hidden="true"></span>
-					<span aria-hidden="true"></span>
-				</a>
-			</div>
-
-			<div id="navbarMain" class="navbar-menu">
-				<div class="navbar-start">
-					<a class="navbar-item" href="<?php echo base_url(); ?>">
-						Home
+					<a id="burgerMain" role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarMain" onclick="navBurgerMain()">
+						<span aria-hidden="true"></span>
+						<span aria-hidden="true"></span>
+						<span aria-hidden="true"></span>
 					</a>
 				</div>
-				<div class="navbar-end">
-					<div class="navbar-item">
-						<div class="buttons">
-							<button class="button is-primary">
-								<strong>Sign up</strong>
-							</button>
-							<button class="button is-light" onclick="loginModal()">
-								Log in
-							</button>
+
+				<div id="navbarMain" class="navbar-menu">
+					<div class="navbar-start">
+						<a class="navbar-item" href="<?php echo base_url(); ?>">
+							Home
+						</a>
+					</div>
+					<div class="navbar-end">
+						<div class="navbar-item">
+							<div class="buttons">
+								<button class="button is-info">
+									<strong>Sign up</strong>
+								</button>
+								<button class="button is-info is-light" onclick="loginModal()">
+									Log in
+								</button>
+							</div>
 						</div>
 					</div>
 				</div>

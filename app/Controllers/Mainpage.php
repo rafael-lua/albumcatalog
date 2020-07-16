@@ -30,7 +30,7 @@ class Mainpage extends BaseController
 					$this->session->set("homeErrorId", 0);
 					break;
 				case 3: # No results found (!SHOULD CHANGE IN THE FUTURE, THE NO REUSLTS PAGE SHOULD BE THE SAME OF THE RESULTS!)
-					$data["searchError"] = "Nenhum resultado encontrado!";
+					$data["searchError"] = "Nenhum resultado encontrado! Tente algo diferente...";
 					$this->session->set("homeErrorId", 0);
 					break;
 			}

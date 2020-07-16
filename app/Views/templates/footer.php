@@ -1,12 +1,12 @@
 
 </body>
 
-<footer>
-	<br>
-	<div style="text-align:center">
+<footer class="footer">
+	<div class="content has-text-centered">
+		<p>
 		<em>&copy; 2020</em>
+		</p>
 	</div>
-	<br>
 </footer>
 
 </html>
