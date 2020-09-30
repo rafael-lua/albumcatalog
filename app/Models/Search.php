@@ -7,7 +7,7 @@ use App\Models\Studio;
 use App\Models\Genre;
 /*
 
-Sometimes SELECT needs a 2 value of false and WHERE a 3 value of false, so codeigntier don't protect the fields automatically.
+Sometimes SELECT needs a second value of false and WHERE a third value of false, so codeigntier don't protect the fields automatically.
 When using compound names or alias (tablename.colunm), it can break the query.
 
 BUT, using WHERE with false will not quote strings coming from variables, so for these ones a second where with protection can be called.
@@ -25,7 +25,7 @@ class Search extends Model
 {	
 	protected $table = "album";	
 	protected $primaryKey = "id";
-    protected $returnType = "array";
+  protected $returnType = "array";
 	
 	# return all informations about one specific album.
 	public function getFullAlbum($albumId = false)

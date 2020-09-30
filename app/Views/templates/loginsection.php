@@ -39,6 +39,7 @@
 	<button class="modal-close is-large" aria-label="close" onclick="loginModal()"></button>
 </div>
 
+<!-- Below is code to deal with login fails -->
 
 <!-- <?php if(!isset($userAccount)) : ?>
 			

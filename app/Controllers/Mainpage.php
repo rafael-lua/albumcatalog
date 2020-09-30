@@ -2,7 +2,8 @@
 
 
 # Controle principal da aplicação.
-# Ele é usado para chamada de páginas principais da aplicação, que estão dentro da pasta mainpages. Por exemplo o home, about, etc...
+# Ele é usado para chamada de páginas principais da aplicação, que estão dentro da pasta mainpages. 
+# Por exemplo o home, about, etc...
 
 class Mainpage extends BaseController
 {	

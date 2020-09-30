@@ -1,3 +1,5 @@
+<main>
+
 <section class="section">
 <div class="columns is-centered">
 	<div class="column is-narrow">
@@ -7,7 +9,7 @@
 
 <div class="columns is-centered">
 	<div class="column is-narrow">
-		<h3 class="subtitle is-3">Bem-vindo!</h3>
+		<h2 class="subtitle is-3">Bem-vindo!</h2>
 	</div>
 </div>
 
@@ -83,3 +85,5 @@
 	</div>
 </div>
 </section>
+
+</main>
