@@ -27,6 +27,9 @@ class Search extends Model
 	protected $primaryKey = "id";
   protected $returnType = "array";
 	
+
+
+
 	# return all informations about one specific album.
 	public function getFullAlbum($albumId = false)
 	{
@@ -50,6 +53,62 @@ class Search extends Model
 		return $albumData;
 		
 	}
+
+
+
+	# Returns the artists for the specified album id
+	public function getArtistByAlbum($albumId = false) 
+	{
+		# If this function is called without values for albumId, throws a error page back.
+		if(($albumId === false) || ($albumId === NULL))
+		{
+			throw new \CodeIgniter\Exceptions\PageNotFoundException();
+		}
+
+		$modelArtist = new Artist();
+		$artists = $modelArtist->getNameByAlbum($albumId);
+		
+		return $artists;
+
+	}
+
+
+
+	# Returns the genres for the specified album id
+	public function getGenreByAlbum($albumId = false) 
+	{
+		# If this function is called without values for albumId, throws a error page back.
+		if(($albumId === false) || ($albumId === NULL))
+		{
+			throw new \CodeIgniter\Exceptions\PageNotFoundException();
+		}
+
+		$modelGenre = new Genre();
+		$genres = $modelGenre->getNameByAlbum($albumId);
+		
+		return $genres;
+
+	}
+
+
+
+	# Returns the studios for the specified album id
+	public function getStudioByAlbum($albumId = false) 
+	{
+		# If this function is called without values for albumId, throws a error page back.
+		if(($albumId === false) || ($albumId === NULL))
+		{
+			throw new \CodeIgniter\Exceptions\PageNotFoundException();
+		}
+
+		$modelStudio = new Studio();
+		$studios = $modelStudio->getNameByAlbum($albumId);
+		
+		return $studios;
+
+	}
+
+
 	
 	# Returns all albums that match the passed name, or if no value is passed return every single one!
 	public function findAlbum($albumName = false) # If you pass a null value, it will not have default false!
@@ -62,7 +121,25 @@ class Search extends Model
 		return $this->asArray()->like(['name' => $albumName])->findAll();
 
 	}
+
+
+
+		# Returns all albums that match the passed name and filters
+		public function findAlbumWithFilters($albumId = false, $filters = false) 
+		{
+				# If this function is called without values for albumId, throws a error page back.
+				if(($albumId === false) || ($albumId === NULL))
+				{
+					throw new \CodeIgniter\Exceptions\PageNotFoundException();
+				}
+
+				
 	
+		}
+	
+
+
+
 	# returns all albums by genre
 	public function findByGenre($genreName = false)
 	{

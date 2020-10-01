@@ -11,7 +11,7 @@ class Albums extends BaseController
 	
 	public function index()
 	{
-		# show all albuns method!
+		# Show the search page clean.
 		$search = new Search();
 		$data["albuns"] = $search->findAlbum();
 		
@@ -39,24 +39,41 @@ class Albums extends BaseController
 		}
 		else
 		{
+
 			# show the album that was searched!
 			$search = new Search();
 			
+
 			$albumName = $this->request->getVar("album");
 			
+			# search->findAlbumWithFilters(albumid, filters) ... work with  that
+
 			$data["albuns"] = $search->findAlbum($albumName);
+			foreach($data["albuns"] as $album)
+			{
+				$album["artist"] = $search->getArtistByAlbum($album["id"]);
+				$album["genre"] = $search->getGenreByAlbum($album["id"]);
+				$album["studio"] = $search->getStudioByAlbum($album["id"]);
+			}
+
+
+
 			
 			if($this->session->has("userAccount"))
 			{
 				$data["userAccount"] = $this->session->get("userAccount");
-			}
+			}			
 			
-			if(empty($data["albuns"] == true))
-			{
-				$this->session->set("homeErrorId", 3);
-				return redirect()->to(base_url());
+			if(empty($data["albuns"] == true)) # No results
+			{		
+				$data["searchError"] = "Nenhum resultado encontrado! Tente algo diferente...";
+
+				echo view('templates/header');
+				echo view('templates/loginsection', $data);
+				echo view('mainpages/searchresults', $data);
+				echo view('templates/footer');
 			}
-			else
+			else # Results found
 			{
 				echo view('templates/header');
 				echo view('templates/loginsection', $data);

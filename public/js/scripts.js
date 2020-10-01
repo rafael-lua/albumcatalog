@@ -1,4 +1,6 @@
 
+// Login functions
+
 function navBurgerMain()
 {
   var elementburger = document.getElementById("burgerMain");
@@ -17,4 +19,13 @@ function signUpModal()
 {
   var element = document.getElementById("user_modal");
   element.classList.toggle("is-active");
+}
+
+
+
+// Filter functions
+
+function ratingFilter()
+{
+  
 }
