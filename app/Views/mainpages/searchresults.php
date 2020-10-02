@@ -146,40 +146,108 @@
 						<span class="tag is-rounded is-info is-light">filter</span>
 						<span class="tag is-rounded is-info is-light">another filter</span>
 					</div>
-					<h3 class="subtitle is-3 has-text-weight-bold">Resultados (<?php echo count($albuns) ?>): </h3>
-					<hr class="my-1 has-background-grey-lighter" style=" margin: auto;">
 
+					<div class="level">
+						<div class="level-left">
+							<h3 class="subtitle is-3 has-text-weight-bold">
+							Resultados (<?php 
+								if(isset($albuns) && !empty($albuns))
+								{
+									echo count($albuns);
+								}
+								else
+								{
+									echo 0;
+								}
+							?>): 
+							</h3>
+						</div>
+						<div class="level-right">
+								<nav class="breadcrumb has-bullet-separator is-small" aria-label="breadcrumbs">
+									<ul>
+										<li id="order-az">
+											<i class="fas fa-sort-down fa-lg mr-1" style="color: hsl(141, 71%, 48%);"></i> <!-- fa-sort-up and down. toggle(up) with toggle (down) on JS to change -->
+											<a href="#"><small><strong>A-Z</strong></small></a>
+										</li>
+										<li id="order-rating"><a href="#"><small><strong>Rating</strong></small></a></li>
+										<li id="order-year"><a href="#"><small><strong>Year</strong></small></a></li>
+									</ul>
+								</nav>
+						</div>					
+					</div>
+
+					<hr class="my-1 has-background-grey-lighter" style=" margin: auto;">
+				
 					<?php if(is_array($albuns) && !empty($albuns)) : ?>
 
 						<?php foreach($albuns as $album) : ?>
 							
+							<?php 
+								# Compound names
+								$artistCompound = "";
+								$firstArtist = false;
+								foreach($album["artist"] as $artist)
+								{
+									if($firstArtist == false)
+									{
+										$artistCompound = $artist["name"];
+										$firstArtist = true;
+									}
+									else
+									{
+										$artistCompound = $artistCompound.", ".$artist["name"];
+									}
+								}
+								$studioCompound = "";
+								$firstStudio = false;
+								foreach($album["studio"] as $studio)
+								{
+									if($firstStudio == false)
+									{
+										$studioCompound = $studio["name"];
+										$firstStudio = true;
+									}
+									else
+									{
+										$studioCompound = $studioCompound.", ".$studio["name"];
+									}
+								}
+							
+							?>
+							
 							<div class="level my-3">
 								<div class="level-left">
-									<a>
-										<span id="album_title" class="mx-3 is-size-5"><strong>Album Name</strong></span>
+									<a href="<?php echo base_url(); ?>/albums/showalbum/<?php echo esc($album["id"]); ?>">
+										<span id="album_title" class="mx-3 is-size-5">
+											<strong>
+												<?php echo esc($album["name"]) ?>
+												<span class="is-size-7 has-text-grey-light"><em><?php echo "(id: ".esc($album["id"]).")"; ?></em></span>
+											</strong>
+										</span>
 									</a>
 								</div>
 								<div class="level-right">
 									<div>
-										<span id="album_artist" class="mx-3"><em>ARTIST</em></span>
-										<span id="album_year" class="mx-3"><em><small>STUDIO</small></em></span>
-										<span id="album_year" class="mx-3"><em><small>YEAR</small></em></span>
+										<span id="album_artist" class="mx-3"><em><strong><?php echo esc($artistCompound); ?></strong></em></span>
+										<span id="album_year" class="mx-3"><em><small><?php echo esc($studioCompound); ?></small></em></span>
+										<span id="album_year" class="mx-3"><em><small><?php echo esc($album["year"]); ?></small></em></span>
 									</div>
 								</div>
 							</div>
-							<span id="album_rate" class="mx-3"><strong>RATING</strong></span>
+							<span id="album_rate" class="mx-3"><strong>
+								<i class="fas fa-star fa-lg is-size-7" style="vertical-align: middle; color: #ffcc00;"></i>
+								<?php echo esc($album["rating"]); ?>
+							</strong></span>
 							<div class="tags" style="float: right;">
-								<span class="tag">Rock</span>
-								<span class="tag">Electronic</span>
-								<span class="tag">Classical</span>
-								<span class="tag">Pop</span>
-								<span class="tag">Jazz</span>
+								<?php foreach($album["genre"] as $genre) : ?>
+									<span class="tag"><?php echo esc($genre["name"]); ?></span>
+								<?php endforeach; ?>
 							</div>
 
 							<hr class="my-1 has-background-grey-lighter" style="margin: auto; clear: both;">
 							
 						<?php endforeach; ?>
-
+						
 					<?php endif; ?>
 
 				</div>
@@ -189,32 +257,6 @@
   </div>
 </div>
 
-
-
-
-<!--  
-
-<div class="searchresults">
-
-					<h3 class="subtitle is-3 has-text-weight-bold">Resultados (<?php echo count($albuns) ?>): </h3>
-
-					<?php if(is_array($albuns) && !empty($albuns)) : ?>
-
-					<?php foreach($albuns as $album) : ?>
-
-						<a href="<?php echo base_url(); ?>/albums/showalbum/<?php echo esc($album["id"]); ?>" style="padding:10px">
-						<?php echo esc($album["name"])." - ".esc($album["year"]." - ".esc($album["rating"])); ?><br>
-						</a>
-
-						<hr class="my-5 has-background-grey-lighter" style=" margin: auto;">
-						
-					<?php endforeach; ?>
-
-					<?php endif; ?>
-
-</div>
-
-  -->
 
 
 

@@ -48,10 +48,10 @@
 		<nav class="level is-mobile">
 			<div class="level-left">
     		<div class="level-item">
-					<form action="<?php echo base_url('albums/showall');?>" method="post" style="float:left;">
+					<form action="<?php echo base_url('albums/top100');?>" method="post" style="float:left;">
 						<div class="field">
 							<div class="control">
-								<button class="button is-link is-small" type="submit">Pesquisa Avançada</button>
+								<button class="button is-link is-small" type="submit">Listar Top 100</button>
 							</div>
 						</div>
 					</form>

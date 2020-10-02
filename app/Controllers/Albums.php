@@ -11,10 +11,9 @@ class Albums extends BaseController
 	
 	public function index()
 	{
+		###################################################################### FIX
 		# Show the search page clean.
-		$search = new Search();
-		$data["albuns"] = $search->findAlbum();
-		
+		$data = [];
 		if($this->session->has("userAccount"))
 		{
 			$data["userAccount"] = $this->session->get("userAccount");
@@ -22,10 +21,20 @@ class Albums extends BaseController
 		
 		echo view('templates/header');
 		echo view('templates/loginsection', $data);
-		echo view('mainpages/searchresults', $data);
+		echo view('mainpages/searchresults');
 		echo view('templates/footer');
 		
 	}
+
+
+	public function top100()
+	{
+		###################################################################### FIX
+		# Show the best 100 albums ordered by rating
+		
+		
+	}
+
 	
 	# search album method, find by its name
 	public function results($albumName = NULL)
@@ -47,9 +56,10 @@ class Albums extends BaseController
 			$albumName = $this->request->getVar("album");
 			
 			# search->findAlbumWithFilters(albumid, filters) ... work with  that
-
+			
 			$data["albuns"] = $search->findAlbum($albumName);
-			foreach($data["albuns"] as $album)
+			
+			foreach($data["albuns"] as &$album) # & makes it so it is by reference and can be modified
 			{
 				$album["artist"] = $search->getArtistByAlbum($album["id"]);
 				$album["genre"] = $search->getGenreByAlbum($album["id"]);
