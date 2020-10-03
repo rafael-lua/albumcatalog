@@ -27,12 +27,12 @@
 <div class="columns is-centered">
 	<div class="column is-7">
 		<div class="box has-background-white-ter">
-			<form action="<?php echo base_url('albums');?>" method="post">
+			<form action="<?php echo base_url('search');?>" method="post">
 				<?= csrf_field() ?> <!-- Function that creates a hidden input with a CSRF token that helps protect against some common attacks. -->
 
 				<div class="field">
 					<div class="control ">
-						<input type="text" name="album" class="input is-primary" placeholder="Digite o nome do álbum, artista, estúdio..." required />
+						<input type="text" name="search_value" class="input is-primary" placeholder="Digite o nome do álbum, artista, estúdio..." required />
 					</div>
 					<p class="help is-danger"><?php if(!empty($searchError)){echo esc($searchError);} ?></p>
 				</div>
@@ -48,7 +48,7 @@
 		<nav class="level is-mobile">
 			<div class="level-left">
     		<div class="level-item">
-					<form action="<?php echo base_url('albums/top100');?>" method="post" style="float:left;">
+					<form action="<?php echo base_url('search/top100');?>" method="post" style="float:left;">
 						<div class="field">
 							<div class="control">
 								<button class="button is-link is-small" type="submit">Listar Top 100</button>
@@ -60,7 +60,7 @@
 
 			<div class="level-right">
     		<div class="level-item">
-					<form action="<?php echo base_url('albums/showgenre');?>" method="post">
+					<form action="<?php echo base_url('search/showgenre');?>" method="post">
 						<div class="field has-addons">
 							<div class="control">
 								<button class="button is-link is-small" type="submit">Listar Gênero:</button>

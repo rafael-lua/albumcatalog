@@ -36,12 +36,12 @@ $routes->post('login', 'Accounts::login');
 $routes->get('login', 'Mainpage::redirectHome');
 $routes->match(['get', 'post'], 'logoff', 'Accounts::logoff');
 $routes->match(['get', 'post'], 'login/(:any)', 'Mainpage::redirectHome');
-$routes->match(['get', 'post'], 'albums', 'Albums::results');
-$routes->match(['get', 'post'], 'albums/top100', 'Albums::index'); # change "index" to "top100"
-$routes->match(['get', 'post'], 'albums/showgenre', 'Albums::findgenre');
-$routes->match(['get', 'post'], 'albums/showalbum/(:num)', 'Albums::showalbum/$1');
-$routes->match(['get', 'post'], 'albums/showalbum/(:any)', 'Mainpage::redirectHome');
-$routes->match(['get', 'post'], 'albums/showalbum', 'Mainpage::redirectHome');
+$routes->match(['get', 'post'], 'search', 'MainSearch::albums');
+$routes->match(['get', 'post'], 'search/top100', 'MainSearch::index'); # change "index" to "top100"
+$routes->match(['get', 'post'], 'search/showgenre', 'MainSearch::findGenre');
+$routes->match(['get', 'post'], 'search/showalbum/(:num)', 'MainSearch::showAlbum/$1');
+$routes->match(['get', 'post'], 'search/showalbum/(:any)', 'Mainpage::redirectHome');
+$routes->match(['get', 'post'], 'search/showalbum', 'Mainpage::redirectHome');
 $routes->get('(:any)', 'Mainpage::view/$1');
 
 /**

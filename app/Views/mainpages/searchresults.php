@@ -2,12 +2,12 @@
   <div class="column px-6 py-6">
 
     <!-- Top column -->
-		<form action="<?php echo base_url('albums');?>" method="post">
+		<form action="<?php echo base_url('search');?>" method="post">
 			<?= csrf_field() ?> <!-- Function that creates a hidden input with a CSRF token that helps protect against some common attacks. -->
 
 			<div class="field has-addons">
 				<div class="control is-expanded">
-					<input type="text" name="album" class="input is-primary" placeholder="Digite o nome do álbum, artista, estúdio..." required />
+					<input type="text" name="search_value" class="input is-primary" placeholder="Digite o nome do álbum, artista, estúdio..." required />
 				</div>
 				<div class="control">
 					<button class="button is-primary" type="submit">Pesquisar</button>
@@ -151,9 +151,9 @@
 						<div class="level-left">
 							<h3 class="subtitle is-3 has-text-weight-bold">
 							Resultados (<?php 
-								if(isset($albuns) && !empty($albuns))
+								if(isset($results["albums"]) && !empty($results["albums"]))
 								{
-									echo count($albuns);
+									echo count($results["albums"]);
 								}
 								else
 								{
@@ -178,9 +178,13 @@
 
 					<hr class="my-1 has-background-grey-lighter" style=" margin: auto;">
 				
-					<?php if(is_array($albuns) && !empty($albuns)) : ?>
+					<?php if(is_array($results) && !empty($results)) : 
+						
+						$albums = $results["albums"];
+					
+					?>
 
-						<?php foreach($albuns as $album) : ?>
+						<?php foreach($albums as $album) : ?>
 							
 							<?php 
 								# Compound names
@@ -217,7 +221,7 @@
 							
 							<div class="level my-3">
 								<div class="level-left">
-									<a href="<?php echo base_url(); ?>/albums/showalbum/<?php echo esc($album["id"]); ?>">
+									<a href="<?php echo base_url(); ?>/search/showalbum/<?php echo esc($album["id"]); ?>">
 										<span id="album_title" class="mx-3 is-size-5">
 											<strong>
 												<?php echo esc($album["name"]) ?>

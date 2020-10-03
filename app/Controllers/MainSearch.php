@@ -6,12 +6,11 @@ use App\Models\Search;
 use App\Models\User;
 use App\Models\Review;
 
-class Albums extends BaseController
+class MainSearch extends BaseController
 {
 	
 	public function index()
 	{
-		###################################################################### FIX
 		# Show the search page clean.
 		$data = [];
 		if($this->session->has("userAccount"))
@@ -27,20 +26,35 @@ class Albums extends BaseController
 	}
 
 
+
+
+
 	public function top100()
 	{
-		###################################################################### FIX
 		# Show the best 100 albums ordered by rating
 		
 		
 	}
 
+
+
+
+	public function showAll()
+	{
+		# The main result query, with albums, artists, etc... All together!
+		
+		
+	}
+
+
+
+
 	
-	# search album method, find by its name
-	public function results($albumName = NULL)
+	# main search method
+	public function albums($searchValue = NULL)
 	{
 		if(!$this->validate([
-			"album" => 	"required",
+			"search_value" => 	"required",
 		]))
 		{
 			$this->session->set("homeErrorId", 1);
@@ -53,28 +67,16 @@ class Albums extends BaseController
 			$search = new Search();
 			
 
-			$albumName = $this->request->getVar("album");
+			$searchValue = $this->request->getVar("search_value");
 			
-			# search->findAlbumWithFilters(albumid, filters) ... work with  that
-			
-			$data["albuns"] = $search->findAlbum($albumName);
-			
-			foreach($data["albuns"] as &$album) # & makes it so it is by reference and can be modified
-			{
-				$album["artist"] = $search->getArtistByAlbum($album["id"]);
-				$album["genre"] = $search->getGenreByAlbum($album["id"]);
-				$album["studio"] = $search->getStudioByAlbum($album["id"]);
-			}
-
-
-
+			$data["results"] = $search->findWithFilters($searchValue);
 			
 			if($this->session->has("userAccount"))
 			{
 				$data["userAccount"] = $this->session->get("userAccount");
 			}			
 			
-			if(empty($data["albuns"] == true)) # No results
+			if(empty($data["results"] == true)) # No results
 			{		
 				$data["searchError"] = "Nenhum resultado encontrado! Tente algo diferente...";
 
@@ -94,9 +96,13 @@ class Albums extends BaseController
 	}
 	
 	
+
+
+
+
 	# Show the full album and its songs, genre, artists, studio, etc!
 	# Also, brings the reviews and rank of it.
-	public function showalbum($albumId = NULL)
+	public function showAlbum($albumId = NULL)
 	{
 		$search = new Search();
 		$reviews = new Review();
@@ -115,9 +121,12 @@ class Albums extends BaseController
 		echo view('templates/footer');
 	}
 	
+
+
+
 	
 	# Returns all albums of that genre
-	public function findgenre($genreName = false)
+	public function findGenre($genreName = false)
 	{		
 		if(!$this->validate([
 			"genre" => 	"required",
