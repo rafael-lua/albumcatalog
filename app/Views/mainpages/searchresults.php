@@ -1,13 +1,16 @@
+<!-- <?php echo var_dump($debug); ?> -->
+
 <div class="columns">
   <div class="column px-6 py-6">
 
     <!-- Top column -->
-		<form action="<?php echo base_url('search');?>" method="post">
+		<form action="<?php echo base_url('search');?>" method="post" id="clean_search">
 			<?= csrf_field() ?> <!-- Function that creates a hidden input with a CSRF token that helps protect against some common attacks. -->
 
 			<div class="field has-addons">
 				<div class="control is-expanded">
-					<input type="text" name="search_value" class="input is-primary" placeholder="Digite o nome do álbum, artista, estúdio..." required />
+					<input type="text" id="search_value" name="search_value" class="input is-primary" 
+					placeholder="Digite o nome do álbum, artista, estúdio..." required/>
 				</div>
 				<div class="control">
 					<button class="button is-primary" type="submit">Pesquisar</button>
@@ -16,6 +19,10 @@
 			<p class="help is-danger"><?php if(!empty($searchError)){echo esc($searchError);} ?></p>
 		</form>
 
+		<form action="<?php echo base_url('search');?>" method="post" id="main_search_form">
+		<!-- This form has the "search_value" as well, but hidden, not required and with the last search value! -->
+		<input type="text" id="last_search" name="search_value" value="<?php if(isset($currentSearch)){echo esc($currentSearch);} ?>" hidden />
+		
     <div class="columns my-5">
 
       <div class="column">
@@ -24,7 +31,7 @@
 
 					<p class="panel-heading">Filters</p>
 
-					<form>
+					<!-- <form id="main_search_form"> -->
 
 						<div class="panel-block">
 							<div class="field is-grouped" style="margin: auto;">
@@ -132,11 +139,11 @@
 							Classical
 						</label>
 
-					</form>
+					<!-- </form> -->
 
 				</nav>
       </div>
-
+		</form>
       <div class="column is-four-fifths px-6" style="border-left: 1px solid #e6e6e6;">
         <!-- Right column -->
 
@@ -166,11 +173,23 @@
 								<nav class="breadcrumb has-bullet-separator is-small" aria-label="breadcrumbs">
 									<ul>
 										<li id="order-az">
-											<i class="fas fa-sort-down fa-lg mr-1" style="color: hsl(141, 71%, 48%);"></i> <!-- fa-sort-up and down. toggle(up) with toggle (down) on JS to change -->
-											<a href="#"><small><strong>A-Z</strong></small></a>
+											<button type="submit" form="main_search_form" class="button is-success is-light is-small mx-1">
+												<i class="fas fa-sort-down fa-lg mr-1" style="color: hsl(141, 71%, 48%); display: inline;"></i> <!-- fa-sort-up and down. toggle(up) with toggle (down) on JS to change -->
+												<small><strong>A-Z</strong></small>
+											</button>
 										</li>
-										<li id="order-rating"><a href="#"><small><strong>Rating</strong></small></a></li>
-										<li id="order-year"><a href="#"><small><strong>Year</strong></small></a></li>
+										<li id="order-rating">
+											<button type="submit" form="main_search_form" class="button is-info is-light is-small mx-1">
+												<i class="fas fa-sort-down fa-lg mr-1" style="color: hsl(141, 71%, 48%); display: none;"></i>
+												<a href="#"><small><strong>Rating</strong></small></a>
+											</button>
+										</li>
+										<li id="order-year">
+											<button type="submit" form="main_search_form" class="button is-info is-light is-small mx-1">
+												<i class="fas fa-sort-down fa-lg mr-1" style="color: hsl(141, 71%, 48%); display: none;"></i>
+												<a href="#"><small><strong>Year</strong></small></a>
+											</button>
+										</li>
 									</ul>
 								</nav>
 						</div>					
@@ -178,11 +197,31 @@
 
 					<hr class="my-1 has-background-grey-lighter" style=" margin: auto;">
 				
-					<?php if(is_array($results) && !empty($results)) : ?>
+					<?php if (is_array($results) && !empty($results)) : ?>
+
+						<?php # Order the current results by name.
+							
+							# The direction asc and desc needs a function for each case. 
+							# Since functions will not access values outside of their scope without passing, $order is not accessible.
+							if (empty($order["type"])) { $order["type"] = "orderResultsByNameAsc";}
+
+							function orderResultsByNameAsc($resultA, $resultB)
+							{
+								return strcmp($resultA["name"], $resultB["name"]);
+							}
+
+							function orderResultsByNameDesc($resultA, $resultB)
+							{
+								return strcmp($resultB["name"], $resultA["name"]);
+							}
+							
+							usort($results, $order["type"]);
+							
+						?>
 
 						<?php foreach($results as $result) : ?>
 
-							<?php if($result["type"] == "album") : ?>
+							<?php if($result["type"] == "album") : ?>				<!-- Albums -->
 							
 								<?php 
 									# Compound names
@@ -220,7 +259,7 @@
 								<div class="level my-3">
 									<div class="level-left">
 										<a href="<?php echo base_url(); ?>/search/showalbum/<?php echo esc($result["id"]); ?>">
-											<span id="album_title" class="mx-3 is-size-5">
+											<span id="album_name" class="mx-3 is-size-5">
 												<strong>
 													<?php echo esc($result["name"]); ?>
 													<span class="is-size-7 has-text-grey-light"><em><?php echo "(id: ".esc($result["id"]).")"; ?></em></span>
@@ -236,7 +275,7 @@
 										</div>
 									</div>
 								</div>
-								<span id="album_rate" class="mx-3"><strong>
+								<span id="album_rate" class="mx-3 is-size-5"><strong>
 									<i class="fas fa-star fa-lg is-size-7" style="vertical-align: middle; color: #ffcc00;"></i>
 									<?php echo esc($result["rating"]); ?>
 								</strong></span>
@@ -246,17 +285,52 @@
 									<?php endforeach; ?>
 								</div>
 							
-							<?php elseif($result["type"] == "artist") : ?>
+							<?php elseif($result["type"] == "artist") : ?> 			<!-- Artists -->
+								
+								<div class="level mt-3 mb-1">
+									<div class="level-left">
+										<a href="#">
+											<span id="artist_name" class="mx-3 is-size-6">
+												<strong style="opacity: 0.85;">
+													<?php echo esc($result["name"]); ?>
+												</strong>
+											</span>
+										</a>
+									</div>
+									<div class="level-right">
+										<span id="artist_top_album" class="mx-3 is-size-6 has-text-weight-bold">
+											<em class="mx-3"><?php echo esc($result["album"]["name"]); ?></em>
+											<i class="fas fa-star fa-lg is-size-7" style="vertical-align: middle; color: #ffcc00;"></i>
+											<?php echo esc($result["album"]["rating"]); ?>
+										</span>
+									</div>
+								</div>
+								<span id="album_rate" class="mx-3 is-size-7"><strong class="has-text-grey">ARTIST</strong></span>
+								<span id="album_rate" class="mx-3 is-size-7" style="float: right;"><strong class="has-text-grey"><em>BEST RATED ALBUM</em></strong></span>
+							
 
-								<?php echo "ARTIST :" . esc($result["name"]); ?>
-								<?php echo "ALBUM :" . esc($result["album"]["name"]); ?>
-								<?php echo "RATING :" . esc($result["album"]["rating"]); ?>
-
-							<?php elseif($result["type"] == "studio") : ?>
-
-								<?php echo "STUDIO :" . esc($result["name"]); ?>
-								<?php echo "ALBUM :" . esc($result["album"]["name"]); ?>
-								<?php echo "RATING :" . esc($result["album"]["rating"]); ?>
+							<?php elseif($result["type"] == "studio") : ?>			<!-- Studios -->
+								
+								<div class="level mt-3 mb-1">
+									<div class="level-left">
+										<a href="#">
+											<span id="studio_name" class="mx-3 is-size-6">
+												<strong style="opacity: 0.85;">
+													<?php echo esc($result["name"]); ?>
+												</strong>
+											</span>
+										</a>
+									</div>
+									<div class="level-right">
+										<span id="studio_top_album" class="mx-3 is-size-6 has-text-weight-bold">
+											<em class="mx-3"><?php echo esc($result["album"]["name"]); ?></em>
+											<i class="fas fa-star fa-lg is-size-7" style="vertical-align: middle; color: #ffcc00;"></i>
+											<?php echo esc($result["album"]["rating"]); ?>
+										</span>
+									</div>
+								</div>
+								<span id="album_rate" class="mx-3 is-size-7"><strong class="has-text-grey">STUDIO</strong></span>
+								<span id="album_rate" class="mx-3 is-size-7" style="float: right;"><strong class="has-text-grey"><em>BEST RATED ALBUM</em></strong></span>
 							
 							<?php endif; ?>
 

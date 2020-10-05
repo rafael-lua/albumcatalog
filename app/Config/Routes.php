@@ -36,7 +36,7 @@ $routes->post('login', 'Accounts::login');
 $routes->get('login', 'Mainpage::redirectHome');
 $routes->match(['get', 'post'], 'logoff', 'Accounts::logoff');
 $routes->match(['get', 'post'], 'login/(:any)', 'Mainpage::redirectHome');
-$routes->match(['get', 'post'], 'search', 'MainSearch::albums');
+$routes->match(['get', 'post'], 'search', 'MainSearch::findAll');
 $routes->match(['get', 'post'], 'search/top100', 'MainSearch::index'); # change "index" to "top100"
 $routes->match(['get', 'post'], 'search/showgenre', 'MainSearch::findGenre');
 $routes->match(['get', 'post'], 'search/showalbum/(:num)', 'MainSearch::showAlbum/$1');

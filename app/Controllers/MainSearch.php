@@ -51,10 +51,10 @@ class MainSearch extends BaseController
 
 	
 	# main search method
-	public function albums($searchValue = NULL)
+	public function findAll($searchValue = NULL)
 	{
 		if(!$this->validate([
-			"search_value" => 	"required",
+			"search_value" 	=> 		"required",
 		]))
 		{
 			$this->session->set("homeErrorId", 1);
@@ -66,10 +66,10 @@ class MainSearch extends BaseController
 			# show the album that was searched!
 			$search = new Search();
 			
-
 			$searchValue = $this->request->getVar("search_value");
 			
 			$data["results"] = $search->findWithFilters($searchValue);
+			$data["currentSearch"] = $searchValue; # Use that for repeating the same search with different order or filters.
 			
 			if($this->session->has("userAccount"))
 			{

@@ -66,6 +66,7 @@ class Search extends Model
 	# Returns all results that match the passed search with filters and order (asc, desc)
 	#
 	##################################################################
+	
 	public function findWithFilters($s = false, $filters = false, $order = "az", $desc = false, $page = 0) 
 	{
 			# If this function is called without values for s, throws a error page back.
