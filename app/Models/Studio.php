@@ -30,5 +30,33 @@ class Studio extends Model
 							->where(['studioalbum.studioId' => 'studio.id', 'studioalbum.albumId' => $albumId], NULL, FALSE)
 							->findAll();							
 	}
+
+
+
+	public function findStudio($s, $filters, $order, $direction, $offset)
+	{
+		$studios = [];
+
+		if($order == "az")
+		{
+			# In the future, use "select" in the query to select only the desired fields, instead of everything.
+			$studios = $this->asArray()->select('id, name, "studio" as type')
+															->like(['name' => $s])
+															->orderBy('name', $direction)
+															->limit(10, $offset)->findAll();
+
+			foreach($studios as &$studio)
+			{
+				$studio["album"] = $this->asArray()->select('album.name, album.rating', false)
+												->from('album, studioalbum')
+												->where(['studioalbum.studioId' => 'studio.id', 'studioalbum.albumId' => 'album.id', 'studio.id' => $studio["id"]], NULL, FALSE)
+												->orderBy('album.rating', 'DESC')
+												->limit(1)->first();
+				
+			}
+		}
+
+		return $studios;
+	}
 	
 }

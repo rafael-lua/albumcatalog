@@ -66,7 +66,7 @@ class Search extends Model
 	# Returns all results that match the passed search with filters and order (asc, desc)
 	#
 	##################################################################
-	public function findWithFilters($s = false, $filters = false, $order = "az", $desc = false) 
+	public function findWithFilters($s = false, $filters = false, $order = "az", $desc = false, $page = 0) 
 	{
 			# If this function is called without values for s, throws a error page back.
 			if(($s === false) || ($s === NULL))
@@ -74,7 +74,10 @@ class Search extends Model
 				throw new \CodeIgniter\Exceptions\PageNotFoundException();
 			}
 
-			$results = [];
+			# Arrays to be merged in the end
+			$albumsResults = [];
+			$artistsResults = [];
+			$studioResults = [];
 
 			$modelArtist = new Artist();
 			$modelStudio = new Studio();
@@ -83,19 +86,32 @@ class Search extends Model
 			$direction = "ASC";
 			if($desc == true){$direction = "DESC";}
 
+			$offset = $page * 10;
+
 			# This model works with album table. 
 			# It will call functions on the respective tables for artist, studio, etc...
 			if($order == "az") # Order by name
 			{
-				$results["albums"] = $this->asArray()->like(['name' => $s])->orderBy('name', $direction)->limit(100)->findAll();
-				foreach($results["albums"] as &$album) # & makes it so it is by reference and can be modified
+				$albumsResults = $this->asArray()->select('id, name, year, rating, "album" as type')
+																				->like(['name' => $s])
+																				->orderBy('name', $direction)
+																				->limit(10, $offset)->findAll();
+				
+				foreach($albumsResults as &$album) # & makes it so it is by reference and can be modified
 				{
 					$album["artist"] = $modelArtist->getNameByAlbum($album["id"]);
 					$album["genre"] = $modelGenre->getNameByAlbum($album["id"]);
 					$album["studio"] = $modelStudio->getNameByAlbum($album["id"]);
 				}
+
+				$artistsResults = $modelArtist->findArtist($s, $filters, "az", $direction, $offset);
+
+				$studioResults = $modelStudio->findStudio($s, $filters, "az", $direction, $offset);
+				
+
 			}
 
+			$results = array_merge($albumsResults, $artistsResults, $studioResults);
 
 			return $results;
 

@@ -151,9 +151,9 @@
 						<div class="level-left">
 							<h3 class="subtitle is-3 has-text-weight-bold">
 							Resultados (<?php 
-								if(isset($results["albums"]) && !empty($results["albums"]))
+								if(isset($results) && !empty($results))
 								{
-									echo count($results["albums"]);
+									echo count($results);
 								}
 								else
 								{
@@ -178,75 +178,87 @@
 
 					<hr class="my-1 has-background-grey-lighter" style=" margin: auto;">
 				
-					<?php if(is_array($results) && !empty($results)) : 
-						
-						$albums = $results["albums"];
-					
-					?>
+					<?php if(is_array($results) && !empty($results)) : ?>
 
-						<?php foreach($albums as $album) : ?>
+						<?php foreach($results as $result) : ?>
+
+							<?php if($result["type"] == "album") : ?>
 							
-							<?php 
-								# Compound names
-								$artistCompound = "";
-								$firstArtist = false;
-								foreach($album["artist"] as $artist)
-								{
-									if($firstArtist == false)
+								<?php 
+									# Compound names
+									$artistCompound = "";
+									$firstArtist = false;
+									foreach($result["artist"] as $artist)
 									{
-										$artistCompound = $artist["name"];
-										$firstArtist = true;
+										if($firstArtist == false)
+										{
+											$artistCompound = $artist["name"];
+											$firstArtist = true;
+										}
+										else
+										{
+											$artistCompound = $artistCompound.", ".$artist["name"];
+										}
 									}
-									else
+									$studioCompound = "";
+									$firstStudio = false;
+									foreach($result["studio"] as $studio)
 									{
-										$artistCompound = $artistCompound.", ".$artist["name"];
+										if($firstStudio == false)
+										{
+											$studioCompound = $studio["name"];
+											$firstStudio = true;
+										}
+										else
+										{
+											$studioCompound = $studioCompound.", ".$studio["name"];
+										}
 									}
-								}
-								$studioCompound = "";
-								$firstStudio = false;
-								foreach($album["studio"] as $studio)
-								{
-									if($firstStudio == false)
-									{
-										$studioCompound = $studio["name"];
-										$firstStudio = true;
-									}
-									else
-									{
-										$studioCompound = $studioCompound.", ".$studio["name"];
-									}
-								}
-							
-							?>
-							
-							<div class="level my-3">
-								<div class="level-left">
-									<a href="<?php echo base_url(); ?>/search/showalbum/<?php echo esc($album["id"]); ?>">
-										<span id="album_title" class="mx-3 is-size-5">
-											<strong>
-												<?php echo esc($album["name"]) ?>
-												<span class="is-size-7 has-text-grey-light"><em><?php echo "(id: ".esc($album["id"]).")"; ?></em></span>
-											</strong>
-										</span>
-									</a>
-								</div>
-								<div class="level-right">
-									<div>
-										<span id="album_artist" class="mx-3"><em><strong><?php echo esc($artistCompound); ?></strong></em></span>
-										<span id="album_year" class="mx-3"><em><small><?php echo esc($studioCompound); ?></small></em></span>
-										<span id="album_year" class="mx-3"><em><small><?php echo esc($album["year"]); ?></small></em></span>
+								
+								?>
+								
+								<div class="level my-3">
+									<div class="level-left">
+										<a href="<?php echo base_url(); ?>/search/showalbum/<?php echo esc($result["id"]); ?>">
+											<span id="album_title" class="mx-3 is-size-5">
+												<strong>
+													<?php echo esc($result["name"]); ?>
+													<span class="is-size-7 has-text-grey-light"><em><?php echo "(id: ".esc($result["id"]).")"; ?></em></span>
+												</strong>
+											</span>
+										</a>
+									</div>
+									<div class="level-right">
+										<div>
+											<span id="album_artist" class="mx-3"><em><strong><?php echo esc($artistCompound); ?></strong></em></span>
+											<span id="album_year" class="mx-3"><em><small><?php echo esc($studioCompound); ?></small></em></span>
+											<span id="album_year" class="mx-3"><em><small><?php echo esc($result["year"]); ?></small></em></span>
+										</div>
 									</div>
 								</div>
-							</div>
-							<span id="album_rate" class="mx-3"><strong>
-								<i class="fas fa-star fa-lg is-size-7" style="vertical-align: middle; color: #ffcc00;"></i>
-								<?php echo esc($album["rating"]); ?>
-							</strong></span>
-							<div class="tags" style="float: right;">
-								<?php foreach($album["genre"] as $genre) : ?>
-									<span class="tag"><?php echo esc($genre["name"]); ?></span>
-								<?php endforeach; ?>
-							</div>
+								<span id="album_rate" class="mx-3"><strong>
+									<i class="fas fa-star fa-lg is-size-7" style="vertical-align: middle; color: #ffcc00;"></i>
+									<?php echo esc($result["rating"]); ?>
+								</strong></span>
+								<div class="tags" style="float: right;">
+									<?php foreach($result["genre"] as $genre) : ?>
+										<span class="tag"><?php echo esc($genre["name"]); ?></span>
+									<?php endforeach; ?>
+								</div>
+							
+							<?php elseif($result["type"] == "artist") : ?>
+
+								<?php echo "ARTIST :" . esc($result["name"]); ?>
+								<?php echo "ALBUM :" . esc($result["album"]["name"]); ?>
+								<?php echo "RATING :" . esc($result["album"]["rating"]); ?>
+
+							<?php elseif($result["type"] == "studio") : ?>
+
+								<?php echo "STUDIO :" . esc($result["name"]); ?>
+								<?php echo "ALBUM :" . esc($result["album"]["name"]); ?>
+								<?php echo "RATING :" . esc($result["album"]["rating"]); ?>
+							
+							<?php endif; ?>
 
 							<hr class="my-1 has-background-grey-lighter" style="margin: auto; clear: both;">
 							
