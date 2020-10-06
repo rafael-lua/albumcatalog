@@ -172,21 +172,22 @@
 						<div class="level-right">
 								<nav class="breadcrumb has-bullet-separator is-small" aria-label="breadcrumbs">
 									<ul>
+										<!-- The value of buttons should match what will happen after cliking it, asc or desc -->
 										<li id="order-az">
-											<button type="submit" form="main_search_form" class="button is-success is-light is-small mx-1">
-												<i class="fas fa-sort-down fa-lg mr-1" style="color: hsl(141, 71%, 48%); display: inline;"></i> <!-- fa-sort-up and down. toggle(up) with toggle (down) on JS to change -->
+											<button name="az_sort" value="<?php if(isset($orderValues["azNext"])){echo esc($orderValues["azNext"]);}else{echo esc("azDesc");} ?>" type="submit" form="main_search_form" class="button is-<?php if(isset($orderValues["azColor"])){echo esc($orderValues["azColor"]);}else{echo esc("info");} ?> is-light is-small mx-1">
+												<i class="fas <?php if(isset($orderValues["azSortIcon"])){echo esc($orderValues["azSortIcon"]);}else{echo esc("fa-sort-down");} ?> fa-lg mr-1" style="color: hsl(141, 71%, 48%); display: <?php if(isset($orderValues["azDisplayIcon"])){echo esc($orderValues["azDisplayIcon"]);}else{echo esc("inline");} ?>;"></i>
 												<small><strong>A-Z</strong></small>
 											</button>
 										</li>
 										<li id="order-rating">
-											<button type="submit" form="main_search_form" class="button is-info is-light is-small mx-1">
-												<i class="fas fa-sort-down fa-lg mr-1" style="color: hsl(141, 71%, 48%); display: none;"></i>
+											<button name="rating_sort" value="<?php if(isset($orderValues["ratingNext"])){echo esc($orderValues["ratingNext"]);}else{echo esc("ratingDesc");} ?>" type="submit" form="main_search_form" class="button is-<?php if(isset($orderValues["ratingColor"])){echo esc($orderValues["ratingColor"]);}else{echo esc("info");} ?> is-light is-small mx-1">
+												<i class="fas <?php if(isset($orderValues["ratingSortIcon"])){echo esc($orderValues["ratingSortIcon"]);}else{echo esc("fa-sort-down");} ?> fa-lg mr-1" style="color: hsl(141, 71%, 48%); display: <?php if(isset($orderValues["ratingDisplayIcon"])){echo esc($orderValues["ratingDisplayIcon"]);}else{echo esc("none");} ?>;"></i>
 												<a href="#"><small><strong>Rating</strong></small></a>
 											</button>
 										</li>
 										<li id="order-year">
-											<button type="submit" form="main_search_form" class="button is-info is-light is-small mx-1">
-												<i class="fas fa-sort-down fa-lg mr-1" style="color: hsl(141, 71%, 48%); display: none;"></i>
+											<button name="year_sort" value="<?php if(isset($orderValues["yearNext"])){echo esc($orderValues["yearNext"]);}else{echo esc("yearDesc");} ?>" type="submit" form="main_search_form" class="button is-<?php if(isset($orderValues["yearColor"])){echo esc($orderValues["yearColor"]);}else{echo esc("info");} ?> is-light is-small mx-1">
+												<i class="fas <?php if(isset($orderValues["yearSortIcon"])){echo esc($orderValues["yearSortIcon"]);}else{echo esc("fa-sort-down");} ?> fa-lg mr-1" style="color: hsl(141, 71%, 48%); display: <?php if(isset($orderValues["yearDisplayIcon"])){echo esc($orderValues["yearDisplayIcon"]);}else{echo esc("none");} ?>;"></i>
 												<a href="#"><small><strong>Year</strong></small></a>
 											</button>
 										</li>
@@ -203,7 +204,7 @@
 							
 							# The direction asc and desc needs a function for each case. 
 							# Since functions will not access values outside of their scope without passing, $order is not accessible.
-							if (empty($order["type"])) { $order["type"] = "orderResultsByNameAsc";}
+							if (empty($orderValues["type"])) { $orderValues["type"] = "orderResultsByNameAsc";}
 
 							function orderResultsByNameAsc($resultA, $resultB)
 							{
@@ -214,8 +215,40 @@
 							{
 								return strcmp($resultB["name"], $resultA["name"]);
 							}
+
+							function orderResultsByRatingAsc($resultA, $resultB)
+							{
+									if ($resultB["type"] != "album") { return -1;}
+									if ($resultA["type"] != "album") { return 1;}
+									if ($resultA["rating"] == $resultB["rating"]) { return 0; }
+									return ($resultA["rating"] < $resultB["rating"]) ? 1 : -1;
+							}
+
+							function orderResultsByRatingDesc($resultA, $resultB)
+							{
+									if ($resultB["type"] != "album") { return -1;}
+									if ($resultA["type"] != "album") { return 1;}
+									if ($resultA["rating"] == $resultB["rating"]) { return 0; }
+									return ($resultB["rating"] < $resultA["rating"]) ? 1 : -1;
+							}
+
+							function orderResultsByYearAsc($resultA, $resultB)
+							{
+									if ($resultB["type"] != "album") { return -1;}
+									if ($resultA["type"] != "album") { return 1;}
+									if ($resultA["year"] == $resultB["year"]) { return 0; }
+									return ($resultA["year"] < $resultB["year"]) ? 1 : -1;
+							}
+
+							function orderResultsByYearDesc($resultA, $resultB)
+							{
+									if ($resultB["type"] != "album") { return -1;}
+									if ($resultA["type"] != "album") { return 1;}
+									if ($resultA["year"] == $resultB["year"]) { return 0; }
+									return ($resultB["year"] < $resultA["year"]) ? 1 : -1;
+							}
 							
-							usort($results, $order["type"]);
+							usort($results, $orderValues["type"]);
 							
 						?>
 

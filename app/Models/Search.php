@@ -91,26 +91,27 @@ class Search extends Model
 
 			# This model works with album table. 
 			# It will call functions on the respective tables for artist, studio, etc...
-			if($order == "az") # Order by name
+
+			$sortBy = "name";
+			if($order == "az"){$sortBy = "name";}
+			elseif($order == "rating"){$sortBy = "rating";} # Order by name
+			elseif($order == "year"){$sortBy = "year";} # Order by name
+
+			$albumsResults = $this->asArray()->select('id, name, year, rating, "album" as type')
+																			->like(['name' => $s])
+																			->orderBy($sortBy, $direction)
+																			->limit(10, $offset)->findAll();
+			
+			foreach($albumsResults as &$album) # & makes it so it is by reference and can be modified
 			{
-				$albumsResults = $this->asArray()->select('id, name, year, rating, "album" as type')
-																				->like(['name' => $s])
-																				->orderBy('name', $direction)
-																				->limit(10, $offset)->findAll();
-				
-				foreach($albumsResults as &$album) # & makes it so it is by reference and can be modified
-				{
-					$album["artist"] = $modelArtist->getNameByAlbum($album["id"]);
-					$album["genre"] = $modelGenre->getNameByAlbum($album["id"]);
-					$album["studio"] = $modelStudio->getNameByAlbum($album["id"]);
-				}
-
-				$artistsResults = $modelArtist->findArtist($s, $filters, "az", $direction, $offset);
-
-				$studioResults = $modelStudio->findStudio($s, $filters, "az", $direction, $offset);
-				
-
+				$album["artist"] = $modelArtist->getNameByAlbum($album["id"]);
+				$album["genre"] = $modelGenre->getNameByAlbum($album["id"]);
+				$album["studio"] = $modelStudio->getNameByAlbum($album["id"]);
 			}
+
+			$artistsResults = $modelArtist->findArtist($s, $filters, $direction, $offset);
+
+			$studioResults = $modelStudio->findStudio($s, $filters, $direction, $offset);
 
 			$results = array_merge($albumsResults, $artistsResults, $studioResults);
 

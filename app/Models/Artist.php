@@ -33,28 +33,28 @@ class Artist extends Model
 	}
 
 
-	public function findArtist($s, $filters, $order, $direction, $offset)
+	
+	public function findArtist($s, $filters, $direction, $offset)
 	{
 		$artists = [];
 
-		if($order == "az")
-		{
-			# In the future, use "select" in the query to select only the desired fields, instead of everything.
-			$artists = $this->asArray()->select('id, name, "artist" as type')
-															->like(['name' => $s])
-															->orderBy('name', $direction)
-															->limit(10, $offset)->findAll();
+		
+		# In the future, use "select" in the query to select only the desired fields, instead of everything.
+		$artists = $this->asArray()->select('id, name, "artist" as type')
+														->like(['name' => $s])
+														->orderBy('name', $direction)
+														->limit(10, $offset)->findAll();
 
-			foreach($artists as &$artist)
-			{
-				$artist["album"] = $this->asArray()->select('album.name, album.rating', false)
-												->from('album, artistalbum')
-												->where(['artistalbum.artistId' => 'artist.id', 'artistalbum.albumId' => 'album.id', 'artist.id' => $artist["id"]], NULL, FALSE)
-												->orderBy('album.rating', 'DESC')
-												->limit(1)->first();
-				
-			}
+		foreach($artists as &$artist)
+		{
+			$artist["album"] = $this->asArray()->select('album.name, album.rating', false)
+											->from('album, artistalbum')
+											->where(['artistalbum.artistId' => 'artist.id', 'artistalbum.albumId' => 'album.id', 'artist.id' => $artist["id"]], NULL, FALSE)
+											->orderBy('album.rating', 'DESC')
+											->limit(1)->first();
+			
 		}
+		
 
 		return $artists;
 	}

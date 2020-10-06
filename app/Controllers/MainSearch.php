@@ -55,6 +55,9 @@ class MainSearch extends BaseController
 	{
 		if(!$this->validate([
 			"search_value" 	=> 		"required",
+			"az_sort" 	=> 		"permit_empty|in_list[azAsc, azDesc]",
+			"rating_sort" 	=> 		"permit_empty|in_list[ratingAsc, ratingDesc]",
+			"year_sort" 	=> 		"permit_empty|in_list[yearAsc, yearDesc]",
 		]))
 		{
 			$this->session->set("homeErrorId", 1);
@@ -67,10 +70,69 @@ class MainSearch extends BaseController
 			$search = new Search();
 			
 			$searchValue = $this->request->getVar("search_value");
-			
-			$data["results"] = $search->findWithFilters($searchValue);
+
+			$currentPage = 0;
+			$currentFilters = false;
+
+			$searchOrder = "az";
+			$searchDesc = false;
+			$currentIconPosition = "az";
+			if(!empty($this->request->getVar("rating_sort")) || is_numeric($this->request->getVar("rating_sort"))){
+				$searchOrder = "rating";
+				if($this->request->getVar("rating_sort") == "ratingDesc"){$searchDesc = true;}
+				$currentIconPosition = "rating";
+			}
+			else if(!empty($this->request->getVar("year_sort")) || is_numeric($this->request->getVar("year_sort"))){
+				$searchOrder = "year";
+				if($this->request->getVar("year_sort") == "yearDesc"){$searchDesc = true;}
+				$currentIconPosition = "year";
+			}
+			else
+			{
+				if($this->request->getVar("az_sort") == "azDesc"){$searchDesc = true;}
+			}
+
+			# The type will tell which sort function should it call
+			if ($searchOrder == "az") {
+				$orderValues["type"] = $searchDesc == false ? "orderResultsByNameAsc" : "orderResultsByNameDesc";
+				$orderValues["azColor"] = "primary";
+			}
+			elseif ($searchOrder == "rating")
+			{
+				$orderValues["type"] = $searchDesc == false ? "orderResultsByRatingAsc" : "orderResultsByRatingDesc";
+				$orderValues["ratingColor"] = "primary";
+			}
+			elseif ($searchOrder == "year")
+			{
+				$orderValues["type"] = $searchDesc == false ? "orderResultsByYearAsc" : "orderResultsByYearDesc";
+				$orderValues["yearColor"] = "primary";
+			}
+
+			$orderValues["azNext"] = $searchDesc == true ? "azAsc" : "azDesc"; # Opposite of current state.
+			$orderValues["azSortIcon"] = $searchDesc == true ? "fa-sort-up" : "fa-sort-down";
+			$orderValues["azDisplayIcon"] = $currentIconPosition == "az" ? "inline" : "none";
+
+			$orderValues["ratingNext"] = $searchDesc == true ? "ratingAsc" : "ratingDesc"; # Opposite of current state.
+			$orderValues["ratingSortIcon"] = $searchDesc == true ? "fa-sort-up" : "fa-sort-down";
+			$orderValues["ratingDisplayIcon"] = $currentIconPosition == "rating" ? "inline" : "none";
+
+			$orderValues["yearNext"] = $searchDesc == true ? "yearAsc" : "yearDesc"; # Opposite of current state.
+			$orderValues["yearSortIcon"] = $searchDesc == true ? "fa-sort-up" : "fa-sort-down";
+			$orderValues["yearDisplayIcon"] = $currentIconPosition == "year" ? "inline" : "none";
+
+
+			$data["results"] = $search->findWithFilters($searchValue, $currentFilters, $searchOrder, $searchDesc, $currentPage);
 			$data["currentSearch"] = $searchValue; # Use that for repeating the same search with different order or filters.
+			$data["orderValues"] = $orderValues;
 			
+			/*
+				The data["results"] HAS to have the following values for ordering:
+						type
+						name (string)
+						rating (float/double)
+						year (int)
+			*/
+
 			if($this->session->has("userAccount"))
 			{
 				$data["userAccount"] = $this->session->get("userAccount");
