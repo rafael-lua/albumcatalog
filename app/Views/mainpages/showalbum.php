@@ -1,6 +1,30 @@
 
 <section class="section" id="albumSection">
 	<div class="columns is-centered is-vcentered">
+
+		<div class="column is-half">
+			<div class="box">
+				<table class="table is-striped is-hoverable is-fullwidth">
+
+					<thead>
+						<tr>
+							<th>Faixa</th>
+							<th style="width:15%">Duração</th>
+						</tr>
+					</thead>
+
+					<tbody>
+						<?php foreach($albumData["music"] as $music) : ?>
+							<tr>
+								<th><?php echo esc($music["name"]); ?></th>
+								<td><?php echo esc($music["duration"]); ?></td>
+							</tr>
+						<?php endforeach; ?>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
 		<div class="column is-half">
 			
 			<p class="is-italic is-size-1 has-text-weight-bold has-text-black-ter" style="line-height: 0.5em;">
@@ -79,28 +103,7 @@
 
 		</div>
 
-		<div class="column is-half">
-			<div class="box">
-				<table class="table is-striped is-hoverable is-fullwidth">
-
-					<thead>
-						<tr>
-							<th>Faixa</th>
-							<th style="width:15%">Duração</th>
-						</tr>
-					</thead>
-
-					<tbody>
-						<?php foreach($albumData["music"] as $music) : ?>
-							<tr>
-								<th><?php echo esc($music["name"]); ?></th>
-								<td><?php echo esc($music["duration"]); ?></td>
-							</tr>
-						<?php endforeach; ?>
-					</tbody>
-				</table>
-			</div>
-		</div>
+		
 	</div>
 </section>
 
