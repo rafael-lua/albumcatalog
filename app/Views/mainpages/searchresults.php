@@ -1,5 +1,90 @@
 <!-- <?php echo var_dump($debug); ?> -->
 
+<script>
+
+function toggleRatingFilter()
+{
+  let element = document.getElementById("ratingFilterToggle");
+	element.classList.toggle("is-active");
+	return false;
+}
+
+function toggleRatingValueFilter()
+{
+  let element = document.getElementById("ratingFilterValueToggle");
+	element.classList.toggle("is-active");
+	return false;
+}
+
+function selectRatingFilter(a)
+{
+	// First, rmeove all activate class
+	let removeActive = document.getElementById("rating_any");
+	removeActive.classList.remove("is-active");
+	removeActive = document.getElementById("rating_maiorigual");
+	removeActive.classList.remove("is-active");
+	removeActive = document.getElementById("rating_menorigual");
+	removeActive.classList.remove("is-active");
+	removeActive = document.getElementById("rating_igual");
+	removeActive.classList.remove("is-active");
+
+	// Then active the link that was clicked and set the hidden value for the filter form
+	if(a == 1)
+	{
+		let element = document.getElementById("rating_any");
+		element.classList.toggle("is-active");
+		document.getElementById("current_option").innerHTML = "Nenhum";
+		document.getElementById("ratingFilterValueButton").disabled = true;
+		document.getElementById("hidden_rating_filter").value = "any";
+	}
+	else if(a == 2)
+	{
+		let element = document.getElementById("rating_maiorigual");
+		element.classList.toggle("is-active");
+		document.getElementById("current_option").innerHTML = ">=";
+		document.getElementById("ratingFilterValueButton").disabled = false;
+		document.getElementById("hidden_rating_filter").value = "maior";
+	}
+	else if(a == 3)
+	{
+		let element = document.getElementById("rating_menorigual");
+		element.classList.toggle("is-active");
+		document.getElementById("current_option").innerHTML = "<=";
+		document.getElementById("ratingFilterValueButton").disabled = false;
+		document.getElementById("hidden_rating_filter").value = "menor";
+	}
+	else if(a == 4)
+	{
+		let element = document.getElementById("rating_igual");
+		element.classList.toggle("is-active");
+		document.getElementById("current_option").innerHTML = "=";
+		document.getElementById("ratingFilterValueButton").disabled = false;
+		document.getElementById("hidden_rating_filter").value = "igual";
+	}
+
+	toggleRatingFilter();
+}
+
+function selectRatingFilterValue(a)
+{
+	// First, rmeove all activate class
+	for(let i = 1; i <= 10; i++)
+	{
+		let removeActive = document.getElementById("rating_filter_" + i);
+		removeActive.classList.remove("is-active");
+	}
+
+	// Then active the link that was clicked and set the hidden value for the filter form
+	let element = document.getElementById("rating_filter_" + a);
+	element.classList.toggle("is-active");
+	document.getElementById("current_rating_value").innerHTML = a.toString();
+	document.getElementById("hidden_rating_value").value = a;
+
+	toggleRatingValueFilter();
+}
+
+</script>
+
 <div class="columns">
   <div class="column px-6 py-6">
 
@@ -22,7 +107,10 @@
 		<form action="<?php echo base_url('search');?>" method="post" id="main_search_form">
 		<!-- This form has the "search_value" as well, but hidden, not required and with the last search value! -->
 		<input type="text" id="last_search" name="search_value" value="<?php if(isset($currentSearch)){echo esc($currentSearch);} ?>" hidden />
-		
+		<input type="text" name="lastOrderType" value="<?php if(isset($orderValues["lastType"])){echo esc($orderValues["lastType"]);}else{echo esc("none");} ?>" hidden />
+		<input type="text" name="lastOrderDesc" value="<?php if(isset($orderValues["lastDesc"])){echo esc($orderValues["lastDesc"]);}else{echo esc("no");} ?>" hidden />
+		<input type="text" name="lastCurrentIconPos" value="<?php if(isset($orderValues["lastIconPos"])){echo esc($orderValues["lastIconPos"]);}else{echo esc("none");} ?>" hidden />
+
     <div class="columns my-5">
 
       <div class="column">
@@ -36,84 +124,95 @@
 						<div class="panel-block">
 							<div class="field is-grouped" style="margin: auto;">
 								<div class="control">
-									<button class="button is-link is-outlined is-rounded">Apply</button>
+									<button type="submit" class="button is-link is-outlined is-rounded">Apply</button>
 								</div>
 								<div class="control">
-									<button class="button is-danger is-outlined is-rounded">Reset</button>
+									<button type="reset" class="button is-danger is-outlined is-rounded">Reset</button>
 								</div>
 							</div>						
 						</div>
 
 						<p class="panel-block"><strong>Rating</strong></p>
 						<div class="panel-block">
-							<div class="dropdown mx-1"> <!-- "is-active" toggle -->
+							<div class="dropdown mx-1" id="ratingFilterToggle"> <!-- "is-active" toggle -->
 								<div class="dropdown-trigger">
-									<button class="button is-small">
-										<span id="current_option">Nenhum</span>
+									<button class="button is-small" id="ratingFilterButton" onclick="return toggleRatingFilter()">
+										<span id="current_option">
+											<?php 
+												if(isset($filterValues["ratingType"]) && $filterValues["ratingType"] == "maior"){echo esc(">=");}
+												elseif(isset($filterValues["ratingType"]) && $filterValues["ratingType"] == "menor"){echo esc("<=");}
+												elseif(isset($filterValues["ratingType"]) && $filterValues["ratingType"] == "igual"){echo esc("=");}
+												else{echo esc("Nenhum");} 
+											?>
+										</span>
 										<span class="icon is-small">
 											<i class="fas fa-angle-down" aria-hidden="true"></i>
 										</span>
 									</button>
 									<div class="dropdown-menu" id="dropdown-menu" role="menu">
 										<div class="dropdown-content">
-											<a href="#" class="dropdown-item is-active" id="rating_any">
+											<a class="dropdown-item <?php if(!isset($filterValues["ratingType"])){echo esc("is-active");}elseif($filterValues["ratingType"] == "any"){echo esc("is-active");}?>" id="rating_any" onclick="selectRatingFilter(1)">
 												Nenhum
 											</a>
-											<a href="#" class="dropdown-item" id="rating_maiorigual">
+											<a class="dropdown-item <?php if(isset($filterValues["ratingType"]) && $filterValues["ratingType"] == "maior"){echo esc("is-active");}?>" id="rating_maiorigual" onclick="selectRatingFilter(2)">
 												Maior ou Igual
 											</a>
-											<a href="#" class="dropdown-item" id="rating_menorigual">
+											<a class="dropdown-item <?php if(isset($filterValues["ratingType"]) && $filterValues["ratingType"] == "menor"){echo esc("is-active");}?>" id="rating_menorigual" onclick="selectRatingFilter(3)">
 												Menor ou Igual
 											</a>
-											<a href="#" class="dropdown-item" id="rating_igual">
+											<a class="dropdown-item <?php if(isset($filterValues["ratingType"]) && $filterValues["ratingType"] == "igual"){echo esc("is-active");}?>" id="rating_igual" onclick="selectRatingFilter(4)">
 												Igual
 											</a>
 										</div>
 									</div>
 								</div>
 								<!-- JavaScript is reponsible for changing the hidden value -->
-								<input type="hidden" id="hidden_rating_filter" name="rating_filter" value="any">
+								<input type="hidden" id="hidden_rating_filter" name="rating_filter" value="<?php if(isset($filterValues["ratingType"])){echo esc($filterValues["ratingType"]);}else{echo esc("any");} ?>">
 							</div>
 
-							<div class="dropdown mx-1"> <!-- "is-active" toggle -->
+							<div class="dropdown mx-1" id="ratingFilterValueToggle"> <!-- "is-active" toggle -->
 								<div class="dropdown-trigger">
-									<button class="button" disabled> <!-- Enable or disable based on the choices -->
-										<span id="rating_value">10</span>
+									<button class="button is-small" id="ratingFilterValueButton" onclick="return toggleRatingValueFilter()" <?php if(!isset($filterValues["ratingType"]) || $filterValues["ratingType"] == "any"){echo esc("disabled");} ?>> <!-- Enable or disable based on the choices -->
+										<span id="current_rating_value"><?php if(isset($filterValues["ratingValue"])){echo esc($filterValues["ratingValue"]);}else{echo esc("10");} ?></span>
 										<span class="icon is-small">
 											<i class="fas fa-angle-down" aria-hidden="true"></i>
 										</span>
 									</button>
 									<div class="dropdown-menu" id="dropdown-menu" role="menu">
 										<div class="dropdown-content">
-											<a href="#" class="dropdown-item" id="rating_filter_10"> 10 </a>
-											<a href="#" class="dropdown-item" id="rating_filter_9"> 9 </a>
-											<a href="#" class="dropdown-item" id="rating_filter_8"> 8 </a>
-											<a href="#" class="dropdown-item" id="rating_filter_7"> 7 </a>
-											<a href="#" class="dropdown-item" id="rating_filter_6"> 6 </a>
-											<a href="#" class="dropdown-item" id="rating_filter_5"> 5 </a>
-											<a href="#" class="dropdown-item" id="rating_filter_4"> 4 </a>
-											<a href="#" class="dropdown-item" id="rating_filter_3"> 3 </a>
-											<a href="#" class="dropdown-item" id="rating_filter_2"> 2 </a>
-											<a href="#" class="dropdown-item" id="rating_filter_1"> 1 </a>
+											<a class="dropdown-item <?php if(!isset($filterValues["ratingValue"])){echo esc("is-active");}elseif($filterValues["ratingValue"] == 10){echo esc("is-active");}?>" id="rating_filter_10" onclick="selectRatingFilterValue(10)"> 10 </a>
+											<a class="dropdown-item <?php if(isset($filterValues["ratingValue"]) && $filterValues["ratingValue"] == 9){echo esc("is-active");}?>" id="rating_filter_9" onclick="selectRatingFilterValue(9)"> 9 </a>
+											<a class="dropdown-item <?php if(isset($filterValues["ratingValue"]) && $filterValues["ratingValue"] == 8){echo esc("is-active");}?>" id="rating_filter_8" onclick="selectRatingFilterValue(8)"> 8 </a>
+											<a class="dropdown-item <?php if(isset($filterValues["ratingValue"]) && $filterValues["ratingValue"] == 7){echo esc("is-active");}?>" id="rating_filter_7" onclick="selectRatingFilterValue(7)"> 7 </a>
+											<a class="dropdown-item <?php if(isset($filterValues["ratingValue"]) && $filterValues["ratingValue"] == 6){echo esc("is-active");}?>" id="rating_filter_6" onclick="selectRatingFilterValue(6)"> 6 </a>
+											<a class="dropdown-item <?php if(isset($filterValues["ratingValue"]) && $filterValues["ratingValue"] == 5){echo esc("is-active");}?>" id="rating_filter_5" onclick="selectRatingFilterValue(5)"> 5 </a>
+											<a class="dropdown-item <?php if(isset($filterValues["ratingValue"]) && $filterValues["ratingValue"] == 4){echo esc("is-active");}?>" id="rating_filter_4" onclick="selectRatingFilterValue(4)"> 4 </a>
+											<a class="dropdown-item <?php if(isset($filterValues["ratingValue"]) && $filterValues["ratingValue"] == 3){echo esc("is-active");}?>" id="rating_filter_3" onclick="selectRatingFilterValue(3)"> 3 </a>
+											<a class="dropdown-item <?php if(isset($filterValues["ratingValue"]) && $filterValues["ratingValue"] == 2){echo esc("is-active");}?>" id="rating_filter_2" onclick="selectRatingFilterValue(2)"> 2 </a>
+											<a class="dropdown-item <?php if(isset($filterValues["ratingValue"]) && $filterValues["ratingValue"] == 1){echo esc("is-active");}?>" id="rating_filter_1" onclick="selectRatingFilterValue(1)"> 1 </a>
 										</div>
 									</div>
 								</div>
 								<!-- JavaScript is reponsible for changing the hidden value -->
-								<input type="hidden" id="hidden_rating_value" name="rating_value" value="0">
+								<input type="hidden" id="hidden_rating_value" name="rating_value" value="<?php if(isset($filterValues["ratingValue"])){echo esc($filterValues["ratingValue"]);}else{echo esc(10);} ?>">
 							</div>
 						</div>
 
 						<p class="panel-block"><strong>Mostrar Apenas</strong></p>
 						<label class="panel-block">
-							<input type="radio" name="show_only" class="mx-2">
+							<input type="radio" name="show_only" class="mx-2" value="all" <?php if(!isset($filterValues["showOnly"])){echo esc("checked");}elseif($filterValues["showOnly"] == "all"){echo esc("checked");} ?>>
+							Todos
+						</label>
+						<label class="panel-block">
+							<input type="radio" name="show_only" class="mx-2" value="onlyAlbum" <?php if($filterValues["showOnly"] == "album"){echo esc("checked");} ?>>
 							Albums
 						</label>
 						<label class="panel-block">
-							<input type="radio" name="show_only" class="mx-2">
+							<input type="radio" name="show_only" class="mx-2" value="onlyArtist" <?php if($filterValues["showOnly"] == "artist"){echo esc("checked");} ?>>
 							Artistas
 						</label>
 						<label class="panel-block">
-							<input type="radio" name="show_only" class="mx-2">
+							<input type="radio" name="show_only" class="mx-2" value="onlyStudio" <?php if($filterValues["showOnly"] == "studio"){echo esc("checked");} ?>>
 							Estúdios
 						</label>
 
@@ -200,7 +299,69 @@
 				
 					<?php if (is_array($results) && !empty($results)) : ?>
 
-						<?php # Order the current results by name.
+						<?php 
+						
+							/* ----------------------------- View filtering ----------------------------- */
+
+							# Deals with rating filter.
+							if($filterValues["ratingType"] != "any")
+							{	
+								foreach ($results as $key => &$value) 
+								{
+									if($filterValues["ratingType"] == "igual")
+									{
+										if($value["type"] == "album")
+										{
+											if($value["rating"] < $filterValues["ratingValue"] || $value["rating"] > ($filterValues["ratingValue"] + 0.9)) {
+													unset($results[$key]);
+											}
+										}
+										else
+										{
+											if($value["album"]["rating"] < $filterValues["ratingValue"] || $value["album"]["rating"] > ($filterValues["ratingValue"] + 0.9)) {
+												unset($results[$key]);
+											}
+										}
+									}
+									else if($filterValues["ratingType"] == "maior")
+									{
+										if($value["type"] == "album")
+										{
+											if($value["rating"] < $filterValues["ratingValue"]) {
+												unset($results[$key]);
+											}
+										}
+										else
+										{
+											if($value["album"]["rating"] < $filterValues["ratingValue"]) {
+												unset($results[$key]);
+											}
+										}
+									}
+									else if($filterValues["ratingType"] == "menor")
+									{
+										if($value["type"] == "album")
+										{
+											if($value["rating"] > $filterValues["ratingValue"]) {
+												unset($results[$key]);
+											}
+										}
+										else
+										{
+											if($value["album"]["rating"] > $filterValues["ratingValue"]) {
+												unset($results[$key]);
+											}
+										}
+									}
+								}
+								unset($value);
+							}
+
+						?>
+
+						<?php 
+
+							/* ------------------- Order the current results by name. ------------------- */
 							
 							# The direction asc and desc needs a function for each case. 
 							# Since functions will not access values outside of their scope without passing, $order is not accessible.

@@ -54,10 +54,16 @@ class MainSearch extends BaseController
 	public function findAll($searchValue = NULL)
 	{
 		if(!$this->validate([
-			"search_value" 	=> 		"required",
-			"az_sort" 	=> 		"permit_empty|in_list[azAsc, azDesc]",
-			"rating_sort" 	=> 		"permit_empty|in_list[ratingAsc, ratingDesc]",
-			"year_sort" 	=> 		"permit_empty|in_list[yearAsc, yearDesc]",
+			"search_value" 				=> 		"required",
+			"az_sort" 						=> 		"permit_empty|in_list[azAsc, azDesc]",
+			"rating_sort" 				=> 		"permit_empty|in_list[ratingAsc, ratingDesc]",
+			"year_sort" 					=> 		"permit_empty|in_list[yearAsc, yearDesc]",
+			"rating_filter" 			=> 		"permit_empty|in_list[any, maior, menor, igual]",
+			"rating_value" 				=> 		"permit_empty|in_list[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",
+			"show_only" 					=> 		"permit_empty|in_list[onlyAlbum, onlyArtist, onlyStudio, all]",
+			"lastOrderType" 			=> 		"permit_empty|in_list[none, az, rating, year]",
+			"lastOrderDesc" 			=> 		"permit_empty|in_list[no, yes]",
+			"lastCurrentIconPos" 	=> 		"permit_empty|in_list[none, az, rating, year]",
 		]))
 		{
 			$this->session->set("homeErrorId", 1);
@@ -66,33 +72,90 @@ class MainSearch extends BaseController
 		else
 		{
 
-			# show the album that was searched!
+			/* -------------------- show the album that was searched! ------------------- */
+
 			$search = new Search();
 			
 			$searchValue = $this->request->getVar("search_value");
 
 			$currentPage = 0;
-			$currentFilters = false;
+
+
+
+			/* -------------------------------------------------------------------------- */
+			/*                               SEARCH FILTERS                               */
+			/* -------------------------------------------------------------------------- */
+
+			$filterValues = []; # This is filters options sent to the view deal it
+			$currentFilters = []; # This is filters sent to the model apply on the query
+			
+			$ratingFilterType = $this->request->getVar("rating_filter");
+			$ratingFilterValue = $this->request->getVar("rating_value");
+			$filterValues["ratingType"] = $ratingFilterType != NULL ? $ratingFilterType : "any";
+			$filterValues["ratingValue"] = $ratingFilterValue != NULL ? $ratingFilterValue : "10";
+
+			$show_only = $this->request->getVar("show_only");
+			if($show_only == "onlyAlbum")
+			{
+				$currentFilters["showOnly"] = "album";
+			}
+			else if($show_only == "onlyArtist")
+			{
+				$currentFilters["showOnly"] = "artist";
+			}
+			else if($show_only == "onlyStudio")
+			{
+				$currentFilters["showOnly"] = "studio";
+			}
+			$filterValues["showOnly"] = $currentFilters["showOnly"];
+
+
+
+			/* -------------------------------------------------------------------------- */
+			/*                                SEARCH ORDER                                */
+			/* -------------------------------------------------------------------------- */
+
+			$orderValues = [];
 
 			$searchOrder = "az";
 			$searchDesc = false;
 			$currentIconPosition = "az";
-			if(!empty($this->request->getVar("rating_sort")) || is_numeric($this->request->getVar("rating_sort"))){
-				$searchOrder = "rating";
-				if($this->request->getVar("rating_sort") == "ratingDesc"){$searchDesc = true;}
-				$currentIconPosition = "rating";
-			}
-			else if(!empty($this->request->getVar("year_sort")) || is_numeric($this->request->getVar("year_sort"))){
-				$searchOrder = "year";
-				if($this->request->getVar("year_sort") == "yearDesc"){$searchDesc = true;}
-				$currentIconPosition = "year";
-			}
-			else
+
+			if(!empty($this->request->getVar("lastOrderType") && $this->request->getVar("lastOrderType") != "none"))
 			{
-				if($this->request->getVar("az_sort") == "azDesc"){$searchDesc = true;}
+				$searchOrder = $this->request->getVar("lastOrderType");
 			}
 
-			# The type will tell which sort function should it call
+			if(!empty($this->request->getVar("lastOrderDesc") && $this->request->getVar("lastOrderDesc") == "yes"))
+			{
+				$searchDesc = true;
+			}
+
+			if(!empty($this->request->getVar("lastCurrentIconPos") && $this->request->getVar("lastCurrentIconPos") != "none"))
+			{
+				$currentIconPosition = $this->request->getVar("lastCurrentIconPos");
+			}
+
+
+			if(!empty($this->request->getVar("rating_sort"))){
+				$searchOrder = "rating";
+				if($this->request->getVar("rating_sort") == "ratingDesc"){$searchDesc = true;}else{$searchDesc = false;}
+				$currentIconPosition = "rating";
+			}
+			else if(!empty($this->request->getVar("year_sort"))){
+				$searchOrder = "year";
+				if($this->request->getVar("year_sort") == "yearDesc"){$searchDesc = true;}else{$searchDesc = false;}
+				$currentIconPosition = "year";
+			}
+			else if(!empty($this->request->getVar("az_sort")))
+			{
+				$searchOrder = "az";
+				if($this->request->getVar("az_sort") == "azDesc"){$searchDesc = true;}else{$searchDesc = false;}
+				$currentIconPosition = "az";
+			}
+
+			/* ---------- The type will tell which sort function should it call --------- */
+
 			if ($searchOrder == "az") {
 				$orderValues["type"] = $searchDesc == false ? "orderResultsByNameAsc" : "orderResultsByNameDesc";
 				$orderValues["azColor"] = "primary";
@@ -120,10 +183,17 @@ class MainSearch extends BaseController
 			$orderValues["yearSortIcon"] = $searchDesc == true ? "fa-sort-up" : "fa-sort-down";
 			$orderValues["yearDisplayIcon"] = $currentIconPosition == "year" ? "inline" : "none";
 
+			$orderValues["lastType"] = $searchOrder;
+			$orderValues["lastDesc"] = $searchDesc == true ? "yes" : "no";
+			$orderValues["lastIconPos"] = $currentIconPosition;
+
+
+			/* -------------------------------- Mont data ------------------------------- */
 
 			$data["results"] = $search->findWithFilters($searchValue, $currentFilters, $searchOrder, $searchDesc, $currentPage);
 			$data["currentSearch"] = $searchValue; # Use that for repeating the same search with different order or filters.
 			$data["orderValues"] = $orderValues;
+			$data["filterValues"] = $filterValues;
 			
 			/*
 				The data["results"] HAS to have the following values for ordering:
@@ -162,8 +232,9 @@ class MainSearch extends BaseController
 
 
 
-	# Show the full album and its songs, genre, artists, studio, etc!
-	# Also, brings the reviews and rank of it.
+	/* ----- Show the full album and its songs, genre, artists, studio, etc! ---- */
+	/* ---------------- Also, brings the reviews and rank of it. ---------------- */
+
 	public function showAlbum($albumId = NULL)
 	{
 		$search = new Search();
@@ -183,35 +254,4 @@ class MainSearch extends BaseController
 		echo view('templates/footer');
 	}
 	
-
-
-
-	
-	# Returns all albums of that genre
-	public function findGenre($genreName = false)
-	{		
-		if(!$this->validate([
-			"genre" => 	"required",
-		]))
-		{
-			return redirect()->to(base_url());
-		}
-		else
-		{
-			$search = new Search();
-			$genreName = $this->request->getVar("genre");
-			
-			$data["albuns"] = $search->findByGenre($genreName);
-			
-			if($this->session->has("userAccount"))
-			{
-				$data["userAccount"] = $this->session->get("userAccount");
-			}
-			
-			echo view('templates/header');
-			echo view('templates/loginsection', $data);
-			echo view('mainpages/searchresults', $data);
-			echo view('templates/footer');
-		}
-	}
 }

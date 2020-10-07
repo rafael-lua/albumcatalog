@@ -67,7 +67,7 @@ class Search extends Model
 	#
 	##################################################################
 	
-	public function findWithFilters($s = false, $filters = false, $order = "az", $desc = false, $page = 0) 
+	public function findWithFilters($s = false, $filters = [], $order = "az", $desc = false, $page = 0) 
 	{
 			# If this function is called without values for s, throws a error page back.
 			if(($s === false) || ($s === NULL))
@@ -78,11 +78,16 @@ class Search extends Model
 			# Arrays to be merged in the end
 			$albumsResults = [];
 			$artistsResults = [];
-			$studioResults = [];
+			$studiosResults = [];
 
 			$modelArtist = new Artist();
 			$modelStudio = new Studio();
 			$modelGenre = new Genre();
+
+			/* --------------------------------- filters -------------------------------- */
+			if(is_array($filters) && !empty($filters)){
+				$showOnly = $filters["showOnly"];
+			}
 
 			$direction = "ASC";
 			if($desc == true){$direction = "DESC";}
@@ -97,23 +102,41 @@ class Search extends Model
 			elseif($order == "rating"){$sortBy = "rating";} # Order by name
 			elseif($order == "year"){$sortBy = "year";} # Order by name
 
-			$albumsResults = $this->asArray()->select('id, name, year, rating, "album" as type')
-																			->like(['name' => $s])
-																			->orderBy($sortBy, $direction)
-																			->limit(10, $offset)->findAll();
-			
-			foreach($albumsResults as &$album) # & makes it so it is by reference and can be modified
+			/* ------------------------------- Get albums ------------------------------- */
+
+			if($showOnly != "artist" && $showOnly != "studio")
 			{
-				$album["artist"] = $modelArtist->getNameByAlbum($album["id"]);
-				$album["genre"] = $modelGenre->getNameByAlbum($album["id"]);
-				$album["studio"] = $modelStudio->getNameByAlbum($album["id"]);
+				$albumsResults = $this->asArray()->select('id, name, year, rating, "album" as type')
+																				->like(['name' => $s])
+																				->orderBy($sortBy, $direction)
+																				->limit(10, $offset)->findAll();
+				
+				foreach($albumsResults as &$album) # & makes it so it is by reference and can be modified
+				{
+					$album["artist"] = $modelArtist->getNameByAlbum($album["id"]);
+					$album["genre"] = $modelGenre->getNameByAlbum($album["id"]);
+					$album["studio"] = $modelStudio->getNameByAlbum($album["id"]);
+				}
+				unset($album); # Always unset the value by reference as good practise, since changing it here would mess up with the actual array
 			}
 
-			$artistsResults = $modelArtist->findArtist($s, $filters, $direction, $offset);
 
-			$studioResults = $modelStudio->findStudio($s, $filters, $direction, $offset);
+			/* ------------------------------- Get artists ------------------------------ */
+			if($showOnly != "album" && $showOnly != "studio")
+			{
+				$artistsResults = $modelArtist->findArtist($s, $filters, $direction, $offset);
+			}
 
-			$results = array_merge($albumsResults, $artistsResults, $studioResults);
+			/* ------------------------------- Get studios ------------------------------- */
+			if($showOnly != "artist" && $showOnly != "album")
+			{
+				$studiosResults = $modelStudio->findStudio($s, $filters, $direction, $offset);
+			}
+
+
+			/* ------------------------------ MERGE RESULTS ----------------------------- */
+
+			$results = array_merge($albumsResults, $artistsResults, $studiosResults);
 
 			return $results;
 
