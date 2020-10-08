@@ -26,29 +26,6 @@ class MainSearch extends BaseController
 	}
 
 
-
-
-
-	public function top100()
-	{
-		# Show the best 100 albums ordered by rating
-		
-		
-	}
-
-
-
-
-	public function showAll()
-	{
-		# The main result query, with albums, artists, etc... All together!
-		
-		
-	}
-
-
-
-
 	
 	# main search method
 	public function findAll($searchValue = NULL)

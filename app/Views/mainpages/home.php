@@ -79,7 +79,6 @@
 								</span>
 							</div>							
 						</div>
-						<input type="text" name="search_value" hidden/>
 					</form>
 				</div>
 			</div>

@@ -69,10 +69,10 @@ class Search extends Model
 	
 	public function findWithFilters($s = false, $filters = [], $order = "az", $desc = false, $page = 0) 
 	{
-			# If this function is called without values for s, throws a error page back.
+			# If this function is called without values for s, fill a empty value.
 			if(($s === false) || ($s === NULL))
 			{
-				throw new \CodeIgniter\Exceptions\PageNotFoundException();
+				$s = "";
 			}
 
 			# Arrays to be merged in the end
