@@ -54,7 +54,7 @@ class MainSearch extends BaseController
 	public function findAll($searchValue = NULL)
 	{
 		if(!$this->validate([
-			"search_value" 				=> 		"required",
+			"search_value" 				=> 		"permit_empty",
 			"az_sort" 						=> 		"permit_empty|in_list[azAsc, azDesc]",
 			"rating_sort" 				=> 		"permit_empty|in_list[ratingAsc, ratingDesc]",
 			"year_sort" 					=> 		"permit_empty|in_list[yearAsc, yearDesc]",
@@ -64,10 +64,10 @@ class MainSearch extends BaseController
 			"lastOrderType" 			=> 		"permit_empty|in_list[none, az, rating, year]",
 			"lastOrderDesc" 			=> 		"permit_empty|in_list[no, yes]",
 			"lastCurrentIconPos" 	=> 		"permit_empty|in_list[none, az, rating, year]",
-			"genreFilter[]" 	=> 		"permit_empty|in_list[rock, pop, electronic, classical, jazz]",
+			"genreFilter[]" 			=> 		"permit_empty|in_list[rock, pop, electronic, classical, jazz]",
+			"listGenre" 					=>		"permit_empty|in_list[rock, pop, electronic, classical, jazz]",
 		]))
 		{
-			$this->session->set("homeErrorId", 1);
 			return redirect()->to(base_url());
 		}
 		else
@@ -108,13 +108,20 @@ class MainSearch extends BaseController
 			{
 				$currentFilters["showOnly"] = "studio";
 			}
-			$filterValues["showOnly"] = $currentFilters["showOnly"];
 
 			if(!empty($this->request->getVar("genreFilter[]")))
 			{
 				$currentFilters["genre"] = $this->request->getVar("genreFilter[]");
 				$filterValues["checkedGenre"] = $currentFilters["genre"];
 			}
+			elseif(!empty($this->request->getVar("listGenre")))
+			{
+				$currentFilters["genre"][] = $this->request->getVar("listGenre");
+				$filterValues["checkedGenre"] = $currentFilters["genre"];
+				$currentFilters["showOnly"] = "album";
+			}
+
+			$filterValues["showOnly"] = $currentFilters["showOnly"];
 
 			/* ----------------------------- Filters tags ----------------------------- */
 

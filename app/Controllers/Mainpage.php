@@ -22,11 +22,7 @@ class Mainpage extends BaseController
 		if(!empty($errorNumber) && $errorNumber != 0)
 		{
 			switch ($errorNumber) {
-				case 1: # Search empty error!
-					$data["searchError"] = "Digite um nome para pesquisar!";
-					$this->session->set("homeErrorId", 0);
-					break;
-				case 2: # Login error!
+				case 1: # Login error!
 					$data["loginError"] = "Usuário/senha são obrigatórios ou estão incorretos!";
 					$this->session->set("homeErrorId", 0);
 					break;

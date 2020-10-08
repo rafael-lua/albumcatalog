@@ -32,7 +32,7 @@
 
 				<div class="field">
 					<div class="control ">
-						<input type="text" name="search_value" class="input is-primary" placeholder="Digite o nome do álbum, artista, estúdio..." required />
+						<input type="text" name="search_value" class="input is-primary" placeholder="Digite o nome do álbum, artista, estúdio..." />
 					</div>
 					<p class="help is-danger"><?php if(!empty($searchError)){echo esc($searchError);} ?></p>
 				</div>
@@ -49,6 +49,7 @@
 			<div class="level-left">
     		<div class="level-item">
 					<form action="<?php echo base_url('search/top100');?>" method="post" style="float:left;">
+					<?= csrf_field() ?>
 						<div class="field">
 							<div class="control">
 								<button class="button is-link is-small" type="submit">Listar Top 100</button>
@@ -60,14 +61,15 @@
 
 			<div class="level-right">
     		<div class="level-item">
-					<form action="<?php echo base_url('search/showgenre');?>" method="post">
+					<form action="<?php echo base_url('search');?>" method="post">
+					<?= csrf_field() ?>
 						<div class="field has-addons">
 							<div class="control">
 								<button class="button is-link is-small" type="submit">Listar Gênero:</button>
 							</div>
 							<div class="control">
 								<span class="select is-small">
-									<select name="genre">
+									<select name="listGenre">
 										<option value="rock">Rock</option>
 										<option value="pop">Pop</option>
 										<option value="electronic">Electronic</option>
@@ -77,6 +79,7 @@
 								</span>
 							</div>							
 						</div>
+						<input type="text" name="search_value" hidden/>
 					</form>
 				</div>
 			</div>

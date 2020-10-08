@@ -86,17 +86,25 @@ function selectRatingFilterValue(a)
 
 </script>
 
+<!-- 
+/* -------------------------------------------------------------------------- */
+/*                                 page start                                 */
+/* -------------------------------------------------------------------------- */ 
+-->
+
 <div class="columns">
   <div class="column px-6 py-6">
 
     <!-- Top column -->
+
+		<!-- Main form -->
 		<form action="<?php echo base_url('search');?>" method="post" id="clean_search">
 			<?= csrf_field() ?> <!-- Function that creates a hidden input with a CSRF token that helps protect against some common attacks. -->
 
 			<div class="field has-addons">
 				<div class="control is-expanded">
 					<input type="text" id="search_value" name="search_value" class="input is-primary" 
-					placeholder="Digite o nome do álbum, artista, estúdio..." required/>
+					placeholder="Digite o nome do álbum, artista, estúdio..." />
 				</div>
 				<div class="control">
 					<button class="button is-primary" type="submit">Pesquisar</button>
@@ -105,11 +113,13 @@ function selectRatingFilterValue(a)
 			<p class="help is-danger"><?php if(!empty($searchError)){echo esc($searchError);} ?></p>
 		</form>
 
+		<!-- Reset form -->
 		<form method="post" id="clean_search_reset" action="<?php echo base_url('search');?>" >
 		<?= csrf_field() ?>
 		<input type="text" id="last_search" name="search_value" value="<?php if(isset($currentSearch)){echo esc($currentSearch);} ?>" hidden />
 		</form>
 
+		<!-- filters form -->
 		<form action="<?php echo base_url('search');?>" method="post" id="main_search_form" method="post">
 		<?= csrf_field() ?>
 		<!-- This form has the "search_value" as well, but hidden, not required and with the last search value! -->
@@ -255,6 +265,68 @@ function selectRatingFilterValue(a)
 
 				<div class="searchresults">
 
+					<?php 			
+						if (is_array($results) && !empty($results))
+						{
+
+							/* ----------------------------- View filtering ----------------------------- */
+
+							# Deals with rating filter.
+							if(isset($filterValues["ratingType"]) && $filterValues["ratingType"] != "any")
+							{	
+								foreach ($results as $key => &$value) 
+								{
+									if($filterValues["ratingType"] == "igual")
+									{
+										if($value["type"] == "album")
+										{
+											if($value["rating"] < $filterValues["ratingValue"] || $value["rating"] > ($filterValues["ratingValue"] + 0.9)) {
+													unset($results[$key]);
+											}
+										}
+										else
+										{
+											if($value["album"]["rating"] < $filterValues["ratingValue"] || $value["album"]["rating"] > ($filterValues["ratingValue"] + 0.9)) {
+												unset($results[$key]);
+											}
+										}
+									}
+									else if($filterValues["ratingType"] == "maior")
+									{
+										if($value["type"] == "album")
+										{
+											if($value["rating"] < $filterValues["ratingValue"]) {
+												unset($results[$key]);
+											}
+										}
+										else
+										{
+											if($value["album"]["rating"] < $filterValues["ratingValue"]) {
+												unset($results[$key]);
+											}
+										}
+									}
+									else if($filterValues["ratingType"] == "menor")
+									{
+										if($value["type"] == "album")
+										{
+											if($value["rating"] > $filterValues["ratingValue"]) {
+												unset($results[$key]);
+											}
+										}
+										else
+										{
+											if($value["album"]["rating"] > $filterValues["ratingValue"]) {
+												unset($results[$key]);
+											}
+										}
+									}
+								}
+								unset($value);
+							}
+						}
+					?>
+
 					<div class="tags">
 						<?php if(isset($filterValues["tags"])) : ?>
 							<?php foreach($filterValues["tags"] as $tag) : ?>
@@ -308,66 +380,6 @@ function selectRatingFilterValue(a)
 					<hr class="my-1 has-background-grey-lighter" style=" margin: auto;">
 				
 					<?php if (is_array($results) && !empty($results)) : ?>
-
-						<?php 
-						
-							/* ----------------------------- View filtering ----------------------------- */
-
-							# Deals with rating filter.
-							if($filterValues["ratingType"] != "any")
-							{	
-								foreach ($results as $key => &$value) 
-								{
-									if($filterValues["ratingType"] == "igual")
-									{
-										if($value["type"] == "album")
-										{
-											if($value["rating"] < $filterValues["ratingValue"] || $value["rating"] > ($filterValues["ratingValue"] + 0.9)) {
-													unset($results[$key]);
-											}
-										}
-										else
-										{
-											if($value["album"]["rating"] < $filterValues["ratingValue"] || $value["album"]["rating"] > ($filterValues["ratingValue"] + 0.9)) {
-												unset($results[$key]);
-											}
-										}
-									}
-									else if($filterValues["ratingType"] == "maior")
-									{
-										if($value["type"] == "album")
-										{
-											if($value["rating"] < $filterValues["ratingValue"]) {
-												unset($results[$key]);
-											}
-										}
-										else
-										{
-											if($value["album"]["rating"] < $filterValues["ratingValue"]) {
-												unset($results[$key]);
-											}
-										}
-									}
-									else if($filterValues["ratingType"] == "menor")
-									{
-										if($value["type"] == "album")
-										{
-											if($value["rating"] > $filterValues["ratingValue"]) {
-												unset($results[$key]);
-											}
-										}
-										else
-										{
-											if($value["album"]["rating"] > $filterValues["ratingValue"]) {
-												unset($results[$key]);
-											}
-										}
-									}
-								}
-								unset($value);
-							}
-
-						?>
 
 						<?php 
 
