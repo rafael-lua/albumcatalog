@@ -106,11 +106,24 @@ class Search extends Model
 
 			if($showOnly != "artist" && $showOnly != "studio")
 			{
-				$albumsResults = $this->asArray()->select('id, name, year, rating, "album" as type')
-																				->like(['name' => $s])
-																				->orderBy($sortBy, $direction)
-																				->limit(10, $offset)->findAll();
-				
+				if(isset($filters["genre"]))
+				{
+					$albumsResults = $this->asArray()->select('id, album.name, year, rating, "album" as type')->distinct()
+																					->from('genre, genrealbum')
+																					->where(['genre.name' => 'genrealbum.genreName', 'album.id' => 'genrealbum.albumId'], NULL, FALSE)
+																					->whereIn('genre.name', $filters["genre"])
+																					->like(['album.name' => $s])
+																					->orderBy($sortBy, $direction)
+																					->limit(10, $offset)->findAll();
+				}
+				else
+				{
+					$albumsResults = $this->asArray()->select('id, name, year, rating, "album" as type')
+																					->like(['name' => $s])
+																					->orderBy($sortBy, $direction)
+																					->limit(10, $offset)->findAll();
+				}
+
 				foreach($albumsResults as &$album) # & makes it so it is by reference and can be modified
 				{
 					$album["artist"] = $modelArtist->getNameByAlbum($album["id"]);

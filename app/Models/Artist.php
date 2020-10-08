@@ -11,7 +11,7 @@ class Artist extends Model
 	protected $table = "artist";
 	
 	protected $primaryKey = "id";
-    protected $returnType = "array";
+  protected $returnType = "array";
 	
 	
 	# Returns all the data of an artist
@@ -45,15 +45,31 @@ class Artist extends Model
 														->orderBy('name', $direction)
 														->limit(10, $offset)->findAll();
 
-		foreach($artists as &$artist)
+		foreach($artists as $key => &$artist)
 		{
-			$artist["album"] = $this->asArray()->select('album.name, album.rating', false)
-											->from('album, artistalbum')
-											->where(['artistalbum.artistId' => 'artist.id', 'artistalbum.albumId' => 'album.id', 'artist.id' => $artist["id"]], NULL, FALSE)
-											->orderBy('album.rating', 'DESC')
-											->limit(1)->first();
-			
+			if(isset($filters["genre"]))
+			{
+				$artist["album"] = $this->asArray()->select('album.name, album.rating', false)->distinct()
+												->from('album, artistalbum')
+												->from('genre, genrealbum')
+												->where(['artistalbum.artistId' => 'artist.id', 'artistalbum.albumId' => 'album.id', 'artist.id' => $artist["id"]], NULL, FALSE)
+												->where(['genre.name' => 'genrealbum.genreName', 'album.id' => 'genrealbum.albumId'], NULL, FALSE)
+												->whereIn('genre.name', $filters["genre"])
+												->orderBy('album.rating', 'DESC')
+												->limit(1)->first();
+				
+				if(empty($artist["album"])){unset($artists[$key]);}
+			}
+			else
+			{
+				$artist["album"] = $this->asArray()->select('album.name, album.rating', false)
+												->from('album, artistalbum')
+												->where(['artistalbum.artistId' => 'artist.id', 'artistalbum.albumId' => 'album.id', 'artist.id' => $artist["id"]], NULL, FALSE)
+												->orderBy('album.rating', 'DESC')
+												->limit(1)->first();
+			}
 		}
+		unset($artist);
 		
 
 		return $artists;

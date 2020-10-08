@@ -64,6 +64,7 @@ class MainSearch extends BaseController
 			"lastOrderType" 			=> 		"permit_empty|in_list[none, az, rating, year]",
 			"lastOrderDesc" 			=> 		"permit_empty|in_list[no, yes]",
 			"lastCurrentIconPos" 	=> 		"permit_empty|in_list[none, az, rating, year]",
+			"genreFilter[]" 	=> 		"permit_empty|in_list[rock, pop, electronic, classical, jazz]",
 		]))
 		{
 			$this->session->set("homeErrorId", 1);
@@ -71,7 +72,7 @@ class MainSearch extends BaseController
 		}
 		else
 		{
-
+			
 			/* -------------------- show the album that was searched! ------------------- */
 
 			$search = new Search();
@@ -109,7 +110,40 @@ class MainSearch extends BaseController
 			}
 			$filterValues["showOnly"] = $currentFilters["showOnly"];
 
+			if(!empty($this->request->getVar("genreFilter[]")))
+			{
+				$currentFilters["genre"] = $this->request->getVar("genreFilter[]");
+				$filterValues["checkedGenre"] = $currentFilters["genre"];
+			}
 
+			/* ----------------------------- Filters tags ----------------------------- */
+
+			$filterValues["tags"] = [];
+
+			if($filterValues["ratingType"] != "any"){
+				$tag = "";
+				if($filterValues["ratingType"] == "maior"){$tag = "Rating >= " . $filterValues["ratingValue"];}
+				elseif($filterValues["ratingType"] == "menor"){$tag = "Rating <= " . $filterValues["ratingValue"];}
+				elseif($filterValues["ratingType"] == "igual"){$tag = "Rating = " . $filterValues["ratingValue"];}
+				$filterValues["tags"][] = $tag;
+			}
+
+			if(!empty($show_only) && $show_only != "all")
+			{
+				$tag = "";
+				if($show_only == "onlyAlbum"){$tag = "Apenas albums";}
+				elseif($show_only == "onlyArtist"){$tag = "Apenas artistas";}
+				elseif($show_only == "onlyStudio"){$tag = "Apenas estúdios";}
+				$filterValues["tags"][] = $tag;
+			}
+
+			if(!empty($currentFilters["genre"]))
+			{
+				foreach($currentFilters["genre"] as $genre)
+				{
+					$filterValues["tags"][] = ucfirst($genre);
+				}
+			}
 
 			/* -------------------------------------------------------------------------- */
 			/*                                SEARCH ORDER                                */

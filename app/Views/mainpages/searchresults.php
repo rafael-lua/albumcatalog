@@ -18,7 +18,7 @@ function toggleRatingValueFilter()
 
 function selectRatingFilter(a)
 {
-	// First, rmeove all activate class
+	// First, remove all activate class
 	let removeActive = document.getElementById("rating_any");
 	removeActive.classList.remove("is-active");
 	removeActive = document.getElementById("rating_maiorigual");
@@ -67,7 +67,7 @@ function selectRatingFilter(a)
 
 function selectRatingFilterValue(a)
 {
-	// First, rmeove all activate class
+	// First, remove all activate class
 	for(let i = 1; i <= 10; i++)
 	{
 		let removeActive = document.getElementById("rating_filter_" + i);
@@ -82,6 +82,7 @@ function selectRatingFilterValue(a)
 
 	toggleRatingValueFilter();
 }
+
 
 </script>
 
@@ -104,7 +105,13 @@ function selectRatingFilterValue(a)
 			<p class="help is-danger"><?php if(!empty($searchError)){echo esc($searchError);} ?></p>
 		</form>
 
-		<form action="<?php echo base_url('search');?>" method="post" id="main_search_form">
+		<form method="post" id="clean_search_reset" action="<?php echo base_url('search');?>" >
+		<?= csrf_field() ?>
+		<input type="text" id="last_search" name="search_value" value="<?php if(isset($currentSearch)){echo esc($currentSearch);} ?>" hidden />
+		</form>
+
+		<form action="<?php echo base_url('search');?>" method="post" id="main_search_form" method="post">
+		<?= csrf_field() ?>
 		<!-- This form has the "search_value" as well, but hidden, not required and with the last search value! -->
 		<input type="text" id="last_search" name="search_value" value="<?php if(isset($currentSearch)){echo esc($currentSearch);} ?>" hidden />
 		<input type="text" name="lastOrderType" value="<?php if(isset($orderValues["lastType"])){echo esc($orderValues["lastType"]);}else{echo esc("none");} ?>" hidden />
@@ -127,7 +134,7 @@ function selectRatingFilterValue(a)
 									<button type="submit" class="button is-link is-outlined is-rounded">Apply</button>
 								</div>
 								<div class="control">
-									<button type="reset" class="button is-danger is-outlined is-rounded">Reset</button>
+									<button type="submit" form="clean_search_reset" class="button is-danger is-outlined is-rounded" <?php if(!isset($currentSearch)){echo esc("disabled");} ?>>Reset</button>
 								</div>
 							</div>						
 						</div>
@@ -218,23 +225,23 @@ function selectRatingFilterValue(a)
 
 						<p class="panel-block"><strong>Genre</strong></p>
 						<label class="panel-block">
-							<input type="checkbox">
+							<input type="checkbox" name="genreFilter[]" value="rock" <?php if(isset($filterValues["checkedGenre"]) && in_array("rock", $filterValues["checkedGenre"])){echo esc("checked");} ?>>
 							Rock
 						</label>
 						<label class="panel-block">
-							<input type="checkbox">
+							<input type="checkbox" name="genreFilter[]" value="pop" <?php if(isset($filterValues["checkedGenre"]) && in_array("pop", $filterValues["checkedGenre"])){echo esc("checked");} ?>>
 							Pop
 						</label>
 						<label class="panel-block">
-							<input type="checkbox">
+							<input type="checkbox" name="genreFilter[]" value="jazz" <?php if(isset($filterValues["checkedGenre"]) && in_array("jazz", $filterValues["checkedGenre"])){echo esc("checked");} ?>>
 							Jazz
 						</label>
 						<label class="panel-block">
-							<input type="checkbox">
+							<input type="checkbox" name="genreFilter[]" value="electronic" <?php if(isset($filterValues["checkedGenre"]) && in_array("electronic", $filterValues["checkedGenre"])){echo esc("checked");} ?>>
 							Electronic
 						</label>
 						<label class="panel-block">
-							<input type="checkbox">
+							<input type="checkbox" name="genreFilter[]" value="classical" <?php if(isset($filterValues["checkedGenre"]) && in_array("classical", $filterValues["checkedGenre"])){echo esc("checked");} ?>>
 							Classical
 						</label>
 
@@ -249,8 +256,11 @@ function selectRatingFilterValue(a)
 				<div class="searchresults">
 
 					<div class="tags">
-						<span class="tag is-rounded is-info is-light">filter</span>
-						<span class="tag is-rounded is-info is-light">another filter</span>
+						<?php if(isset($filterValues["tags"])) : ?>
+							<?php foreach($filterValues["tags"] as $tag) : ?>
+								<span class="tag is-rounded is-info is-light"><?php echo esc($tag); ?></span>
+							<?php endforeach; ?>
+						<?php endif; ?>
 					</div>
 
 					<div class="level">

@@ -44,15 +44,31 @@ class Studio extends Model
 														->orderBy('name', $direction)
 														->limit(10, $offset)->findAll();
 
-		foreach($studios as &$studio)
+		foreach($studios as $key => &$studio)
 		{
-			$studio["album"] = $this->asArray()->select('album.name, album.rating', false)
-											->from('album, studioalbum')
-											->where(['studioalbum.studioId' => 'studio.id', 'studioalbum.albumId' => 'album.id', 'studio.id' => $studio["id"]], NULL, FALSE)
-											->orderBy('album.rating', 'DESC')
-											->limit(1)->first();
-			
+			if(isset($filters["genre"]))
+			{
+				$studio["album"] = $this->asArray()->select('album.name, album.rating', false)->distinct()
+												->from('album, studioalbum')
+												->from('genre, genrealbum')
+												->where(['studioalbum.studioId' => 'studio.id', 'studioalbum.albumId' => 'album.id', 'studio.id' => $studio["id"]], NULL, FALSE)
+												->where(['genre.name' => 'genrealbum.genreName', 'album.id' => 'genrealbum.albumId'], NULL, FALSE)
+												->whereIn('genre.name', $filters["genre"])
+												->orderBy('album.rating', 'DESC')
+												->limit(1)->first();
+				
+				if(empty($studio["album"])){unset($studios[$key]);}
+			}
+			else
+			{
+				$studio["album"] = $this->asArray()->select('album.name, album.rating', false)
+												->from('album, studioalbum')
+												->where(['studioalbum.studioId' => 'studio.id', 'studioalbum.albumId' => 'album.id', 'studio.id' => $studio["id"]], NULL, FALSE)
+												->orderBy('album.rating', 'DESC')
+												->limit(1)->first();
+			}
 		}
+		unset($studio);
 		
 
 		return $studios;
