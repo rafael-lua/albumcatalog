@@ -67,4 +67,38 @@ class Accounts extends BaseController
 		}
 	}
 
+
+
+	/* -------------------------------------------------------------------------- */
+	/*                             User painel control                            */
+	/* -------------------------------------------------------------------------- */
+
+	public function userPainel()
+	{
+		if(!$this->session->has("userAccount"))
+		{
+			return redirect()->to(base_url());
+		}
+		else
+		{
+
+			$data = [];
+
+			if($this->session->has("userAccount"))
+			{
+				$data["userAccount"] = $this->session->get("userAccount");
+			}
+
+
+			
+
+			
+			echo view('templates/header', $data);
+			echo view('templates/loginsection', $data);
+			echo view('mainpages/userpage', $data);
+			echo view('templates/footer');
+		}		
+
+	}
+
 }

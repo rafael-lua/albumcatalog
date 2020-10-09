@@ -34,7 +34,7 @@
 							Home
 						</a>
 					</div>
-					<div class="navbar-end">
+					<div class="navbar-end has-background-black-ter">
 						<div class="navbar-item">
 							<?php if(!isset($userAccount)) : ?>
 								<div class="buttons">
@@ -46,7 +46,7 @@
 									</button>
 								</div>
 							<?php else: ?>							
-								<p>Hello, <?php echo esc($userAccount["username"]); ?> !</p>
+								<p class="has-text-weight-semibold is-size-5">@<a class="has-text-warning" href="<?php echo base_url("painel"); ?>"><?php echo esc($userAccount["username"]); ?></a></p>
 							<?php endif; ?>
 						</div>
 					</div>
