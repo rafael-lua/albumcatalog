@@ -48,8 +48,9 @@
 		<nav class="level is-mobile">
 			<div class="level-left">
     		<div class="level-item">
-					<form action="<?php echo base_url('search/top100');?>" method="post" style="float:left;">
+					<form action="<?php echo base_url('search');?>" method="post" style="float:left;">
 					<?= csrf_field() ?>
+					<input type="text" name="listTop" value="100" hidden />
 						<div class="field">
 							<div class="control">
 								<button class="button is-link is-small" type="submit">Listar Top 100</button>

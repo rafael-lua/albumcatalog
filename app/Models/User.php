@@ -15,7 +15,7 @@ class User extends Model
 {	
 	protected $table = "useraccount";	
 	protected $primaryKey = "id";
-    protected $returnType = "array";
+  protected $returnType = "array";
 	
 	
 	

@@ -33,7 +33,7 @@ class Studio extends Model
 
 
 
-	public function findStudio($s, $filters, $direction, $offset)
+	public function findStudio($s, $filters, $direction, $limit, $offset)
 	{
 		$studios = [];
 
@@ -42,7 +42,7 @@ class Studio extends Model
 		$studios = $this->asArray()->select('id, name, "studio" as type')
 														->like(['name' => $s])
 														->orderBy('name', $direction)
-														->limit(10, $offset)->findAll();
+														->limit($limit, $offset)->findAll();
 
 		foreach($studios as $key => &$studio)
 		{

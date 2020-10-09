@@ -92,6 +92,7 @@ class Search extends Model
 			$direction = "ASC";
 			if($desc == true){$direction = "DESC";}
 
+			$limit = $filters["top100"] == true ? 100 : 10;
 			$offset = $page * 10;
 
 			# This model works with album table. 
@@ -114,14 +115,14 @@ class Search extends Model
 																					->whereIn('genre.name', $filters["genre"])
 																					->like(['album.name' => $s])
 																					->orderBy($sortBy, $direction)
-																					->limit(10, $offset)->findAll();
+																					->limit($limit, $offset)->findAll();
 				}
 				else
 				{
 					$albumsResults = $this->asArray()->select('id, name, year, rating, "album" as type')
 																					->like(['name' => $s])
 																					->orderBy($sortBy, $direction)
-																					->limit(10, $offset)->findAll();
+																					->limit($limit, $offset)->findAll();
 				}
 
 				foreach($albumsResults as &$album) # & makes it so it is by reference and can be modified
@@ -137,13 +138,13 @@ class Search extends Model
 			/* ------------------------------- Get artists ------------------------------ */
 			if($showOnly != "album" && $showOnly != "studio")
 			{
-				$artistsResults = $modelArtist->findArtist($s, $filters, $direction, $offset);
+				$artistsResults = $modelArtist->findArtist($s, $filters, $direction, $limit, $offset);
 			}
 
 			/* ------------------------------- Get studios ------------------------------- */
 			if($showOnly != "artist" && $showOnly != "album")
 			{
-				$studiosResults = $modelStudio->findStudio($s, $filters, $direction, $offset);
+				$studiosResults = $modelStudio->findStudio($s, $filters, $direction, $limit, $offset);
 			}
 
 

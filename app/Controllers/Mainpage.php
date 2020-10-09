@@ -29,7 +29,7 @@ class Mainpage extends BaseController
 			}
 		}
 		
-		echo view('templates/header');
+		echo view('templates/header', $data);
 		echo view('templates/loginsection', $data);
 		echo view('mainpages/home', $data);
 		echo view('templates/footer');
@@ -58,7 +58,7 @@ class Mainpage extends BaseController
 			$data["userAccount"] = $this->session->get("userAccount");
 		}
 		
-		echo view('templates/header');
+		echo view('templates/header', $data);
 		echo view('templates/loginsection', $data);
 		echo view('mainpages/'.$page, $data);
 		echo view('templates/footer');

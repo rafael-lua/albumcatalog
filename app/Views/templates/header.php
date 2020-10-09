@@ -36,14 +36,18 @@
 					</div>
 					<div class="navbar-end">
 						<div class="navbar-item">
-							<div class="buttons">
-								<button class="button is-info">
-									<strong>Sign up</strong>
-								</button>
-								<button class="button is-info is-light" onclick="loginModal()">
-									Log in
-								</button>
-							</div>
+							<?php if(!isset($userAccount)) : ?>
+								<div class="buttons">
+									<button class="button is-info">
+										<strong>Sign up</strong>
+									</button>
+									<button class="button is-info is-light" onclick="loginModal()">
+										Log in
+									</button>
+								</div>
+							<?php else: ?>							
+								<p>Hello, <?php echo esc($userAccount["username"]); ?> !</p>
+							<?php endif; ?>
 						</div>
 					</div>
 				</div>

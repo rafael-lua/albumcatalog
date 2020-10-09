@@ -2,7 +2,7 @@
 <div class="modal" id="login-modal">
 	<div class="modal-background"></div>
 	<div class="modal-content">
-				
+			<?php if(!isset($userAccount)) : ?>
 				<div class="box">					
 						<form action="<?php echo base_url('login'); ?>" method="post">
 							<p class="title" style="text-align: center;"><strong> LOGIN </strong></p>
@@ -33,8 +33,13 @@
 								</div>
 							</div>
 						</form>
-				</div>		
 
+						<div class="container">
+							<p class="has-text-danger is-size-7 has-text-centered mt-3"><?php if(isset($loginError)){echo esc($loginError);} ?></p>
+						</div>
+				</div>	
+
+			<?php endif; ?>
 	</div>	
 	<button class="modal-close is-large" aria-label="close" onclick="loginModal()"></button>
 </div>

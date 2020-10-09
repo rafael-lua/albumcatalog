@@ -18,7 +18,7 @@ class MainSearch extends BaseController
 			$data["userAccount"] = $this->session->get("userAccount");
 		}
 		
-		echo view('templates/header');
+		echo view('templates/header', $data);
 		echo view('templates/loginsection', $data);
 		echo view('mainpages/searchresults');
 		echo view('templates/footer');
@@ -43,6 +43,7 @@ class MainSearch extends BaseController
 			"lastCurrentIconPos" 	=> 		"permit_empty|in_list[none, az, rating, year]",
 			"genreFilter[]" 			=> 		"permit_empty|in_list[rock, pop, electronic, classical, jazz]",
 			"listGenre" 					=>		"permit_empty|in_list[rock, pop, electronic, classical, jazz]",
+			"listTop" 						=>		"permit_empty|in_list[100]",
 		]))
 		{
 			return redirect()->to(base_url());
@@ -95,6 +96,12 @@ class MainSearch extends BaseController
 			{
 				$currentFilters["genre"][] = $this->request->getVar("listGenre");
 				$filterValues["checkedGenre"] = $currentFilters["genre"];
+				$currentFilters["showOnly"] = "album";
+			}
+
+			if(!empty($this->request->getVar("listTop")))
+			{
+				$currentFilters["top100"] = true;
 				$currentFilters["showOnly"] = "album";
 			}
 
@@ -171,6 +178,13 @@ class MainSearch extends BaseController
 				if($this->request->getVar("az_sort") == "azDesc"){$searchDesc = true;}else{$searchDesc = false;}
 				$currentIconPosition = "az";
 			}
+			
+			if($currentFilters["top100"] == true)
+			{
+				$searchOrder = "rating";
+				$searchDesc = true;
+				$currentIconPosition = "rating";
+			}
 
 			/* ---------- The type will tell which sort function should it call --------- */
 
@@ -230,14 +244,14 @@ class MainSearch extends BaseController
 			{		
 				$data["searchError"] = "Nenhum resultado encontrado! Tente algo diferente...";
 
-				echo view('templates/header');
+				echo view('templates/header', $data);
 				echo view('templates/loginsection', $data);
 				echo view('mainpages/searchresults', $data);
 				echo view('templates/footer');
 			}
 			else # Results found
 			{
-				echo view('templates/header');
+				echo view('templates/header', $data);
 				echo view('templates/loginsection', $data);
 				echo view('mainpages/searchresults', $data);
 				echo view('templates/footer');
@@ -266,7 +280,7 @@ class MainSearch extends BaseController
 			$data["userAccount"] = $this->session->get("userAccount");
 		}
 		
-		echo view('templates/header');
+		echo view('templates/header', $data);
 		echo view('templates/loginsection', $data);
 		echo view('mainpages/showalbum', $data);
 		echo view('templates/footer');

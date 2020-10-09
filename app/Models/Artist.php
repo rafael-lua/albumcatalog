@@ -34,7 +34,7 @@ class Artist extends Model
 
 
 	
-	public function findArtist($s, $filters, $direction, $offset)
+	public function findArtist($s, $filters, $direction, $limit, $offset)
 	{
 		$artists = [];
 
@@ -43,7 +43,7 @@ class Artist extends Model
 		$artists = $this->asArray()->select('id, name, "artist" as type')
 														->like(['name' => $s])
 														->orderBy('name', $direction)
-														->limit(10, $offset)->findAll();
+														->limit($limit, $offset)->findAll();
 
 		foreach($artists as $key => &$artist)
 		{

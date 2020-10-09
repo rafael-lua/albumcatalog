@@ -22,7 +22,7 @@ class Accounts extends BaseController
 			"password" => 	"required",
 		]))
 		{
-			$this->session->set("homeErrorId", 2);
+			$this->session->set("homeErrorId", 1);
 			return redirect()->to(base_url());
 		}
 		else

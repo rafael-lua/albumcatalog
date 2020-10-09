@@ -15,6 +15,7 @@ namespace App\Controllers;
  */
 
 use CodeIgniter\Controller;
+use Config\Services;
 
 class BaseController extends Controller
 {
@@ -29,6 +30,11 @@ class BaseController extends Controller
 	protected $helpers = ['html'];
 
 	/**
+	 * @var string - Holds the session instance
+	 */
+	protected $session;
+
+	/**
 	 * Constructor.
 	 */
 	public function initController(\CodeIgniter\HTTP\RequestInterface $request, \CodeIgniter\HTTP\ResponseInterface $response, \Psr\Log\LoggerInterface $logger)
@@ -39,8 +45,12 @@ class BaseController extends Controller
 		//--------------------------------------------------------------------
 		// Preload any models, libraries, etc, here.
 		//--------------------------------------------------------------------
-		// E.g.:
-		$this->session = \Config\Services::session();
+
+		// Ensure that the session is started and running
+		if (session_status() == PHP_SESSION_NONE)
+		{
+				$this->session = Services::session();
+		}
 	}
 
 }

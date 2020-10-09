@@ -113,6 +113,36 @@ function selectRatingFilterValue(a)
 			<p class="help is-danger"><?php if(!empty($searchError)){echo esc($searchError);} ?></p>
 		</form>
 
+		<form action="<?php echo base_url('search');?>" method="post" class="is-pulled-left mx-1">
+		<?= csrf_field() ?>
+		<input type="text" name="listTop" value="100" hidden />
+			<div class="field">
+				<div class="control">
+					<button class="button is-link is-small" type="submit">Listar Top 100</button>
+				</div>
+			</div>
+		</form>
+
+		<form action="<?php echo base_url('search');?>" method="post" class="is-pulled-right mx-1">
+		<?= csrf_field() ?>
+			<div class="field has-addons">
+				<div class="control">
+					<button class="button is-link is-small" type="submit">Listar Gênero:</button>
+				</div>
+				<div class="control">
+					<span class="select is-small">
+						<select name="listGenre">
+							<option value="rock">Rock</option>
+							<option value="pop">Pop</option>
+							<option value="electronic">Electronic</option>
+							<option value="classical">Classical</option>
+							<option value="jazz">Jazz</option>
+						</select>
+					</span>
+				</div>							
+			</div>
+		</form>
+
 		<!-- Reset form -->
 		<form method="post" id="clean_search_reset" action="<?php echo base_url('search');?>" >
 		<?= csrf_field() ?>
@@ -128,7 +158,7 @@ function selectRatingFilterValue(a)
 		<input type="text" name="lastOrderDesc" value="<?php if(isset($orderValues["lastDesc"])){echo esc($orderValues["lastDesc"]);}else{echo esc("no");} ?>" hidden />
 		<input type="text" name="lastCurrentIconPos" value="<?php if(isset($orderValues["lastIconPos"])){echo esc($orderValues["lastIconPos"]);}else{echo esc("none");} ?>" hidden />
 
-    <div class="columns my-5">
+    <div class="columns my-5" style="clear: both;">
 
       <div class="column">
 				<!-- Left column -->
@@ -399,7 +429,7 @@ function selectRatingFilterValue(a)
 								return strcmp($resultB["name"], $resultA["name"]);
 							}
 
-							function orderResultsByRatingAsc($resultA, $resultB)
+							function orderResultsByRatingDesc($resultA, $resultB)
 							{
 									if ($resultB["type"] != "album") { return -1;}
 									if ($resultA["type"] != "album") { return 1;}
@@ -407,7 +437,7 @@ function selectRatingFilterValue(a)
 									return ($resultA["rating"] < $resultB["rating"]) ? 1 : -1;
 							}
 
-							function orderResultsByRatingDesc($resultA, $resultB)
+							function orderResultsByRatingAsc($resultA, $resultB)
 							{
 									if ($resultB["type"] != "album") { return -1;}
 									if ($resultA["type"] != "album") { return 1;}
@@ -415,7 +445,7 @@ function selectRatingFilterValue(a)
 									return ($resultB["rating"] < $resultA["rating"]) ? 1 : -1;
 							}
 
-							function orderResultsByYearAsc($resultA, $resultB)
+							function orderResultsByYearDesc($resultA, $resultB)
 							{
 									if ($resultB["type"] != "album") { return -1;}
 									if ($resultA["type"] != "album") { return 1;}
@@ -423,7 +453,7 @@ function selectRatingFilterValue(a)
 									return ($resultA["year"] < $resultB["year"]) ? 1 : -1;
 							}
 
-							function orderResultsByYearDesc($resultA, $resultB)
+							function orderResultsByYearAsc($resultA, $resultB)
 							{
 									if ($resultB["type"] != "album") { return -1;}
 									if ($resultA["type"] != "album") { return 1;}
