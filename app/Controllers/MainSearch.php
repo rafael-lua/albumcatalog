@@ -5,6 +5,7 @@
 use App\Models\Search;
 use App\Models\User;
 use App\Models\Review;
+use App\Models\Ranking;
 
 class MainSearch extends BaseController
 {
@@ -28,7 +29,7 @@ class MainSearch extends BaseController
 
 	
 	# main search method
-	public function findAll($searchValue = NULL)
+	public function findAll()
 	{
 		if(!$this->validate([
 			"search_value" 				=> 		"permit_empty",
@@ -271,6 +272,7 @@ class MainSearch extends BaseController
 	{
 		$search = new Search();
 		$reviews = new Review();
+		
 		$data["albumId"] = $albumId;
 		$data["albumData"] = $search->getFullAlbum($albumId);
 		$data["albumReviews"] = $reviews->getReviewsByAlbum($albumId);
@@ -278,6 +280,10 @@ class MainSearch extends BaseController
 		if($this->session->has("userAccount"))
 		{
 			$data["userAccount"] = $this->session->get("userAccount");
+
+			$ranking = new Ranking();
+			$data["userAlbumRanking"] = $ranking->getUserAlbumRank($data["userAccount"]["id"], $albumId);
+		
 		}
 		
 		echo view('templates/header', $data);

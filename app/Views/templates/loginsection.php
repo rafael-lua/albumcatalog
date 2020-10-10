@@ -11,7 +11,7 @@
 							<div class="field">
 								<label class="label">Username</label>
 								<div class="control">
-									<input name="username" class="input" type="text" placeholder="user123">
+									<input id="loginUsername" name="username" class="input" type="text" placeholder="user123">
 								</div>
 								<p class="help is-hidden"></p>
 							</div>

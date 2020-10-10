@@ -1,3 +1,108 @@
+<script>
+
+window.onload = function(){
+	let userStars = document.getElementsByClassName("userRank");
+	for(let i = 0; i < userStars.length; i++)
+	{
+		userStars[i].addEventListener("mouseover", hoverColor);
+		userStars[i].addEventListener("mouseout", hoverUncolor);
+	}
+}
+
+function hoverColor()
+{
+	if(!this.classList.contains("isSelected"))
+	{
+		let elements = document.getElementsByClassName("userRank isNotSelected");
+		for (let i = 0; i < elements.length; i++) {
+			
+			elements[i].style.color = "#ffcc00";
+			
+			if(elements[i].id == this.id){return}
+		}
+	}
+}
+
+function hoverUncolor()
+{
+	let elements = document.getElementsByClassName("userRank isNotSelected");
+	for (let i = 0; i < elements.length; i++) {
+		elements[i].style.color = "#d9d9d9";
+	}
+}
+
+
+</script>
+
+
+<?php if(isset($userAccount)) : ?>
+	<div class="container mt-3 px-1 py-1 has-background-grey-lighter">
+		<div class="box has-background-dark has-text-info-light py-1">
+			
+		<form action="<?php echo base_url('updateRating');?>" method="post">
+		<?= csrf_field() ?>
+		<input type="text" name="albumid" value="<?php echo esc($albumId); ?>" hidden />
+		<input type="text" name="userid" value="<?php echo esc($userAccount["id"]); ?>" hidden />
+			<?php if(isset($userAlbumRanking) && !empty($userAlbumRanking)){$note = $userAlbumRanking["note"];}else{$note = 0;} ?>
+			<span class="mx-3"><em class="mr-1">SUA NOTA</em>
+			<button value="1" name="note" type="submit" style="padding: 0; border: none; background: none;" class="is-size-6">
+				<i class="fas fa-star userRank <?php if($note != 0 && $note >= 1){echo esc("isSelected");}else{echo esc("isNotSelected");} ?>" id="star-1" style="color: #<?php if($note != 0 && $note >= 1){echo esc("ffcc00");}else{echo esc("d9d9d9");} ?>; cursor: pointer;"></i>
+			</button>
+
+			<button value="2" name="note" type="submit" style="padding: 0; border: none; background: none;" class="is-size-6">
+				<i class="fas fa-star userRank <?php if($note != 0 && $note >= 2){echo esc("isSelected");}else{echo esc("isNotSelected");} ?>" id="star-2" style="color: #<?php if($note != 0 && $note >= 2){echo esc("ffcc00");}else{echo esc("d9d9d9");} ?>; cursor: pointer;"></i>
+			</button>
+
+			<button value="3" name="note" type="submit" style="padding: 0; border: none; background: none;" class="is-size-6">
+				<i class="fas fa-star userRank <?php if($note != 0 && $note >= 3){echo esc("isSelected");}else{echo esc("isNotSelected");} ?>" id="star-3" style="color: #<?php if($note != 0 && $note >= 3){echo esc("ffcc00");}else{echo esc("d9d9d9");} ?>; cursor: pointer;"></i>
+			</button>
+
+			<button value="4" name="note" type="submit" style="padding: 0; border: none; background: none;" class="is-size-6">
+				<i class="fas fa-star userRank <?php if($note != 0 && $note >= 4){echo esc("isSelected");}else{echo esc("isNotSelected");} ?>" id="star-4" style="color: #<?php if($note != 0 && $note >= 4){echo esc("ffcc00");}else{echo esc("d9d9d9");} ?>; cursor: pointer;"></i>
+			</button>
+
+			<button value="5" name="note" type="submit" style="padding: 0; border: none; background: none;" class="is-size-6">
+				<i class="fas fa-star userRank <?php if($note != 0 && $note >= 5){echo esc("isSelected");}else{echo esc("isNotSelected");} ?>" id="star-5" style="color: #<?php if($note != 0 && $note >= 5){echo esc("ffcc00");}else{echo esc("d9d9d9");} ?>; cursor: pointer;"></i>
+			</button>	
+
+			<button value="6" name="note" type="submit" style="padding: 0; border: none; background: none;" class="is-size-6">
+				<i class="fas fa-star userRank <?php if($note != 0 && $note >= 6){echo esc("isSelected");}else{echo esc("isNotSelected");} ?>" id="star-6" style="color: #<?php if($note != 0 && $note >= 6){echo esc("ffcc00");}else{echo esc("d9d9d9");} ?>; cursor: pointer;"></i>
+			</button>
+
+			<button value="7" name="note" type="submit" style="padding: 0; border: none; background: none;" class="is-size-6">
+				<i class="fas fa-star userRank <?php if($note != 0 && $note >= 7){echo esc("isSelected");}else{echo esc("isNotSelected");} ?>" id="star-7" style="color: #<?php if($note != 0 && $note >= 7){echo esc("ffcc00");}else{echo esc("d9d9d9");} ?>; cursor: pointer;"></i>
+			</button>	
+
+			<button value="8" name="note" type="submit" style="padding: 0; border: none; background: none;" class="is-size-6">
+				<i class="fas fa-star userRank <?php if($note != 0 && $note >= 8){echo esc("isSelected");}else{echo esc("isNotSelected");} ?>" id="star-8" style="color: #<?php if($note != 0 && $note >= 8){echo esc("ffcc00");}else{echo esc("d9d9d9");} ?>; cursor: pointer;"></i>
+			</button>
+
+			<button value="9" name="note" type="submit" style="padding: 0; border: none; background: none;" class="is-size-6">
+				<i class="fas fa-star userRank <?php if($note != 0 && $note >= 9){echo esc("isSelected");}else{echo esc("isNotSelected");} ?>" id="star-9" style="color: #<?php if($note != 0 && $note >= 9){echo esc("ffcc00");}else{echo esc("d9d9d9");} ?>; cursor: pointer;"></i>
+			</button>
+
+			<button value="10" name="note" type="submit" style="padding: 0; border: none; background: none;" class="is-size-6">
+				<i class="fas fa-star userRank <?php if($note != 0 && $note >= 10){echo esc("isSelected");}else{echo esc("isNotSelected");} ?>" id="star-10" style="color: #<?php if($note != 0 && $note >= 10){echo esc("ffcc00");}else{echo esc("d9d9d9");} ?>; cursor: pointer;"></i>
+			</button>
+
+			<small class="mx-1 has-text-warning has-text-weight-bold"><?php if($note != 0){echo esc($userAlbumRanking["note"]);} ?></small>
+			</span> 
+		</form>
+
+		</div>
+	</div>
+<?php endif; ?>
+
+
+<?php
+/* -------------------------------------------------------------------------- */
+/*                               Show album page                              */
+/* -------------------------------------------------------------------------- */
+
+// echo var_dump($debug);
+
+?>
+
 
 <section class="section" id="albumSection">
 	<div class="columns is-centered is-vcentered">
@@ -28,11 +133,11 @@
 		<div class="column is-half">
 			
 			<p class="is-italic is-size-1 has-text-weight-bold has-text-black-ter" style="line-height: 0.5em;">
-			<i class="fas fa-star fa-lg is-size-3" style="vertical-align: middle; color: #ffcc00;"></i>
-			<?php echo esc($albumData["album"]["rating"]); ?>
-			</p>
+				<i class="fas fa-star is-size-1" style="color: #ffcc00;"></i>
+				<?php echo esc($albumData["album"]["rating"]); ?>
+			</p>				
 			
-			<hr style="width: 50%;" class="has-background-grey-lighter">
+			<hr style="width: 75%;" class="has-background-grey-lighter">
 		
 			<h1 class="title is-1 has-text-weight-bold">
 				<?php echo esc($albumData["album"]["name"]);?>
@@ -149,6 +254,3 @@
 	<?php endif; ?>
 
 </section>
-
-
-

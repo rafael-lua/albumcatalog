@@ -12,6 +12,7 @@ function loginModal()
 {
   let element = document.getElementById("login-modal");
   element.classList.toggle("is-active");
+  document.getElementById("loginUsername").focus();
 }
 
 function signUpModal() 

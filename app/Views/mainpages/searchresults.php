@@ -146,14 +146,14 @@ function selectRatingFilterValue(a)
 		<!-- Reset form -->
 		<form method="post" id="clean_search_reset" action="<?php echo base_url('search');?>" >
 		<?= csrf_field() ?>
-		<input type="text" id="last_search" name="search_value" value="<?php if(isset($currentSearch)){echo esc($currentSearch);} ?>" hidden />
+		<input type="text" name="search_value" value="<?php if(isset($currentSearch)){echo esc($currentSearch);} ?>" hidden />
 		</form>
 
 		<!-- filters form -->
 		<form action="<?php echo base_url('search');?>" method="post" id="main_search_form" method="post">
 		<?= csrf_field() ?>
 		<!-- This form has the "search_value" as well, but hidden, not required and with the last search value! -->
-		<input type="text" id="last_search" name="search_value" value="<?php if(isset($currentSearch)){echo esc($currentSearch);} ?>" hidden />
+		<input type="text" name="search_value" value="<?php if(isset($currentSearch)){echo esc($currentSearch);} ?>" hidden />
 		<input type="text" name="lastOrderType" value="<?php if(isset($orderValues["lastType"])){echo esc($orderValues["lastType"]);}else{echo esc("none");} ?>" hidden />
 		<input type="text" name="lastOrderDesc" value="<?php if(isset($orderValues["lastDesc"])){echo esc($orderValues["lastDesc"]);}else{echo esc("no");} ?>" hidden />
 		<input type="text" name="lastCurrentIconPos" value="<?php if(isset($orderValues["lastIconPos"])){echo esc($orderValues["lastIconPos"]);}else{echo esc("none");} ?>" hidden />

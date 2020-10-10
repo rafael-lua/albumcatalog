@@ -89,6 +89,7 @@
     <div class="container">
       <h1 class="title mx-5 mt-1"><strong>COLLECTIONS</strong></h1>
       <div class="box" style="max-height: 30em; overflow-y: scroll;">
+
         <!-- This should be through ajax interaction. -->
         <form>
           <?= csrf_field() ?>
