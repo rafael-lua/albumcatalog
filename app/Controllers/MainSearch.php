@@ -283,6 +283,9 @@ class MainSearch extends BaseController
 
 			$ranking = new Ranking();
 			$data["userAlbumRanking"] = $ranking->getUserAlbumRank($data["userAccount"]["id"], $albumId);
+
+			$review = new Review();
+			$data["userAlbumReview"] = $review->getUserAlbumReview($data["userAccount"]["id"], $albumId);
 		
 		}
 		

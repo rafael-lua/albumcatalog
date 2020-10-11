@@ -144,7 +144,7 @@ function selectRatingFilterValue(a)
 		</form>
 
 		<!-- Reset form -->
-		<form method="post" id="clean_search_reset" action="<?php echo base_url('search');?>" >
+		<form method="post" id="clean_search_reset" action="<?php echo base_url('search');?>" hidden >
 		<?= csrf_field() ?>
 		<input type="text" name="search_value" value="<?php if(isset($currentSearch)){echo esc($currentSearch);} ?>" hidden />
 		</form>

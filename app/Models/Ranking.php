@@ -46,8 +46,8 @@ class Ranking extends Model
 		}
 
 		/* ------------------ check if user already rated the album ----------------- */
-		$rating_exists = $this->select('userId')->where(['userId' => $userId, 'albumId' => $albumId])->countAllResults();
-		if($rating_exists <= 0)
+		$rating_exist = $this->select('userId')->where(['userId' => $userId, 'albumId' => $albumId])->countAllResults();
+		if($rating_exist <= 0)
 		{
 			$data = [
 				'userId' => $userId,

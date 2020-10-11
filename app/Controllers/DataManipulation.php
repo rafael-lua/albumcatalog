@@ -13,6 +13,10 @@ class DataManipulation extends BaseController
 	}
 
 
+  /* -------------------------------------------------------------------------- */
+  /*                     Update the user's rank to the album                    */
+  /* -------------------------------------------------------------------------- */
+
   public function updateRanking()
   {
 
@@ -40,8 +44,47 @@ class DataManipulation extends BaseController
       }
     }
 
-    
   }
 
-	
+  /* -------------------------------------------------------------------------- */
+  /*               Insert/Update/Delete user's review on the album              */
+  /* -------------------------------------------------------------------------- */
+
+  public function updateReview()
+  {
+
+    if(!$this->validate([
+      "userid" 				=> 		"required",
+      "albumid" 			=> 		"required",
+      "wording" 		  => 		"permit_empty|max_length[5000]|min_length[50]",
+      "action"        =>    "required|in_list[insert, update, delete]"
+		]))
+		{
+      // echo $this->validator->listErrors();
+			return redirect()->to(base_url());
+		}
+		else
+		{
+      $reviews = new Review();
+      $action = $this->request->getVar("action");
+      $wording = $this->request->getVar("wording");
+
+      if($action == "insert" && !empty($wording))
+      {
+        $reviews->insertReview($this->request->getVar("userid"), $this->request->getVar("albumid"), $wording);
+      }
+      elseif($action == "update" && !empty($wording))
+      {
+        $reviews->updateReview($this->request->getVar("userid"), $this->request->getVar("albumid"), $wording);
+      }
+      elseif($action == "delete")
+      {
+        $reviews->deleteReview($this->request->getVar("userid"), $this->request->getVar("albumid"));
+      }
+
+
+      return redirect()->to(base_url('search/showalbum/'.$this->request->getVar("albumid")));
+    }
+  }
+
 }

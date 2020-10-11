@@ -46,7 +46,10 @@
 									</button>
 								</div>
 							<?php else: ?>							
-								<p class="has-text-weight-semibold is-size-5">@<a class="has-text-warning" href="<?php echo base_url("painel"); ?>"><?php echo esc($userAccount["username"]); ?></a></p>
+								<p class="has-text-weight-semibold is-size-5">
+								@<a class="has-text-warning" href="<?php echo base_url("painel"); ?>"><?php echo esc($userAccount["username"]); ?></a>
+								<a class="button is-small mx-2 is-danger" href="<?php echo base_url("logoff"); ?>">SAIR</a>
+								</p>
 							<?php endif; ?>
 						</div>
 					</div>
