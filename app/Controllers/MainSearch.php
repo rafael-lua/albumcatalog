@@ -272,7 +272,9 @@ class MainSearch extends BaseController
 	{
 		$search = new Search();
 		$reviews = new Review();
-		
+
+		$data = [];
+
 		$data["albumId"] = $albumId;
 		$data["albumData"] = $search->getFullAlbum($albumId);
 		$data["albumReviews"] = $reviews->getReviewsByAlbum($albumId);
@@ -292,6 +294,30 @@ class MainSearch extends BaseController
 		echo view('templates/header', $data);
 		echo view('templates/loginsection', $data);
 		echo view('mainpages/showalbum', $data);
+		echo view('templates/footer');
+	}
+
+
+
+
+	/* -------------------------------------------------------------------------- */
+	/*                          show the full collection                          */
+	/* -------------------------------------------------------------------------- */
+
+	public function showCollection($collectionId = NULL)
+	{
+		
+		$data = [];
+		
+		if($this->session->has("userAccount"))
+		{
+			$data["userAccount"] = $this->session->get("userAccount");
+		
+		}
+		
+		echo view('templates/header', $data);
+		echo view('templates/loginsection', $data);
+		echo view('mainpages/collection', $data);
 		echo view('templates/footer');
 	}
 	

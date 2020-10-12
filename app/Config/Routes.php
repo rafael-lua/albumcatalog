@@ -42,6 +42,9 @@ $routes->match(['get', 'post'], 'search/showalbum/(:num)', 'MainSearch::showAlbu
 $routes->match(['get', 'post'], 'search/showalbum/(:any)', 'Mainpage::redirectHome');
 $routes->match(['get', 'post'], 'search/showalbum', 'Mainpage::redirectHome');
 $routes->match(['get', 'post'], 'search/(:any)', 'Mainpage::redirectHome');
+$routes->match(['get', 'post'], 'collection/(:num)', 'MainSearch::showCollection/$1');
+$routes->match(['get', 'post'], 'collection/(:any)', 'Mainpage::redirectHome');
+$routes->match(['get', 'post'], 'collection', 'Mainpage::redirectHome');
 $routes->post('updaterating', 'DataManipulation::updateRanking');
 $routes->get('updaterating', 'Mainpage::redirectHome');
 $routes->post('updatereview', 'DataManipulation::updateReview');
