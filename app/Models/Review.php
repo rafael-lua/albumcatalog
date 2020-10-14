@@ -12,7 +12,7 @@ class Review extends Model
 	protected $primaryKey = "id";
 	protected $returnType = "array";
 	
-	protected $allowedFields = ['userId', 'albumId', 'wording'];
+	protected $allowedFields = ['userId', 'albumId', 'wording', 'title'];
 	
 	
 
@@ -79,7 +79,7 @@ class Review extends Model
 	/*                             Insert user's review                           */
 	/* -------------------------------------------------------------------------- */
 
-	public function insertReview($userId = false, $albumId = false, $wording = "")
+	public function insertReview($userId = false, $albumId = false, $wording = "", $title = "")
 	{
 		# If this function is called without values for albumId, throws a error page back.
 		if(($albumId === false) || ($albumId === NULL) || !is_numeric($albumId) || ($userId === false) || ($userId === NULL) || !is_numeric($userId))
@@ -93,7 +93,8 @@ class Review extends Model
 			$data = [
 				'userId' => $userId,
 				'albumId' => $albumId,
-				'wording' => $wording
+				'wording' => $wording,
+				'title' => $title
 			];
 			$this->insert($data);
 		}
@@ -103,7 +104,7 @@ class Review extends Model
 	/* -------------------------------------------------------------------------- */
 	/*                             Update user's review                           */
 	/* -------------------------------------------------------------------------- */
-	public function updateReview($userId = false, $albumId = false, $wording = "")
+	public function updateReview($userId = false, $albumId = false, $wording = "", $title = "")
 	{
 		# If this function is called without values for albumId, throws a error page back.
 		if(($albumId === false) || ($albumId === NULL) || !is_numeric($albumId) || ($userId === false) || ($userId === NULL) || !is_numeric($userId))
@@ -114,7 +115,7 @@ class Review extends Model
 		$review_exist = $this->select('userId')->where(['userId' => $userId, 'albumId' => $albumId])->countAllResults();
 		if($review_exist > 0)
 		{
-			$this->where(['userId' => $userId, 'albumId' => $albumId])->set(['wording' => $wording])->update();
+			$this->where(['userId' => $userId, 'albumId' => $albumId])->set(['wording' => $wording, 'title' => $title])->update();
 		}
 	}
 

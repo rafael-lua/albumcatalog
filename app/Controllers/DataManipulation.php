@@ -57,6 +57,7 @@ class DataManipulation extends BaseController
       "userid" 				=> 		"required",
       "albumid" 			=> 		"required",
       "wording" 		  => 		"permit_empty|max_length[5000]|min_length[50]",
+      "reviewtitle"   => 		"permit_empty|max_length[50]|min_length[5]",
       "action"        =>    "required|in_list[insert, update, delete]"
 		]))
 		{
@@ -68,14 +69,15 @@ class DataManipulation extends BaseController
       $reviews = new Review();
       $action = $this->request->getVar("action");
       $wording = $this->request->getVar("wording");
+      $title = $this->request->getVar("reviewtitle");
 
       if($action == "insert" && !empty($wording))
       {
-        $reviews->insertReview($this->request->getVar("userid"), $this->request->getVar("albumid"), $wording);
+        $reviews->insertReview($this->request->getVar("userid"), $this->request->getVar("albumid"), $wording, $title);
       }
       elseif($action == "update" && !empty($wording))
       {
-        $reviews->updateReview($this->request->getVar("userid"), $this->request->getVar("albumid"), $wording);
+        $reviews->updateReview($this->request->getVar("userid"), $this->request->getVar("albumid"), $wording, $title);
       }
       elseif($action == "delete")
       {

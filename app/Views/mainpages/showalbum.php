@@ -128,6 +128,7 @@ function reviewModal()
 			<?= csrf_field() ?>
 			<input type="text" name="albumid" value="<?php echo esc($albumId); ?>" hidden />
 			<input type="text" name="userid" value="<?php echo esc($userAccount["id"]); ?>" hidden />
+				<input class="input is-rounded is-fullwidth my-2" type="text" name="reviewtitle" placeholder="Título da crítica..." value="<?php if(isset($userAlbumReview["title"])){echo esc($userAlbumReview["title"]);} ?>"/>
 				<textarea class="textarea px-2 py-2" placeholder="Sua crítica..." rows="10" cols="75" maxlength="5000" name="wording"><?php if(isset($userAlbumReview["wording"])){echo esc($userAlbumReview["wording"]);} ?></textarea>
 			</form>
     </section>
