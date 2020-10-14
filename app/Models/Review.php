@@ -15,6 +15,9 @@ class Review extends Model
 	protected $allowedFields = ['userId', 'albumId', 'wording'];
 	
 	
+
+
+
 	# Returns all the reviews based on the album id.
 	public function getReviewsByAlbum($albumId = false)
 	{
@@ -24,7 +27,7 @@ class Review extends Model
 			throw new \CodeIgniter\Exceptions\PageNotFoundException();
 		}
 		
-		return $this->asArray()->select('username, wording', false)->from('useraccount')
+		return $this->asArray()->select('useraccount.id as userId, username, review.title, review.wording, review.creationDate', false)->from('useraccount')
 							->where(['review.userId' => 'useraccount.id', 'review.albumId' => $albumId], NULL, FALSE)
 							->findAll();
 		
@@ -44,7 +47,29 @@ class Review extends Model
 			throw new \CodeIgniter\Exceptions\PageNotFoundException();
 		}
 
-		return $this->asArray()->select('wording')->where(['userId' => $userId, 'albumId' => $albumId])->first();
+		return $this->asArray()->select('wording, title, creationDate')->where(['userId' => $userId, 'albumId' => $albumId])->first();
+
+	}
+
+
+
+	
+	/* -------------------------------------------------------------------------- */
+	/*                 Return the review from the user to the album               */
+	/* -------------------------------------------------------------------------- */
+
+	public function getUserAlbumReviewRecent($userId = false)
+	{
+		# If this function is called without values for albumId, throws a error page back.
+		if(($userId === false) || ($userId === NULL) || !is_numeric($userId))
+		{
+			throw new \CodeIgniter\Exceptions\PageNotFoundException();
+		}
+
+		return $this->asArray()->select('wording, title, creationDate, albumId')
+													->where(['userId' => $userId])
+													->orderBy('creationDate', 'DESC')
+													->first();
 
 	}
 

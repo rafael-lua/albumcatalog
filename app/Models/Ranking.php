@@ -2,6 +2,8 @@
 
 use CodeIgniter\Model;
 
+use App\Models\Search;
+
 ###
 # A model to work with ranking data.
 ###
@@ -12,7 +14,7 @@ class Ranking extends Model
 	protected $primaryKey = "userId";
 	protected $returnType = "array";
 
-	protected $allowedFields = ['userId', 'albumId', 'note'];
+	protected $allowedFields = ['userId', 'albumId', 'note', 'rankingDate'];
 	
 
 	/* -------------------------------------------------------------------------- */
@@ -30,6 +32,39 @@ class Ranking extends Model
 		return $this->asArray()->select('note')->where(['userId' => $userId, 'albumId' => $albumId])->first();
 
 	}
+
+
+
+	/* -------------------------------------------------------------------------- */
+	/*                 Return all notes from the user to all albums               */
+	/* -------------------------------------------------------------------------- */
+
+	public function getUserRankings($userId = false)
+	{
+		# If this function is called without values for albumId, throws a error page back.
+		if(($userId === false) || ($userId === NULL) || !is_numeric($userId))
+		{
+			throw new \CodeIgniter\Exceptions\PageNotFoundException();
+		}
+
+		$search = new Search();
+
+		$userNotes = $this->asArray()->select('note, albumId, rankingDate')
+											->where(['userId' => $userId])
+											->orderBy('rankingDate', 'DESC')
+											->findAll(5);
+
+		foreach($userNotes as &$note)
+		{
+			$note = array_merge($note, $search->getAlbumName($note["albumId"]));
+		}
+		unset($note);
+
+
+		return $userNotes;
+
+	}
+
 
 
 

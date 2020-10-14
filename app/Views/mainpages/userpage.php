@@ -134,43 +134,79 @@
 
 <div class="columns">
 
-  <div class="column px-6 py-6 is-8 is-offset-2">
+  <div class="column px-5 py-5 is-5 is-offset-1">
       <h2 class="subtitle"><strong>Crítica Recente</strong></h2>
-      <div class="level mb-1">
-          <div class="level-left">
-            <div class="level-item">
-                5 <i class="fas fa-star fa-lg is-size-6 my-2 mx-1" style="color: #ffcc00;"></i>
-            </div>          
-          </div>
-          <div class="level-right">
-            <div class="level-item">
-              <strong>Album name</strong>
-            </div> 
-          </div>
-      </div>
-
-      <hr class="has-background-grey-lighter my-1">
       
-      <div class="content">
-        <p>
-          <br>
-          <!-- The link directs the user to the album page of the review -->
-          <strong><a>Titulo da review</a></strong> <small>00/00/0000</small>
-          <p style="margin: 0; padding: 0;">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut urna tellus, malesuada id odio in, 
-            euismod pulvinar dui. Fusce fermentum eleifend scelerisque. Etiam consectetur 
-            turpis ut odio lacinia, sed pulvinar nulla gravida. Proin iaculis lacus arcu, 
-            viverra commodo erat sollicitudin nec. Ut pulvinar ipsum sit amet elit sodales finibus. 
-            Ut ultrices sit amet turpis vel dictum. Nulla vel rutrum felis. Mauris nec iaculis arcu. 
-            Etiam tristique pulvinar aliquet. Nullam tincidunt id velit vitae luctus. Proin vitae vehicula nunc. 
-            Nullam eros nibh, lacinia ut felis in, auctor pharetra nulla. Maecenas ut lectus mauris. Donec sagittis 
-            ornare mi.
+      <?php if(isset($lastReview) && !empty($lastReview)) : ?>
+        <div class="level mb-1">
+            <div class="level-left">
+              <div class="level-item">
+                <?php echo esc($lastReview["album"]["note"]); ?> <i class="fas fa-star fa-lg is-size-6 my-2 mx-1" style="color: #ffcc00;"></i>
+              </div>          
+            </div>
+            <div class="level-right">
+              <div class="level-item">
+                <strong><?php echo esc($lastReview["album"]["name"]); ?></strong>
+              </div> 
+            </div>
+        </div>
+
+        <hr class="has-background-grey-lighter my-1">
+        
+        <div class="content">
+          <p>
+            <br>
+            <!-- The link directs the user to the album page of the review -->
+            <strong><a><?php echo esc($lastReview["title"]); ?></a></strong> <small class="mx-1"><?php echo esc($lastReview["creationDate"]); ?></small>
+            <p style="margin: 0; padding: 0;">
+              <?php echo esc($lastReview["wording"]); ?>
+            </p>
           </p>
-        </p>
-      </div>
-				
+        </div>
+			<?php else : ?>
+        <div class="content has-text-centered">
+          <p style="margin: 0; padding: 0;">
+            Esse usuário não escreveu críticas...
+          </p>          
+        </div>
+      <?php endif; ?>
   </div>
 
+  <div class="column px-5 py-5 is-5">
+
+    <h2 class="subtitle"><strong>Últimas Classificações</strong></h2> 
+
+    <?php if(isset($lastRankings) && !empty($lastRankings)) : ?>    
+
+      <table class="table is-striped is-hoverable is-fullwidth">
+
+        <thead>
+          <tr>
+            <th style="width:75%">Álbum</th>
+            <th style="width:25%">Nota</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <?php foreach($lastRankings as $rank) : ?>
+            <tr>
+              <th><a><?php echo esc($rank["name"]); ?></a></th>
+              <th><?php echo esc($rank["note"]); ?></th>
+            </tr>
+          <?php endforeach; ?>
+        </tbody>
+
+      </table>
+    
+    <?php else : ?>
+      <div class="content has-text-centered">
+        <p style="margin: 0; padding: 0;">
+          Esse usuário não avaliou nenhum álbum...
+        </p>          
+      </div>
+    <?php endif; ?>
+
+  </div>           
  
 
 </div>

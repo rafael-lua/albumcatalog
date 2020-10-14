@@ -57,6 +57,22 @@ class Search extends Model
 
 
 
+	/* -------------------------------------------------------------------------- */
+	/*                            get the album's name                            */
+	/* -------------------------------------------------------------------------- */
+
+	public function getAlbumName($albumId = false)
+	{
+		# If this function is called without values for albumId, throws a error page back.
+		if(($albumId === false) || ($albumId === NULL) || !is_numeric($albumId))
+		{
+			throw new \CodeIgniter\Exceptions\PageNotFoundException();
+		}
+		
+		return $this->asArray()->select('name')->where(['id' => $albumId])->first();
+		
+			
+	}
 
 
 
@@ -109,20 +125,22 @@ class Search extends Model
 			{
 				if(isset($filters["genre"]))
 				{
+					### findAll() can receive the limit and the offset directly!
+
 					$albumsResults = $this->asArray()->select('id, album.name, year, rating, "album" as type')->distinct()
 																					->from('genre, genrealbum')
 																					->where(['genre.name' => 'genrealbum.genreName', 'album.id' => 'genrealbum.albumId'], NULL, FALSE)
 																					->whereIn('genre.name', $filters["genre"])
 																					->like(['album.name' => $s])
 																					->orderBy($sortBy, $direction)
-																					->limit($limit, $offset)->findAll();
+																					->findAll($limit, $offset);
 				}
 				else
 				{
 					$albumsResults = $this->asArray()->select('id, name, year, rating, "album" as type')
 																					->like(['name' => $s])
 																					->orderBy($sortBy, $direction)
-																					->limit($limit, $offset)->findAll();
+																					->findAll($limit, $offset);
 				}
 
 				foreach($albumsResults as &$album) # & makes it so it is by reference and can be modified

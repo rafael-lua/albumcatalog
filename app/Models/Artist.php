@@ -43,7 +43,7 @@ class Artist extends Model
 		$artists = $this->asArray()->select('id, name, "artist" as type')
 														->like(['name' => $s])
 														->orderBy('name', $direction)
-														->limit($limit, $offset)->findAll();
+														->findAll($limit, $offset);
 
 		foreach($artists as $key => &$artist)
 		{

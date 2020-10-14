@@ -137,6 +137,8 @@ class MainSearch extends BaseController
 				}
 			}
 
+			
+
 			/* -------------------------------------------------------------------------- */
 			/*                                SEARCH ORDER                                */
 			/* -------------------------------------------------------------------------- */
@@ -272,12 +274,21 @@ class MainSearch extends BaseController
 	{
 		$search = new Search();
 		$reviews = new Review();
+		$rakings = new Ranking();
 
 		$data = [];
 
 		$data["albumId"] = $albumId;
 		$data["albumData"] = $search->getFullAlbum($albumId);
 		$data["albumReviews"] = $reviews->getReviewsByAlbum($albumId);
+
+		
+		foreach($data["albumReviews"] as &$album) # & makes it so it is by reference and can be modified
+		{
+			$album = array_merge($album, $rakings->getUserAlbumRank($album["userId"], $albumId));
+		}
+		unset($album); # Always unset the value by reference as good practise, since changing it here would mess up with the actual array
+	
 		
 		if($this->session->has("userAccount"))
 		{
@@ -296,6 +307,7 @@ class MainSearch extends BaseController
 		echo view('mainpages/showalbum', $data);
 		echo view('templates/footer');
 	}
+
 
 
 

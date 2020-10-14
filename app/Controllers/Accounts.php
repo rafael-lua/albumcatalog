@@ -3,6 +3,9 @@
 
 
 use App\Models\User;
+use App\Models\Review;
+use App\Models\Ranking;
+use App\Models\Search;
 
 class Accounts extends BaseController
 {
@@ -83,16 +86,18 @@ class Accounts extends BaseController
 		{
 
 			$data = [];
-
-			if($this->session->has("userAccount"))
-			{
-				$data["userAccount"] = $this->session->get("userAccount");
-			}
-
-
+			$data["userAccount"] = $this->session->get("userAccount");
 			
-
+			$reviews = new Review();
+			$rankings = new Ranking();
+			$albums = new Search();
 			
+			$data["lastReview"]	= $reviews->getUserAlbumReviewRecent($data["userAccount"]["id"]);		
+			$data["lastReview"]["album"] = $albums->getAlbumName($data["lastReview"]["albumId"]);
+			$data["lastReview"]["album"] = array_merge($rankings->getUserAlbumRank($data["userAccount"]["id"], $data["lastReview"]["albumId"]), $data["lastReview"]["album"]);
+			
+			$data["lastRankings"] = $rankings->getUserRankings($data["userAccount"]["id"]);
+
 			echo view('templates/header', $data);
 			echo view('templates/loginsection', $data);
 			echo view('mainpages/userpage', $data);

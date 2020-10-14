@@ -280,8 +280,8 @@ function reviewModal()
 				<div class="media-content">
 					<div class="content">
 						<p>
-							<i class="fas fa-star fa-lg is-size-6 my-2" style="color: #ffcc00;"></i><br>
-							<strong>Titulo da review</strong> <small>@<?php echo esc($review["username"]); ?></small> <small>00/00/0000</small>
+							<span class="is-size-6"><?php echo esc($review["note"]); ?></span><i class="fas fa-star is-size-6 my-1 mx-1" style="color: #ffcc00;"></i><br>
+							<strong><?php echo esc($review["title"]); ?></strong> <small><a>@<?php echo esc($review["username"]); ?></a></small> <small><em><?php echo esc($review["creationDate"]); ?></em></small>
 							<p style="margin: 0; padding: 0;">
 								<?php echo esc($review["wording"]); ?>
 							</p>

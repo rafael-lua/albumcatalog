@@ -42,7 +42,7 @@ class Studio extends Model
 		$studios = $this->asArray()->select('id, name, "studio" as type')
 														->like(['name' => $s])
 														->orderBy('name', $direction)
-														->limit($limit, $offset)->findAll();
+														->findAll($limit, $offset);
 
 		foreach($studios as $key => &$studio)
 		{
