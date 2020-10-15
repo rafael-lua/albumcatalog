@@ -3,6 +3,7 @@
 use App\Models\User;
 use App\Models\Review;
 use App\Models\Ranking;
+use App\Models\Collection;
 
 class DataManipulation extends BaseController
 {
@@ -86,6 +87,52 @@ class DataManipulation extends BaseController
 
 
       return redirect()->to(base_url('search/showalbum/'.$this->request->getVar("albumid")));
+    }
+  }
+
+
+    
+  /* -------------------------------------------------------------------------- */
+  /*                           create a new collection                          */
+  /* -------------------------------------------------------------------------- */
+
+  public function createCollection()
+  {
+
+    if(!$this->validate([
+      "visibility"          =>    "required|in_list[show, hide]",
+      "collectiontitle"     =>    "required|max_length[50]|min_length[4]",
+      "genres[]" 			      => 		"permit_empty|in_list[rock, pop, electronic, classical, jazz]",
+		]) || !$this->session->has("userAccount"))
+		{
+      // echo $this->validator->listErrors();
+			return redirect()->to(base_url());
+		}
+		else
+		{
+
+      /* ----------------------- prepare data for creation ----------------------- */
+      $user = $this->session->get("userAccount");
+
+      $collections = new Collection();
+
+
+      $collectionTitle = $this->request->getVar("collectiontitle");
+      $collectionVisibility = $this->request->getVar("visibility");
+
+      if(empty($this->request->getVar("genres[]")))
+      {
+        $colletionGenres = [];
+      }  
+      else
+      {
+        $colletionGenres = $this->request->getVar("genres[]");
+      } 
+      
+      $newCollectionId = $collections->insertCollection($user["id"], $collectionTitle, $collectionVisibility, $colletionGenres);
+
+      return redirect()->to(base_url('collection/'.$newCollectionId));      
+      
     }
   }
 

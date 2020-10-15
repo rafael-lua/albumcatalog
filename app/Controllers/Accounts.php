@@ -5,6 +5,7 @@
 use App\Models\User;
 use App\Models\Review;
 use App\Models\Ranking;
+use App\Models\Collection;
 use App\Models\Search;
 
 class Accounts extends BaseController
@@ -91,6 +92,9 @@ class Accounts extends BaseController
 			$reviews = new Review();
 			$rankings = new Ranking();
 			$albums = new Search();
+			$collections = new Collection();
+
+			$data["userCollections"] = $collections->getCollectionByUser($data["userAccount"]["id"]);
 			
 			$data["lastReview"]	= $reviews->getUserAlbumReviewRecent($data["userAccount"]["id"]);		
 			$data["lastReview"]["album"] = $albums->getAlbumName($data["lastReview"]["albumId"]);

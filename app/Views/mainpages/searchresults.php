@@ -393,13 +393,13 @@ function selectRatingFilterValue(a)
 										<li id="order-rating">
 											<button name="rating_sort" value="<?php if(isset($orderValues["ratingNext"])){echo esc($orderValues["ratingNext"]);}else{echo esc("ratingDesc");} ?>" type="submit" form="main_search_form" class="button is-<?php if(isset($orderValues["ratingColor"])){echo esc($orderValues["ratingColor"]);}else{echo esc("info");} ?> is-light is-small mx-1">
 												<i class="fas <?php if(isset($orderValues["ratingSortIcon"])){echo esc($orderValues["ratingSortIcon"]);}else{echo esc("fa-sort-down");} ?> fa-lg mr-1" style="color: hsl(141, 71%, 48%); display: <?php if(isset($orderValues["ratingDisplayIcon"])){echo esc($orderValues["ratingDisplayIcon"]);}else{echo esc("none");} ?>;"></i>
-												<a href="#"><small><strong>Rating</strong></small></a>
+												<small><strong>Rating</strong></small>
 											</button>
 										</li>
 										<li id="order-year">
 											<button name="year_sort" value="<?php if(isset($orderValues["yearNext"])){echo esc($orderValues["yearNext"]);}else{echo esc("yearDesc");} ?>" type="submit" form="main_search_form" class="button is-<?php if(isset($orderValues["yearColor"])){echo esc($orderValues["yearColor"]);}else{echo esc("info");} ?> is-light is-small mx-1">
 												<i class="fas <?php if(isset($orderValues["yearSortIcon"])){echo esc($orderValues["yearSortIcon"]);}else{echo esc("fa-sort-down");} ?> fa-lg mr-1" style="color: hsl(141, 71%, 48%); display: <?php if(isset($orderValues["yearDisplayIcon"])){echo esc($orderValues["yearDisplayIcon"]);}else{echo esc("none");} ?>;"></i>
-												<a href="#"><small><strong>Year</strong></small></a>
+												<small><strong>Year</strong></small>
 											</button>
 										</li>
 									</ul>

@@ -1,3 +1,15 @@
+<script>
+
+function collectionModal() 
+{
+  let element = document.getElementById("collection_modal");
+  element.classList.toggle("is-active");
+}
+
+</script>
+
+
+
 <?php 
 /* -------------------------------------------------------------------------- */
 /*                                  User view                                 */
@@ -87,15 +99,85 @@
   <div class="column px-6 py-3">
 
     <div class="container">
-      <h1 class="title mx-5 mt-1"><strong>COLLECTIONS</strong></h1>
+      <h1 class="title mx-5 mt-1"><strong>COLEÇÕES</strong></h1>
       <div class="box" style="max-height: 30em; overflow-y: scroll;">
+
+        <button class="button is-rounded is-primary is-small my-1" onclick="collectionModal()">CRIAR COLEÇÃO</button>
+        
+        <div class="modal" id="collection_modal">
+          <div class="modal-background"></div>
+          <div class="modal-card">
+
+            <header class="modal-card-head">
+              <p class="modal-card-title"><strong>NOVA COLEÇÃO</strong></p>
+              <button class="delete" onclick="collectionModal()" aria-label="close"></button>
+            </header>
+
+            <form action="<?php echo base_url('insertcollection');?>" method="post" id="collection_creation_form" method="post">
+              <section class="modal-card-body">
+                <div class="field">
+                  <label class="label">Visibilidade</label>
+                  <div class="control">
+                    <label class="radio">
+                      <input type="radio" name="visibility" value="show">
+                      Público
+                    </label>
+                    <label class="radio">
+                      <input type="radio" name="visibility" value="hide">
+                      Privado
+                    </label>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label class="label">Título</label>
+                  <div class="control">
+                    <input class="input" type="text" placeholder="Nome da coleção..." name="collectiontitle">
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label class="label">Gêneros</label>
+                  <div class="control">
+                    <label class="checkbox mx-1">
+                      <input type="checkbox" name="genres[]" value="rock">
+                      Rock
+                    </label>
+                    <label class="checkbox mx-1">
+                      <input type="checkbox" name="genres[]" value="classical">
+                      Classical
+                    </label>
+                    <label class="checkbox mx-1">
+                      <input type="checkbox" name="genres[]" value="jazz">
+                      Jazz
+                    </label>
+                    <label class="checkbox mx-1">
+                      <input type="checkbox" name="genres[]" value="pop">
+                      Pop
+                    </label>
+                    <label class="checkbox mx-1">
+                      <input type="checkbox" name="genres[]" value="electronic">
+                      Eletronic
+                    </label>
+                  </div>
+                </div>
+              </section>
+            </form>
+
+            <footer class="modal-card-foot">
+              <button class="button is-success" type="submit" form="collection_creation_form">Criar</button>
+              <button class="button" onclick="collectionModal()">Cancelar</button>
+            </footer>
+
+          </div>
+        </div>
 
         <!-- This should be through ajax interaction. -->
         <form>
           <?= csrf_field() ?>
           <div class="field">
             <div class="control ">
-              <input type="text" name="collection_filter" class="input is-info" placeholder="Filtrar por..." />
+              <input type="text" name="collection_filter" class="input is-info my-1" placeholder="Filtrar por..." />
             </div>
           </div>
         </form>
@@ -103,22 +185,36 @@
 
           <thead>
             <tr>
-            <th style="width:5%"></th>
-              <th style="width:25%"></th>
-              <th></th>
-              <th style="width:10%"></th>
+              <th class="has-text-grey-dark" style="width:10%"><small>Visibilidade</small></th>
+              <th class="has-text-grey-dark" style="width:35%"><small>Coleção</small></th>
+              <th class="has-text-grey-dark"><small>Gêneros</small></th>
+              <th class="has-text-grey-dark" style="width:10%"><small>Opções</small></th>
             </tr>
           </thead>
 
           <tbody>
-            <?php for($i = 1; $i <= 10; $i++) : ?>
+            <?php foreach($userCollections as $collection) : ?>
               <tr>
-                <th>public</th>
-                <th><a>Collection name<a></th>
-                <td>Collection genres</td>
+                <th><?php if($collection["visible"] == "show"){echo esc("Público");}else{echo esc("Privado");} ?></th>
+                <th><a href="<?php echo base_url("collection/".$collection["id"]); ?>"><?php echo esc($collection["title"]); ?><a></th>
+                <td>
+                <?php if(!empty($collection["genres"])) : ?>
+                  <div class="tags">
+                    <?php foreach($collection["genres"] as $genre) : ?>
+                        <span class="tag is-info is-light">
+                          <?php echo esc($genre["name"]);?>
+                        </span>
+                    <?php endforeach; ?>
+                  </div>
+                <?php else : ?>
+                  <span class="tag is-info is-light">
+                    Todos
+                  </span>
+                <?php endif; ?>
+                </td>
                 <td>options</td>
               </tr>
-            <?php endfor; ?>
+            <?php endforeach; ?>
           </tbody>
 
         </table>
@@ -141,7 +237,7 @@
         <div class="level mb-1">
             <div class="level-left">
               <div class="level-item">
-                <?php echo esc($lastReview["album"]["note"]); ?> <i class="fas fa-star fa-lg is-size-6 my-2 mx-1" style="color: #ffcc00;"></i>
+                <?php echo esc($lastReview["album"]["note"]); ?> <i class="fas fa-star is-size-6 my-2 mx-1" style="color: #ffcc00;"></i>
               </div>          
             </div>
             <div class="level-right">
@@ -191,7 +287,7 @@
           <?php foreach($lastRankings as $rank) : ?>
             <tr>
               <th><a><?php echo esc($rank["name"]); ?></a></th>
-              <th><?php echo esc($rank["note"]); ?></th>
+              <th><?php echo esc($rank["note"]); ?> <i class="fas fa-star is-size-7 my-1" style="color: #ffcc00;"></th>
             </tr>
           <?php endforeach; ?>
         </tbody>
