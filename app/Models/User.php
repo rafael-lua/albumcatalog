@@ -35,7 +35,7 @@ class User extends Model
 	
 	
 	
-	# returns baisc data of the user to the login session, like id and username.
+	# returns basic data of the user to the login session, like id and username.
 	public function getUser($username = false, $password = false)
 	{
 		# If this function is called without values for user/password, throws a error page back.
@@ -45,6 +45,23 @@ class User extends Model
 		}
 		
 		return $this->asArray()->select('id, username')->where(['username' => $username, 'password' => $password])->first();
+	}
+	
+
+
+	/* -------------------------------------------------------------------------- */
+	/*                      returns public data of a user id                      */
+	/* -------------------------------------------------------------------------- */
+
+	public function getPublicUser($userid)
+	{
+		# If this function is called without values for userid, throws a error page back.
+		if(($userid === false) || ($userid === NULL) || !is_numeric($userid))
+		{
+			throw new \CodeIgniter\Exceptions\PageNotFoundException();
+		}
+		
+		return $this->asArray()->select('id, username as name')->where(['id' => $userid])->first();
 	}
 	
 	

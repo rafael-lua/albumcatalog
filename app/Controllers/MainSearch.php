@@ -6,6 +6,7 @@ use App\Models\Search;
 use App\Models\User;
 use App\Models\Review;
 use App\Models\Ranking;
+use App\Models\Collection;
 
 class MainSearch extends BaseController
 {
@@ -27,8 +28,11 @@ class MainSearch extends BaseController
 	}
 
 
-	
-	# main search method
+		
+	/* -------------------------------------------------------------------------- */
+	/*                             main search method                             */
+	/* -------------------------------------------------------------------------- */
+
 	public function findAll()
 	{
 		if(!$this->validate([
@@ -312,25 +316,34 @@ class MainSearch extends BaseController
 
 
 
+
 	/* -------------------------------------------------------------------------- */
 	/*                          show the full collection                          */
 	/* -------------------------------------------------------------------------- */
 
 	public function showCollection($collectionId = NULL)
 	{
-		
-		$data = [];
-		
-		if($this->session->has("userAccount"))
-		{
-			$data["userAccount"] = $this->session->get("userAccount");
-		
+		if($collectionId != NULL && is_numeric($collectionId))
+		{	
+			$data = [];
+			
+			$collections = new Collection();
+			$data["collectionData"] = $collections->getFullCollection($collectionId);
+
+			if($this->session->has("userAccount"))
+			{
+				$data["userAccount"] = $this->session->get("userAccount");
+			}
+			
+			echo view('templates/header', $data);
+			echo view('templates/loginsection', $data);
+			echo view('mainpages/collection', $data);
+			echo view('templates/footer');
 		}
-		
-		echo view('templates/header', $data);
-		echo view('templates/loginsection', $data);
-		echo view('mainpages/collection', $data);
-		echo view('templates/footer');
+		else
+		{
+			return redirect()->to(base_url());
+		}
 	}
 	
 }

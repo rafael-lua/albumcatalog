@@ -2,6 +2,7 @@
 
 use CodeIgniter\Model;
 
+use App\Models\User;
 use App\Models\CollectionAlbum;
 use App\Models\CollectionGenre;
 
@@ -30,6 +31,8 @@ class Collection extends Model
   protected $allowedFields = ['userId', 'title', 'visible'];
 
 
+
+
   /* -------------------------------------------------------------------------- */
   /*                 return all informations about a collection                 */
   /* -------------------------------------------------------------------------- */
@@ -37,9 +40,26 @@ class Collection extends Model
 	public function getFullCollection($collectionId = false)
 	{
 
+    # If this function is called without values for userId, throws a error page back.
+		if(($collectionId === false) || ($collectionId === NULL) || !is_numeric($collectionId))
+		{
+			throw new \CodeIgniter\Exceptions\PageNotFoundException();
+    }
 
+    $users = new User();
+    $collectiongenre = new CollectionGenre();
+
+    $collection = $this->asArray()->where('id', $collectionId)->first();
+    $collection["user"] = $users->getPublicUser($collection["userId"]);
+    unset($collection["userId"]); # Unset the userId, since it would be duplicated inside the user
+
+    $collection["genres"] = $collectiongenre->getCollectionGenre($collection["id"]);
+    
+    return $collection;
 
   }
+
+
 
 
   /* -------------------------------------------------------------------------- */
@@ -54,16 +74,14 @@ class Collection extends Model
 		{
 			throw new \CodeIgniter\Exceptions\PageNotFoundException();
     }
+
+    $collectiongenre = new CollectionGenre();
     
     $collections = $this->asArray()->select('id, title, visible')->where(['userId' => $userId])->findAll();
 
     foreach($collections as &$collection) # & makes it so it is by reference and can be modified
     {
-      $collection["genres"] = $this->asArray()->select('genre.name', FALSE)
-                                            ->from('genre, collectiongenre')
-                                            ->where(['collection.id' => 'collectiongenre.collectionId', 'genre.name' => 'collectiongenre.genreName'], NULL, FALSE)
-                                            ->where('collection.id', $collection["id"], NULL, FALSE)
-                                            ->findAll();
+      $collection["genres"] = $collectiongenre->getCollectionGenre($collection["id"]);
     }
     unset($collection);
 

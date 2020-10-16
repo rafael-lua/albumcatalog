@@ -102,7 +102,7 @@ function collectionModal()
       <h1 class="title mx-5 mt-1"><strong>COLEÇÕES</strong></h1>
       <div class="box" style="max-height: 30em; overflow-y: scroll;">
 
-        <button class="button is-rounded is-primary is-small my-1" onclick="collectionModal()">CRIAR COLEÇÃO</button>
+        <button class="button is-rounded is-primary is-small mb-1" onclick="collectionModal()">CRIAR COLEÇÃO</button>
         
         <div class="modal" id="collection_modal">
           <div class="modal-background"></div>

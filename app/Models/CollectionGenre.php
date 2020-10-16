@@ -57,8 +57,21 @@ class CollectionGenre extends Model
 
   }
 
-	
+    
+  /* -------------------------------------------------------------------------- */
+  /*                          Get the collection genres                         */
+  /* -------------------------------------------------------------------------- */
   
-  
-	
+	public function getCollectionGenre($collectionId = false)
+	{
+
+    # If this function is called without values for userId, throws a error page back.
+		if(($collectionId === false) || ($collectionId === NULL) || !is_numeric($collectionId))
+		{
+			throw new \CodeIgniter\Exceptions\PageNotFoundException();
+    }
+    
+    return $this->asArray()->select('genreName as name')->where('collectionId', $collectionId)->findAll();    
+
+  }
 }
