@@ -29,8 +29,18 @@ class Ranking extends Model
 			throw new \CodeIgniter\Exceptions\PageNotFoundException();
 		}
 
-		return $this->asArray()->select('note')->where(['userId' => $userId, 'albumId' => $albumId])->first();
+		$userRank = $this->asArray()->select('note')->where(['userId' => $userId, 'albumId' => $albumId])->first();
 
+
+		/* ----------------------- check if there is results. ----------------------- */
+		/* ----------- If not, still returns an empty array for the array_merge ----------- */
+		if(!empty($userRank)){
+			return $userRank;
+		}
+		else
+		{ 
+			return [];
+		}
 	}
 
 

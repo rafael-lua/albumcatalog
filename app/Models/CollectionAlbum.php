@@ -2,6 +2,8 @@
 
 use CodeIgniter\Model;
 
+use App\Models\Artist;
+use App\Models\Ranking;
 
 /*
 
@@ -28,7 +30,38 @@ class CollectionAlbum extends Model
   protected $allowedFields = ['collectionId', 'albumId'];
 
 
- 
+  /* -------------------------------------------------------------------------- */
+  /*                          Get the collection genres                         */
+  /* -------------------------------------------------------------------------- */
+
+  public function getCollectionAlbums($collectionId = false, $userId = false)
+  {
+
+    # If this function is called without values for userId, throws a error page back.
+    if(($collectionId === false) || ($collectionId === NULL) || !is_numeric($collectionId) || ($userId === false) || ($userId === NULL) || !is_numeric($userId))
+    {
+      throw new \CodeIgniter\Exceptions\PageNotFoundException();
+    }
+    
+    $albums = $this->asArray()->select('album.id, album.name, album.year, state', FALSE)
+                          ->from('album, statusalbum')
+                          ->where(['album.id' => 'collectionalbum.albumId', 'collectionalbum.collectionId' => $collectionId], NULL, FALSE)
+                          ->where(['statusalbum.albumId' => 'album.id', 'statusalbum.userId' => $userId], NULL, FALSE)
+                          ->findAll();
+    
+    $artists = new Artist();
+    $rankings = new Ranking();
+
+    foreach($albums as &$album)
+    {
+      $album["artists"] = $artists->getNameByAlbum($album["id"]);
+      $album["rank"] = $rankings->getUserAlbumRank($userId, $album["id"]);
+    }
+    unset($album);
+
+    return $albums;
+
+  }
 
 	
   

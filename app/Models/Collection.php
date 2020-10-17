@@ -48,12 +48,15 @@ class Collection extends Model
 
     $users = new User();
     $collectiongenre = new CollectionGenre();
+    $collectionalbum = new CollectionAlbum();
 
     $collection = $this->asArray()->where('id', $collectionId)->first();
     $collection["user"] = $users->getPublicUser($collection["userId"]);
-    unset($collection["userId"]); # Unset the userId, since it would be duplicated inside the user
 
     $collection["genres"] = $collectiongenre->getCollectionGenre($collection["id"]);
+    $collection["albums"] = $collectionalbum->getCollectionAlbums($collection["id"], $collection["userId"]);
+
+    unset($collection["userId"]); # Unset the userId, since it would be duplicated inside the user
     
     return $collection;
 

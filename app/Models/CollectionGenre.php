@@ -74,4 +74,6 @@ class CollectionGenre extends Model
     return $this->asArray()->select('genreName as name')->where('collectionId', $collectionId)->findAll();    
 
   }
+
+  
 }

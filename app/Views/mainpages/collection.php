@@ -18,17 +18,22 @@
         <!-- HEADER COLUMN -->
         <div class="columns">
           <div class="column is-two-thirds">
-            <h1 class="title is-size-5 has-text-weight-bold mb-2"><?php echo esc($collectionData["title"]); ?> <small class="is-italic is-size-7 has-text-grey">(id:<?php echo esc($collectionData["id"]); ?>)</small></h1>
+            <h1 class="title is-size-5 has-text-weight-bold mb-3"><?php echo esc($collectionData["title"]); ?> <small class="is-italic is-size-7 has-text-grey">(id:<?php echo esc($collectionData["id"]); ?>)</small></h1>
             <div class="tags are-small">
-              <?php foreach($collectionData["genres"] as $genre) : ?>
-                <span class="tag is-small is-info is-light"><?php echo esc($genre["name"]); ?></span>
-              <?php endforeach; ?>
+              <?php if(!empty($collectionData["genres"])) : ?>
+                <?php foreach($collectionData["genres"] as $genre) : ?>
+                  <span class="tag is-small is-info is-light"><?php echo esc($genre["name"]); ?></span>
+                <?php endforeach; ?>
+              <?php else : ?>
+                <span class="tag is-small is-info is-light">todos</span>
+              <?php endif; ?>
             </div>
           </div>
 
           <div class="column is-one-third has-text-right">
             <p class="is-size-5"><a>@<?php echo esc($collectionData["user"]["name"]); ?></a></p>
             <p class="is-size-6"><small><?php if($collectionData["visible"] == "show"){echo esc("Público");}else{echo esc("Privado");} ?></small></p>
+            <p class="is-size-7"><small>Número de álbums: <?php echo esc(count($collectionData["albums"])); ?></small></p>
           </div>
         </div>
 
@@ -38,23 +43,33 @@
 
           <thead>
             <tr>
-              <th>State</th>
-              <th style="width:70%">Album name</th>
-              <th style="width: 15%">OPTIONS</th>
+              <th>Status</th>
+              <th style="width:70%">Álbum</th>
+              <th style="width: 15%">Opções</th>
             </tr>
           </thead>
 
           <tbody>
-            <?php for($i = 1; $i <= 5; $i++) : ?>
+            <?php foreach($collectionData["albums"] as $album) : ?>
               <tr>
-                <th></th>
+                <th>
+                  <?php 
+                    if($album["state"] == "completed"){echo esc("Completo");}
+                    elseif($album["state"] == "dumped"){echo esc("Abandonado");}
+                    elseif($album["waiting"] == "waiting"){echo esc("Esperando");}
+                  ?>
+                  <br>
+                  <small class="has-text-grey"><?php echo esc($album["rank"]["note"]); ?><i class="fas fa-star is-size-7 mx-1" style="color: #ffcc00;"></i></small>
+                </th>
                 <td>              
-                  <strong>Album name</strong> <small class="has-text-weight-normal">(9999)</small><br>
-                  <small class="has-text-grey is-italic">artist</small>            
+                  <strong><a href="<?php echo base_url("search/showalbum/".$album["id"]); ?>"><?php echo esc($album["name"]); ?></a></strong> <small class="has-text-weight-normal is-italic">(<?php echo esc($album["year"]); ?>)</small><br>
+                  <small class="has-text-grey">
+                    <?php foreach($album["artists"] as $artist){echo esc($artist["name"] . " | ");} ?>
+                  </small>            
                 </td>
-                <td></td>
+                <td>xxxxxxx</td>
               </tr>
-            <?php endfor; ?>
+            <?php endforeach; ?>
           </tbody>
 
         </table>
