@@ -28,7 +28,7 @@ class Collection extends Model
 	protected $primaryKey = "id";
   protected $returnType = "array";
 	
-  protected $allowedFields = ['userId', 'title', 'visible'];
+  protected $allowedFields = ['userId', 'title', 'visible', 'locked'];
 
 
 
@@ -80,7 +80,7 @@ class Collection extends Model
 
     $collectiongenre = new CollectionGenre();
     
-    $collections = $this->asArray()->select('id, title, visible')->where(['userId' => $userId])->findAll();
+    $collections = $this->asArray()->select('id, title, visible, locked')->where(['userId' => $userId])->findAll();
 
     foreach($collections as &$collection) # & makes it so it is by reference and can be modified
     {
@@ -120,6 +120,36 @@ class Collection extends Model
     $collectiongenre->insertCollectionGenre($collectionId, $genres);
 
     return $collectionId;
+
+  }
+
+
+
+  /* -------------------------------------------------------------------------- */
+  /*                       toggles the collection visibility                    */
+  /* -------------------------------------------------------------------------- */
+  public function toggleVisible($collectionId = false)
+	{
+
+    # If this function is called without values for userId, throws a error page back.
+		if(($collectionId === false) || ($collectionId === NULL) || !is_numeric($collectionId))
+		{
+			throw new \CodeIgniter\Exceptions\PageNotFoundException();
+    }
+    
+    $colletionVibility = $this->asArray()->select('visible')->where('id', $collectionId)->first();
+
+    if($colletionVibility["visible"] == "show")
+    {
+      $data = [ 'visible' => 'hide' ]; 
+      $this->update($collectionId, $data);
+    }
+    elseif($colletionVibility["visible"] == "hide")
+    {
+      $data = [ 'visible' => 'show' ]; 
+      $this->update($collectionId, $data);
+    }
+    
 
   }
 

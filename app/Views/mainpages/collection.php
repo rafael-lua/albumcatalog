@@ -32,7 +32,8 @@
 
           <div class="column is-one-third has-text-right">
             <p class="is-size-5"><a>@<?php echo esc($collectionData["user"]["name"]); ?></a></p>
-            <p class="is-size-6"><small><?php if($collectionData["visible"] == "show"){echo esc("Público");}else{echo esc("Privado");} ?></small></p>
+            <?php if($collectionData["visible"] == "show"){$color = "success";}else{$color = "danger";} ?>
+            <p class="is-size-6 has-text-<?php echo esc($color); ?>"><small><?php if($collectionData["visible"] == "show"){echo esc("Público");}else{echo esc("Privado");} ?></small></p>
             <p class="is-size-7"><small>Número de álbums: <?php echo esc(count($collectionData["albums"])); ?></small></p>
           </div>
         </div>

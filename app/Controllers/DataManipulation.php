@@ -136,4 +136,32 @@ class DataManipulation extends BaseController
     }
   }
 
+
+
+  /* -------------------------------------------------------------------------- */
+  /*                      toggles the collection visibility                     */
+  /* -------------------------------------------------------------------------- */
+
+  public function toggleCollectionVisibility()
+  {
+
+    if(!$this->validate([
+      "collectionid"          =>          "required",
+		]) || !$this->session->has("userAccount"))
+		{
+      // echo $this->validator->listErrors();
+			return redirect()->to(base_url());
+		}
+		else
+		{
+      $collectionid = $this->request->getVar("collectionid");
+
+      $collections = new Collection();
+      $collections->toggleVisible($collectionid);
+
+      return redirect()->to(base_url('painel'));      
+      
+    }
+  }
+
 }

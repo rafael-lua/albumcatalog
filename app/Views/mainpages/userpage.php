@@ -188,14 +188,15 @@ function collectionModal()
               <th class="has-text-grey-dark" style="width:10%"><small>Visibilidade</small></th>
               <th class="has-text-grey-dark" style="width:35%"><small>Coleção</small></th>
               <th class="has-text-grey-dark"><small>Gêneros</small></th>
-              <th class="has-text-grey-dark" style="width:10%"><small>Opções</small></th>
+              <th class="has-text-grey-dark" style="width:15%; text-align: right;"><small>Opções</small></th>
             </tr>
           </thead>
 
           <tbody>
             <?php foreach($userCollections as $collection) : ?>
               <tr>
-                <th><?php if($collection["visible"] == "show"){echo esc("Público");}else{echo esc("Privado");} ?></th>
+                <?php if($collection["visible"] == "show"){$color = "success";}else{$color = "danger";} ?>
+                <th class="has-text-<?php echo esc($color); ?>"><?php if($collection["visible"] == "show"){echo esc("Público");}else{echo esc("Privado");} ?></th>
                 <th><a href="<?php echo base_url("collection/".$collection["id"]); ?>"><?php echo esc($collection["title"]); ?><a></th>
                 <td>
                 <?php if(!empty($collection["genres"])) : ?>
@@ -212,7 +213,47 @@ function collectionModal()
                   </span>
                 <?php endif; ?>
                 </td>
-                <td>options</td>
+                <td class="has-text-right">
+
+                  <?php if($collection["locked"] == "1") : # Can't change anything ?>
+                    <button class="button is-small" disabled>
+                      <span class="icon is-small">
+                        <i class="fas fa-lock"></i>
+                      </span>
+                    </button>
+
+                  <?php elseif($collection["locked"] == "2") : # Can change visibibility and in the future can be hidden from the user's collections ?>
+                    <form method="post" action="<?php echo base_url('togglecollectionvisibility');?>" style="display: inline;">
+                      <button class="button is-small" type="submit" name="collectionid" value="<?php echo esc($collection["id"]); ?>" onclick="return confirm('Tem certeza que deseja alterar a visibilidade?');">
+                        <span class="icon is-small">
+                          <i class="fas fa-eye"></i>
+                        </span>
+                      </button>
+                    </form>
+
+                  <?php else : # Can be fully modified ?>
+
+                  <form method="post" action="<?php echo base_url('togglecollectionvisibility');?>" style="display: inline;" onclick="return confirm('Tem certeza que deseja alterar a visibilidade?');">
+                      <button class="button is-small" type="submit" name="collectionid" value="<?php echo esc($collection["id"]); ?>">
+                        <span class="icon is-small">
+                          <i class="fas fa-eye"></i>
+                        </span>
+                      </button>
+                  </form>
+
+                    <button class="button is-small">
+                      <span class="icon is-small">
+                        <i class="fas fa-edit"></i>
+                      </span>
+                    </button>
+
+                    <button class="button is-small">
+                      <span class="icon is-small">
+                        <i class="fas fa-trash-alt" style="color: red;"></i>
+                      </span>
+                    </button>
+                  <?php endif; ?>
+                </td>
               </tr>
             <?php endforeach; ?>
           </tbody>
