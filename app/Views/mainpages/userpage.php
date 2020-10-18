@@ -233,25 +233,30 @@ function collectionModal()
 
                   <?php else : # Can be fully modified ?>
 
-                  <form method="post" action="<?php echo base_url('togglecollectionvisibility');?>" style="display: inline;" onclick="return confirm('Tem certeza que deseja alterar a visibilidade?');">
+                    <form method="post" action="<?php echo base_url('togglecollectionvisibility');?>" style="display: inline;" onclick="return confirm('Tem certeza que deseja alterar a visibilidade?');">
+                        <button class="button is-small" type="submit" name="collectionid" value="<?php echo esc($collection["id"]); ?>">
+                          <span class="icon is-small">
+                            <i class="fas fa-eye"></i>
+                          </span>
+                        </button>
+                    </form>
+
+                    <form method="post" action="<?php echo base_url('');?>" style="display: inline;" onclick="return confirm('Tem certeza que deseja alterar a visibilidade?');">
                       <button class="button is-small" type="submit" name="collectionid" value="<?php echo esc($collection["id"]); ?>">
                         <span class="icon is-small">
-                          <i class="fas fa-eye"></i>
+                          <i class="fas fa-edit"></i>
                         </span>
                       </button>
-                  </form>
+                    </form>
 
-                    <button class="button is-small">
-                      <span class="icon is-small">
-                        <i class="fas fa-edit"></i>
-                      </span>
-                    </button>
-
-                    <button class="button is-small">
-                      <span class="icon is-small">
-                        <i class="fas fa-trash-alt" style="color: red;"></i>
-                      </span>
-                    </button>
+                    <form method="post" action="<?php echo base_url('deletecollection');?>" style="display: inline;" onclick="return confirm('Tem certeza que deseja deletar essa coleção?');">
+                      <button class="button is-small" type="submit" name="collectionid" value="<?php echo esc($collection["id"]); ?>">
+                        <span class="icon is-small">
+                          <i class="fas fa-trash-alt" style="color: red;"></i>
+                        </span>
+                      </button>
+                    </form>
+                    
                   <?php endif; ?>
                 </td>
               </tr>

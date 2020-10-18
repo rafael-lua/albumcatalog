@@ -126,12 +126,45 @@ class Collection extends Model
 
 
   /* -------------------------------------------------------------------------- */
+  /*                       deletes a collection                                 */
+  /* -------------------------------------------------------------------------- */
+  public function deleteCollection($collectionId)
+	{
+
+    # If this function is called without values for collectionId, throws a error page back.
+		if(($collectionId === false) || ($collectionId === NULL) || !is_numeric($collectionId))
+		{
+			throw new \CodeIgniter\Exceptions\PageNotFoundException();
+    }
+
+
+    $colletionVibility = $this->asArray()->select('locked')->where('id', $collectionId)->first();
+
+    if($colletionVibility["locked"] == 0)
+    {
+
+      $collectiongenre = new CollectionGenre();
+      $collectionalbum = new CollectionAlbum();
+
+      $collectiongenre->removeCollectionGenres($collectionId);
+      $collectionalbum->removeCollectionAlbums($collectionId);
+
+      $this->where(['id' => $collectionId])->delete();
+    }
+    
+    
+
+  }
+
+
+
+  /* -------------------------------------------------------------------------- */
   /*                       toggles the collection visibility                    */
   /* -------------------------------------------------------------------------- */
   public function toggleVisible($collectionId = false)
 	{
 
-    # If this function is called without values for userId, throws a error page back.
+    # If this function is called without values for collectionId, throws a error page back.
 		if(($collectionId === false) || ($collectionId === NULL) || !is_numeric($collectionId))
 		{
 			throw new \CodeIgniter\Exceptions\PageNotFoundException();

@@ -63,8 +63,24 @@ class CollectionAlbum extends Model
 
   }
 
-	
+  
+    
+  /* -------------------------------------------------------------------------- */
+  /*                      remove collection album reference                     */
+  /* -------------------------------------------------------------------------- */
   
   
+  public function removeCollectionAlbums($collectionId = false)
+  {
+
+    # If this function is called without values for userId, throws a error page back.
+    if(($collectionId === false) || ($collectionId === NULL) || !is_numeric($collectionId))
+    {
+      throw new \CodeIgniter\Exceptions\PageNotFoundException();
+    }
+
+    $this->where(['collectionId' => $collectionId])->delete();
+  
+  }
 	
 }

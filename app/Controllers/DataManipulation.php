@@ -164,4 +164,31 @@ class DataManipulation extends BaseController
     }
   }
 
+
+  /* -------------------------------------------------------------------------- */
+  /*                           deletes the collection                           */
+  /* -------------------------------------------------------------------------- */
+
+  public function deleteCollection()
+  {
+
+    if(!$this->validate([
+      "collectionid"          =>          "required",
+		]) || !$this->session->has("userAccount"))
+		{
+      // echo $this->validator->listErrors();
+			return redirect()->to(base_url());
+		}
+		else
+		{
+      $collectionid = $this->request->getVar("collectionid");
+
+      $collections = new Collection();
+      $collections->deleteCollection($collectionid);
+
+      return redirect()->to(base_url('painel'));      
+      
+    }
+  }
+
 }
