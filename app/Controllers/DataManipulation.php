@@ -139,6 +139,49 @@ class DataManipulation extends BaseController
 
 
   /* -------------------------------------------------------------------------- */
+  /*                      update a existing collection                          */
+  /* -------------------------------------------------------------------------- */
+
+  public function updateCollection()
+  {
+
+    if(!$this->validate([
+      "collectionid"        =>    "required",
+      "collectiontitle"     =>    "required|max_length[50]|min_length[4]",
+      "genres[]" 			      => 		"permit_empty|in_list[rock, pop, electronic, classical, jazz]",
+		]) || !$this->session->has("userAccount"))
+		{
+      // echo $this->validator->listErrors();
+			return redirect()->to(base_url());
+		}
+		else
+		{
+
+      $collections = new Collection();
+
+      $collectionId = $this->request->getVar("collectionid");
+      $collectionTitle = $this->request->getVar("collectiontitle");
+
+      if(empty($this->request->getVar("genres[]")))
+      {
+        $colletionGenres = [];
+      }  
+      else
+      {
+        $colletionGenres = $this->request->getVar("genres[]");
+      } 
+      
+      $newCollectionId = $collections->updateCollection($collectionId, $collectionTitle, $colletionGenres);
+
+      return redirect()->to(base_url('painel'));      
+      
+    }
+  }
+
+
+
+
+  /* -------------------------------------------------------------------------- */
   /*                      toggles the collection visibility                     */
   /* -------------------------------------------------------------------------- */
 

@@ -59,7 +59,7 @@ class CollectionGenre extends Model
 
 
   /* -------------------------------------------------------------------------- */
-  /*                      remove collection album reference                     */
+  /*                      remove collection genre reference                     */
   /* -------------------------------------------------------------------------- */
   
   

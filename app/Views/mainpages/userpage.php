@@ -6,6 +6,49 @@ function collectionModal()
   element.classList.toggle("is-active");
 }
 
+function collectionEditModal(collection_id, collection_title, collection_genres) 
+{
+  let element = document.getElementById("collection_edit");
+  element.classList.toggle("is-active");
+
+  let button_element = document.getElementById("edit_value");
+  if(button_element.value == "0" && !isNaN(collection_id))
+  {
+    button_element.value = collection_id;
+  }
+  else
+  {
+    button_element.value = 0;
+  }
+
+  let title_input = document.getElementById("edit_title");
+  if(collection_title != undefined && title_input.value == "")
+  {
+    title_input.value = collection_title;
+  }
+  else
+  {
+    title_input.value = "";
+  }
+
+  if(collection_genres != undefined)
+  {
+    let genres = document.getElementsByClassName("edit_genre");
+    for (let i = 0; i < genres.length; i++) {
+      if(collection_genres.includes(genres[i].id))
+      {
+        genres[i].checked = true;
+      }
+      else
+      {
+        genres[i].checked = false;
+      }
+    }
+  }
+ 
+  
+}
+
 </script>
 
 
@@ -241,13 +284,25 @@ function collectionModal()
                         </button>
                     </form>
 
-                    <form method="post" action="<?php echo base_url('');?>" style="display: inline;" onclick="return confirm('Tem certeza que deseja alterar a visibilidade?');">
-                      <button class="button is-small" type="submit" name="collectionid" value="<?php echo esc($collection["id"]); ?>">
-                        <span class="icon is-small">
-                          <i class="fas fa-edit"></i>
-                        </span>
-                      </button>
-                    </form>
+                    <?php 
+                      $edit_collection_id = $collection['id'];
+                      $edit_collection_title = "'".$collection['title']."'";
+                      $edit_collection_genre = "[]";
+                      if(!empty($collection["genres"]))
+                      {
+                        $edit_collection_genre = "[";
+                        foreach($collection["genres"] as $genre)
+                        {
+                          $edit_collection_genre = $edit_collection_genre."'".$genre["name"]."', ";
+                        }
+                        $edit_collection_genre = $edit_collection_genre."]";
+                      }
+                    ?>
+                    <button class="button is-small" onclick="collectionEditModal(<?php echo esc($edit_collection_id); ?>, <?php echo esc($edit_collection_title); ?>, <?php echo esc($edit_collection_genre); ?> )">
+                      <span class="icon is-small">
+                        <i class="fas fa-edit"></i>
+                      </span>
+                    </button>                    
 
                     <form method="post" action="<?php echo base_url('deletecollection');?>" style="display: inline;" onclick="return confirm('Tem certeza que deseja deletar essa coleção?');">
                       <button class="button is-small" type="submit" name="collectionid" value="<?php echo esc($collection["id"]); ?>">
@@ -272,6 +327,62 @@ function collectionModal()
   </div>
 
 </div>
+
+
+
+<!-- Edit collection modal -->
+<div class="modal" id="collection_edit">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title"><strong>MODIFICAR COLEÇÃO</strong></p>
+      <button class="delete" aria-label="close" onclick="collectionEditModal()"></button>
+    </header>
+    <section class="modal-card-body">
+      <form method="post" action="<?php echo base_url('updatecollection');?>" style="display: inline;" id="edit_collection_form">
+        <div class="field">
+          <label class="label">Título</label>
+          <div class="control">
+            <input id="edit_title" class="input" type="text" placeholder="Nome da coleção..." name="collectiontitle" value="">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Gêneros</label>
+          <div class="control">
+            <label class="checkbox mx-1">
+              <input type="checkbox" name="genres[]" value="rock" id="rock" class="edit_genre">
+              Rock
+            </label>
+            <label class="checkbox mx-1">
+              <input type="checkbox" name="genres[]" value="classical" id="classical" class="edit_genre">
+              Classical
+            </label>
+            <label class="checkbox mx-1">
+              <input type="checkbox" name="genres[]" value="jazz" id="jazz" class="edit_genre">
+              Jazz
+            </label>
+            <label class="checkbox mx-1">
+              <input type="checkbox" name="genres[]" value="pop" id="pop" class="edit_genre">
+              Pop
+            </label>
+            <label class="checkbox mx-1">
+              <input type="checkbox" name="genres[]" value="electronic" id="electronic" class="edit_genre">
+              Eletronic
+            </label>
+          </div>
+        </div>
+      </form>
+    </section>
+    <footer class="modal-card-foot">
+      <button class="button is-success" form="edit_collection_form" type="submit" name="collectionid" value="0" id="edit_value">Confirmar</button>
+      <button class="button" onclick="collectionEditModal()">Cancelar</button>
+    </footer>
+  </div>
+</div>
+
+
+
 
 
 <div class="columns">

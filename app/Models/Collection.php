@@ -126,6 +126,30 @@ class Collection extends Model
 
 
   /* -------------------------------------------------------------------------- */
+  /*                       create a new user's collection                       */
+  /* -------------------------------------------------------------------------- */
+  public function updateCollection($collectionId = false, $title = "", $genres = [])
+	{
+
+    # If this function is called without values for userId, throws a error page back.
+		if(($collectionId === false) || ($collectionId === NULL) || !is_numeric($collectionId))
+		{
+			throw new \CodeIgniter\Exceptions\PageNotFoundException();
+    }
+
+    $this->where(['id' => $collectionId])->set(['title' => $title])->update();
+
+    $collectiongenre = new CollectionGenre();
+    $collectiongenre->removeCollectionGenres($collectionId);
+    $collectiongenre->insertCollectionGenre($collectionId, $genres);
+  
+
+  }
+
+
+
+
+  /* -------------------------------------------------------------------------- */
   /*                       deletes a collection                                 */
   /* -------------------------------------------------------------------------- */
   public function deleteCollection($collectionId)
