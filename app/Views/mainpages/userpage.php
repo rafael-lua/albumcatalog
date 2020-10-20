@@ -410,7 +410,7 @@ function collectionEditModal(collection_id, collection_title, collection_genres)
           <p>
             <br>
             <!-- The link directs the user to the album page of the review -->
-            <strong><a><?php echo esc($lastReview["title"]); ?></a></strong> <small class="mx-1"><?php echo esc($lastReview["creationDate"]); ?></small>
+            <strong><a href="<?php echo base_url("search/showalbum/".$lastReview["albumId"]); ?>"><?php echo esc($lastReview["title"]); ?></a></strong> <small class="mx-1"><?php echo esc($lastReview["creationDate"]); ?></small>
             <p style="margin: 0; padding: 0;">
               <?php echo esc($lastReview["wording"]); ?>
             </p>
@@ -443,7 +443,7 @@ function collectionEditModal(collection_id, collection_title, collection_genres)
         <tbody>
           <?php foreach($lastRankings as $rank) : ?>
             <tr>
-              <th><a><?php echo esc($rank["name"]); ?></a></th>
+              <th><a href="<?php echo base_url("search/showalbum/".$rank["albumId"]); ?>"><?php echo esc($rank["name"]); ?></a></th>
               <th><?php echo esc($rank["note"]); ?> <i class="fas fa-star is-size-7 my-1" style="color: #ffcc00;"></th>
             </tr>
           <?php endforeach; ?>
