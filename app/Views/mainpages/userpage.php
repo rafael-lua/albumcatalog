@@ -87,7 +87,7 @@ function collectionEditModal(collection_id, collection_title, collection_genres)
           </div>
           <div class="media-content">
             <p class="title is-4"><strong>Nome do usuário</strong></p>
-            <p class="subtitle is-6 has-text-info"><em>@username</em></p>
+            <p class="subtitle is-6 has-text-info"><em>@<?php echo esc($userAccount["username"]); ?></em></p>
           </div>
         </div>
 
