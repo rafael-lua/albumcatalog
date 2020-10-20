@@ -303,6 +303,17 @@ class MainSearch extends BaseController
 
 			$review = new Review();
 			$data["userAlbumReview"] = $review->getUserAlbumReview($data["userAccount"]["id"], $albumId);
+
+			$collections = new Collection();
+			$data["userCollections"] = $collections->getCollectionByUser($data["userAccount"]["id"]);
+
+			foreach($data["userCollections"] as &$collection)
+			{
+				$collection["state"] = [];
+				$collection["state"] = array_merge($collection["state"], $search->getAlbumStateByUser($data["userAccount"]["id"], $albumId));
+				$collection["checked"] = $collections->checkAlbumCollection($collection["id"], $albumId);
+			}
+			unset($collection);
 		
 		}
 		

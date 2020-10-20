@@ -32,27 +32,21 @@ class CollectionGenre extends Model
   /*                       insert a collection genre entry                      */
   /* -------------------------------------------------------------------------- */
 
-  public function insertCollectionGenre($collectionId = false, $genres = [])
+  public function insertCollectionGenre($collectionId = false, $genreName = false)
 	{
 
     # If this function is called without values for userId, throws a error page back.
-		if(($collectionId === false) || ($collectionId === NULL) || !is_numeric($collectionId))
+		if(($collectionId === false) || ($collectionId === NULL) || !is_numeric($collectionId) || ($genreName === false) || ($genreName === NULL))
 		{
 			throw new \CodeIgniter\Exceptions\PageNotFoundException();
     }
     
-    $data = [];
-    
-    foreach($genres as $genre)
-    {
-      $data[] = [
+    $data = [
         'collectionId' => $collectionId,
-        'genreName' => $genre,
-      ];
-    }
-    
-    # inser batch will insert multiple entry together, so will don't need loop the insert.
-    $this->insertBatch($data); 
+        'genreName' => $genreName,
+    ];
+  
+    $this->insert($data); 
     
 
   }

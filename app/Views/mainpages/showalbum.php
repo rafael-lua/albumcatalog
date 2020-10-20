@@ -38,6 +38,13 @@ function reviewModal()
   element.classList.toggle("is-active");
 }
 
+
+function addCollectionModal() 
+{
+  let element = document.getElementById("add-collection-modal");
+  element.classList.toggle("is-active");
+}
+
 </script>
 
 
@@ -48,8 +55,9 @@ function reviewModal()
 	<div class="container mt-3 px-1 py-1 has-background-grey-lighter">
 		<div class="box has-background-dark has-text-info-light py-1">
 		
-			<div class="columns">
+			<div class="columns is-vcentered">
 				<div class="column is-half">
+
 					<form action="<?php echo base_url('updaterating');?>" method="post" style="display: inline;">
 					<?= csrf_field() ?>
 					<input type="text" name="albumid" value="<?php echo esc($albumId); ?>" hidden />
@@ -99,48 +107,99 @@ function reviewModal()
 						<small class="mx-1 has-text-warning has-text-weight-bold"><?php if($note != 0){echo esc($userAlbumRanking["note"]);} ?></small>
 						</span> 
 					</form>
+					
 				</div>
 
 				<div class="column is-half">
-					<nav class="breadcrumb has-bullet-separator is-right" aria-label="breadcrumbs">
-						<ul>
-							<li><a class="has-text-light" href="#">Adicionar à Coleção</a></li>
-							<li><a class="has-text-light" onclick="reviewModal();">Escrever Crítica</a></li>
-						</ul>
-					</nav>					
+					<div class="is-flex is-flex-direction-row-reverse">
+						<button class="button is-small is-inverted is-primary is-light mx-2" onclick="addCollectionModal();"><strong>Colecionar</strong></button>
+						<button class="button is-small is-inverted is-info is-light mx-2" onclick="reviewModal();"><strong>Escrever Crítica</strong></button>
+					</div>				
 				</div>
+
 			</div>
 
 		</div>
 	</div>
 <?php endif; ?>
 
-<div class="modal" id="review-modal">
-  <div class="modal-background"></div>
-  <div class="modal-card">
-    <header class="modal-card-head">
-      <p class="modal-card-title has-text-weight-bold is-size-5">CRÍTICA <small>(<?php echo esc($albumData["album"]["name"]);?> - <?php echo esc($albumData["album"]["rating"]);?><i class="fas fa-star mx-1" style="color: #ffcc00;"></i>)</small></p>
-      <button class="delete" aria-label="close" onclick="reviewModal();"></button>
-    </header>
-		
-    <section class="modal-card-body">
-			<form id="reviewForm" action="<?php echo base_url('updatereview');?>" method="post" style="display: inline;">
-			<?= csrf_field() ?>
-			<input type="text" name="albumid" value="<?php echo esc($albumId); ?>" hidden />
-			<input type="text" name="userid" value="<?php echo esc($userAccount["id"]); ?>" hidden />
-				<input class="input is-rounded is-fullwidth my-2" type="text" name="reviewtitle" placeholder="Título da crítica..." value="<?php if(isset($userAlbumReview["title"])){echo esc($userAlbumReview["title"]);} ?>"/>
-				<textarea class="textarea px-2 py-2" placeholder="Sua crítica..." rows="10" cols="75" maxlength="5000" name="wording"><?php if(isset($userAlbumReview["wording"])){echo esc($userAlbumReview["wording"]);} ?></textarea>
-			</form>
-    </section>
 
-    <footer class="modal-card-foot">
-      <button class="button is-success" form="reviewForm" name="action" value="<?php if(!isset($userAlbumReview["wording"])){echo esc("insert");}else{echo esc("update");} ?>" type="submit"><?php if(!isset($userAlbumReview["wording"])){echo esc("Confirmar");}else{echo esc("Atualizar");} ?></button>
-      <button class="button" onclick="reviewModal();">Cancelar</button>
-			<button class="button is-danger" form="reviewForm" name="action" value="delete" <?php if(!isset($userAlbumReview["wording"])){echo esc("disabled");} ?> type="submit">Excluir</button>
-    </footer>
-		
-  </div>
-</div>
+<?php if(isset($userAccount)) : ?>
+	<!-- Write review modal -->
+
+	<div class="modal" id="review-modal">
+		<div class="modal-background"></div>
+		<div class="modal-card">
+			<header class="modal-card-head">
+				<p class="modal-card-title has-text-weight-bold is-size-5">CRÍTICA <small>(<?php echo esc($albumData["album"]["name"]);?> - <?php echo esc($albumData["album"]["rating"]);?><i class="fas fa-star mx-1" style="color: #ffcc00;"></i>)</small></p>
+				<button class="delete" aria-label="close" onclick="reviewModal();"></button>
+			</header>
+			
+			<section class="modal-card-body">
+				<form id="reviewForm" action="<?php echo base_url('updatereview');?>" method="post" style="display: inline;">
+				<?= csrf_field() ?>
+				<input type="text" name="albumid" value="<?php echo esc($albumId); ?>" hidden />
+				<input type="text" name="userid" value="<?php echo esc($userAccount["id"]); ?>" hidden />
+					<input class="input is-rounded is-fullwidth my-2" type="text" name="reviewtitle" placeholder="Título da crítica..." value="<?php if(isset($userAlbumReview["title"])){echo esc($userAlbumReview["title"]);} ?>"/>
+					<textarea class="textarea px-2 py-2" placeholder="Sua crítica..." rows="10" cols="75" maxlength="5000" name="wording"><?php if(isset($userAlbumReview["wording"])){echo esc($userAlbumReview["wording"]);} ?></textarea>
+				</form>
+			</section>
+
+			<footer class="modal-card-foot">
+				<button class="button is-success" form="reviewForm" name="action" value="<?php if(!isset($userAlbumReview["wording"])){echo esc("insert");}else{echo esc("update");} ?>" type="submit"><?php if(!isset($userAlbumReview["wording"])){echo esc("Confirmar");}else{echo esc("Atualizar");} ?></button>
+				<button class="button" onclick="reviewModal();">Cancelar</button>
+				<button class="button is-danger" form="reviewForm" name="action" value="delete" <?php if(!isset($userAlbumReview["wording"])){echo esc("disabled");} ?> type="submit">Excluir</button>
+			</footer>
+			
+		</div>
+	</div>
+
+
+
+	<!-- Add to collection modal -->
+
+	<div class="modal" id="add-collection-modal">
+		<div class="modal-background"></div>
+		<div class="modal-card">
+			<header class="modal-card-head">
+				<p class="modal-card-title has-text-weight-bold is-size-5">ADICIONAR À COLEÇÃO</p>
+				<button class="delete" aria-label="close" onclick="addCollectionModal();"></button>
+			</header>
+			
+			<section class="modal-card-body">
+			<form action="<?php echo base_url('addtocollection');?>" method="post" id="add_collection_form">
+			<?= csrf_field() ?>
+				<input type="text" name="albumId" value="<?php echo esc($albumId); ?>" hidden />
+				<div class="field px-3">
+					<label class="label mb-4">Selecione as coleções: </label>
+					<div class="control" style="max-height: 10em; overflow: scroll-y;">
+						<?php foreach($userCollections as $collection) : $hasCollection = false; ?>
+							<?php if($collection["locked"] == 0) : $hasCollection = true; ?>
+								<label class="checkbox is-size-5 mx-1 mb-2">
+									<input type="checkbox" name="collectionIds[]" value="<?php echo esc($collection["id"]); ?>" <?php if($collection["checked"] == true){echo esc("checked");} ?>>
+									<?php echo esc($collection["title"]); ?>
+								</label>
+								<hr class="my-1">
+							<?php endif; ?>
+						<?php endforeach; ?>
+
+						<?php if($hasCollection == false) : ?>
+							<p>Você não tem nenhuma coleção criada!</p>
+						<?php endif; ?>
+
+					</div>
+				</div>
+			</form>
+			</section>
+
+			<footer class="modal-card-foot">
+				<button class="button is-success" type="submit" form="add_collection_form"><strong>Confirmar</strong></button>
+				<button class="button" type="submit" onclick="addCollectionModal();"><strong>Cancelar</strong></button>
+			</footer>
+			
+		</div>
+	</div>
+<?php endif; ?>
 
 
 <?php

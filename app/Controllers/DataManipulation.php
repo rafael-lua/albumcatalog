@@ -182,6 +182,42 @@ class DataManipulation extends BaseController
 
 
   /* -------------------------------------------------------------------------- */
+  /*                      add album to existing collection                      */
+  /* -------------------------------------------------------------------------- */
+
+  public function addToCollection()
+  {
+
+    if(!$this->validate([
+      "albumId"             =>    "required",
+      "collectionIds[]" 	  => 		"permit_empty",
+		]) || !$this->session->has("userAccount"))
+		{
+      // echo $this->validator->listErrors();
+			return redirect()->to(base_url());
+		}
+		else
+		{
+      $userAccount = $this->session->get("userAccount");
+
+      $albumId = $this->request->getVar("albumId");
+      $collectionIds = $this->request->getVar("collectionIds[]");
+      if($collectionIds == NULL){$collectionIds = [];}
+      
+      $collections = new Collection();
+      $userCollections = $collections->getCollectionByUser($userAccount["id"]);
+      $collections->addAlbumCollection($collectionIds, $albumId, $userCollections);
+              
+
+      return redirect()->to(base_url('search/showalbum/'.$albumId));      
+      
+    }
+  }
+
+
+
+
+  /* -------------------------------------------------------------------------- */
   /*                      toggles the collection visibility                     */
   /* -------------------------------------------------------------------------- */
 

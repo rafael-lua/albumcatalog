@@ -117,7 +117,10 @@ class Collection extends Model
     $collectionId = $this->insert($data); 
 
     $collectiongenre = new CollectionGenre();
-    $collectiongenre->insertCollectionGenre($collectionId, $genres);
+    foreach($genres as $genreName)
+    {
+      $collectiongenre->insertCollectionGenre($collectionId, $genreName);
+    }
 
     return $collectionId;
 
@@ -209,6 +212,65 @@ class Collection extends Model
     
 
   }
+
+
+
+  /* -------------------------------------------------------------------------- */
+	/*                     get the album's state by user                          */
+	/* -------------------------------------------------------------------------- */
+
+	public function checkAlbumCollection($collectionId = false, $albumId = false)
+	{
+		# If this function is called without values for albumId, throws a error page back.
+		if(($albumId === false) || ($albumId === NULL) || !is_numeric($albumId) || ($collectionId === false) || ($collectionId === NULL) || !is_numeric($collectionId))
+		{
+			throw new \CodeIgniter\Exceptions\PageNotFoundException();
+    }
+    
+    $collectionalbum = new CollectionAlbum();
+		
+		$albumInCollection = $collectionalbum->isAlbumInCollection($collectionId, $albumId);
+		if($albumInCollection > 0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+  }
+  
+
+
+  /* -------------------------------------------------------------------------- */
+	/*                     add the album to the collections                       */
+	/* -------------------------------------------------------------------------- */
+
+	public function addAlbumCollection($collectionIds = false, $albumId = false, $userCollections = false)
+	{
+		# If this function is called without values for albumId, throws a error page back.
+    if(($collectionIds === false) || ($collectionIds === NULL) || 
+    ($albumId === false) || ($albumId === NULL) || !is_numeric($albumId) || 
+    ($userCollections === false) || ($userCollections === NULL))
+		{
+			throw new \CodeIgniter\Exceptions\PageNotFoundException();
+    }
+
+    $collectionalbum = new CollectionAlbum();
+
+    foreach($userCollections as $collection)
+    {
+      $collectionalbum->removeCollectionByAlbum($collection["id"], $albumId);
+    }
+
+    if(!empty($collectionIds))
+    {
+      foreach($collectionIds as $collectionId)
+      {
+        $collectionalbum->insertAlbumCollection($collectionId, $albumId);
+      }
+    }
+	}
 
 	
 }

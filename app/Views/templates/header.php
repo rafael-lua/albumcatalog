@@ -10,7 +10,7 @@
 	<!-- <?php echo link_tag('css/style.css'); ?> -->
 	<?php echo script_tag('js/scripts.js'); ?>
 
-	 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+	 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
 	 <script src="https://kit.fontawesome.com/14e494ac10.js" crossorigin="anonymous"></script>	 
 </head>
 

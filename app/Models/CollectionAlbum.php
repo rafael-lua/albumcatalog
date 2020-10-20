@@ -66,7 +66,7 @@ class CollectionAlbum extends Model
   
     
   /* -------------------------------------------------------------------------- */
-  /*                      remove collection album reference                     */
+  /*                    remove all collection album references                  */
   /* -------------------------------------------------------------------------- */
   
   
@@ -82,5 +82,69 @@ class CollectionAlbum extends Model
     $this->where(['collectionId' => $collectionId])->delete();
   
   }
+
+
+
+  /* -------------------------------------------------------------------------- */
+  /*            remove all collections for the album/user reference             */
+  /* -------------------------------------------------------------------------- */
+  
+  
+  public function removeCollectionByAlbum($collectionId = false, $albumId = false)
+  {
+
+    # If this function is called without values for userId, throws a error page back.
+    if(($collectionId === false) || ($collectionId === NULL) || !is_numeric($collectionId) || ($albumId === false) || ($albumId === NULL) || !is_numeric($albumId))
+    {
+      throw new \CodeIgniter\Exceptions\PageNotFoundException();
+    }
+
+    $this->where(['collectionId' => $collectionId, 'albumId' => $albumId])->delete();
+  
+  }
+
+
+
+  /* -------------------------------------------------------------------------- */
+	/*                     insert an album into an collection                     */
+	/* -------------------------------------------------------------------------- */
+
+	public function insertAlbumCollection($collectionId = false, $albumId = false)
+	{
+		# If this function is called without values for albumId, throws a error page back.
+		if(($albumId === false) || ($albumId === NULL) || !is_numeric($albumId) || ($collectionId === false) || ($collectionId === NULL))
+		{
+			throw new \CodeIgniter\Exceptions\PageNotFoundException();
+		}
+		
+    $data = [
+      'collectionId' => $collectionId,
+      'albumId' => $albumId,
+    ];    
+   
+    $this->insert($data); 
+    
+		
+	}
+
+
+
+  /* -------------------------------------------------------------------------- */
+	/*                     get the album's state by user                          */
+	/* -------------------------------------------------------------------------- */
+
+	public function isAlbumInCollection($collectionId = false, $albumId = false)
+	{
+		# If this function is called without values for albumId, throws a error page back.
+		if(($albumId === false) || ($albumId === NULL) || !is_numeric($albumId) || ($collectionId === false) || ($collectionId === NULL) || !is_numeric($collectionId))
+		{
+			throw new \CodeIgniter\Exceptions\PageNotFoundException();
+		}
+		
+    return $this->where(['collectionId' => $collectionId, 'albumId' => $albumId])->countAllResults();
+    
+    
+		
+	}
 	
 }

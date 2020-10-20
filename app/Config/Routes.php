@@ -57,6 +57,8 @@ $routes->post('togglecollectionvisibility', 'DataManipulation::toggleCollectionV
 $routes->get('togglecollectionvisibility', 'Mainpage::redirectHome');
 $routes->post('deletecollection', 'DataManipulation::deleteCollection');
 $routes->get('deletecollection', 'Mainpage::redirectHome');
+$routes->post('addtocollection', 'DataManipulation::addToCollection');
+$routes->get('addtocollection', 'Mainpage::redirectHome');
 $routes->get('(:any)', 'Mainpage::view/$1');
 
 /**
