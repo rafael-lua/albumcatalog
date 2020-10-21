@@ -2,7 +2,7 @@
 
 use CodeIgniter\Model;
 
-
+use App\Models\Collection;
 
 /*
 
@@ -88,6 +88,9 @@ class StatusAlbum extends Model
       ];
 			$this->insert($data);
 		}
+
+		$collections = new Collection();
+		$collections->updateAlbumStateCollection($albumId, $userId, $newState);
 
 	}
 

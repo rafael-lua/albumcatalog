@@ -57,7 +57,9 @@
                   <?php 
                     if($album["state"] == "completed"){echo esc("Completo");}
                     elseif($album["state"] == "dumped"){echo esc("Abandonado");}
-                    elseif($album["waiting"] == "waiting"){echo esc("Esperando");}
+                    elseif($album["state"] == "waiting"){echo esc("Esperando");}
+                    elseif($album["state"] == "wanting"){echo esc("Pretende");}
+                    elseif($album["state"] == "none"){echo esc("Nenhum");}
                   ?>
                   <br>
                   <small class="has-text-grey"><?php echo esc($album["rank"]["note"]); ?><i class="fas fa-star is-size-7 mx-1" style="color: #ffcc00;"></i></small>

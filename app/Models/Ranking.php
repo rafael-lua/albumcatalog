@@ -3,6 +3,7 @@
 use CodeIgniter\Model;
 
 use App\Models\Search;
+use App\Models\Collection;
 
 ###
 # A model to work with ranking data.
@@ -100,15 +101,26 @@ class Ranking extends Model
 				'note' => $note
 			];
 			$this->insert($data);
+
+			$collections = new Collection();
+			$collections->updateAlbumStateCollection($albumId, $userId, "ranking", "+");
+
 		}
 		elseif($note == 0)
 		{
 			$this->where(['userId' => $userId, 'albumId' => $albumId])->delete();
+			
+			$collections = new Collection();
+			$collections->updateAlbumStateCollection($albumId, $userId, "ranking", "-");
 		}
 		else
 		{
 			$this->where(['userId' => $userId, 'albumId' => $albumId])->set(['note' => $note])->update();
+
+			$collections = new Collection();
+			$collections->updateAlbumStateCollection($albumId, $userId, "ranking", "+");
 		}
+
 	}
 	
 }

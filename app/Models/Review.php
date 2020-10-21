@@ -2,6 +2,8 @@
 
 use CodeIgniter\Model;
 
+use App\Models\Collection;
+
 ###
 # A model to work with review data.
 ###
@@ -97,7 +99,11 @@ class Review extends Model
 				'title' => $title
 			];
 			$this->insert($data);
+
+			$collections = new Collection();
+			$collections->updateAlbumStateCollection($albumId, $userId, "review", "+");
 		}
+
 	}
 
 
@@ -116,6 +122,9 @@ class Review extends Model
 		if($review_exist > 0)
 		{
 			$this->where(['userId' => $userId, 'albumId' => $albumId])->set(['wording' => $wording, 'title' => $title])->update();
+			
+			$collections = new Collection();
+			$collections->updateAlbumStateCollection($albumId, $userId, "review", "+");
 		}
 	}
 
@@ -136,6 +145,9 @@ class Review extends Model
 		if($review_exist > 0)
 		{
 			$this->where(['userId' => $userId, 'albumId' => $albumId])->delete();
+
+			$collections = new Collection();
+			$collections->updateAlbumStateCollection($albumId, $userId, "review", "-");
 		}
 	}
 

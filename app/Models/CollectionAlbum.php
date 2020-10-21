@@ -130,7 +130,7 @@ class CollectionAlbum extends Model
 
 
   /* -------------------------------------------------------------------------- */
-	/*                     get the album's state by user                          */
+	/*                     check if an album is in a collection                   */
 	/* -------------------------------------------------------------------------- */
 
 	public function isAlbumInCollection($collectionId = false, $albumId = false)

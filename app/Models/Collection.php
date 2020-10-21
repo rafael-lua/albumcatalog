@@ -28,7 +28,7 @@ class Collection extends Model
 	protected $primaryKey = "id";
   protected $returnType = "array";
 	
-  protected $allowedFields = ['userId', 'title', 'visible', 'locked'];
+  protected $allowedFields = ['userId', 'title', 'visible', 'locked', 'baseid'];
 
 
 
@@ -110,7 +110,8 @@ class Collection extends Model
     $data = [
       'title' => $title,
       'visible' => $visibility,
-      'userId' => $userId
+      'userId' => $userId,
+      'baseid' => 9 # 9 is the base value for user created collections
     ];
 
     # Insert returns the id of the last inserted data!
@@ -270,7 +271,123 @@ class Collection extends Model
         $collectionalbum->insertAlbumCollection($collectionId, $albumId);
       }
     }
-	}
+  }
+  
+
+
+
+  /* -------------------------------------------------------------------------- */
+	/*                     update albums and state collections                    */
+	/* -------------------------------------------------------------------------- */
+
+	public function updateAlbumStateCollection($albumId = false, $userId = false, $state = false, $action = "")
+	{
+		# If this function is called without values for albumId, throws a error page back.
+    if(($userId === false) || ($userId === NULL) || !is_numeric($userId) || 
+    ($albumId === false) || ($albumId === NULL) || !is_numeric($albumId) || 
+    ($state === false) || ($state === NULL))
+		{
+			throw new \CodeIgniter\Exceptions\PageNotFoundException();
+    }
+
+    $collectionalbum = new CollectionAlbum();
+
+    if($state == "review") # review album update state, use action as reference for adding or deleting
+    {
+      $userCollection = $this->asArray()->select('id')->where(['userId' => $userId, 'baseid' => 0])->first();
+      if($action == "+")
+      {
+        if($collectionalbum->isAlbumInCollection($userCollection["id"], $albumId) == 0)
+        {
+          $collectionalbum->insertAlbumCollection($userCollection["id"], $albumId);
+        }
+      }
+      elseif($action == "-")
+      {
+        if($collectionalbum->isAlbumInCollection($userCollection["id"], $albumId) > 0)
+        {
+          $collectionalbum->removeCollectionByAlbum($userCollection["id"], $albumId);
+        }
+      }
+    }
+    elseif($state == "ranking") # ranking collection update state
+    {
+      $userCollection = $this->asArray()->select('id')->where(['userId' => $userId, 'baseid' => 1])->first();
+      if($action == "+")
+      {
+        if($collectionalbum->isAlbumInCollection($userCollection["id"], $albumId) == 0)
+        {
+          $collectionalbum->insertAlbumCollection($userCollection["id"], $albumId);
+        }
+      }
+      elseif($action == "-")
+      {
+        if($collectionalbum->isAlbumInCollection($userCollection["id"], $albumId) > 0)
+        {
+          $collectionalbum->removeCollectionByAlbum($userCollection["id"], $albumId);
+        }
+      }
+    }
+    elseif($state == "none") # remove from all state collections
+    {
+      $baseList = [2, 3, 4, 5];
+      $userBaseCollections = $this->asArray()->select('id')->where('userId', $userId)->whereIn('baseid', $baseList)->findAll();
+      foreach($userBaseCollections as $collection)
+      {
+        $collectionalbum->removeCollectionByAlbum($collection["id"], $albumId);
+      }
+    }
+    elseif($state == "wanting") # add to only wanting collection
+    {
+      $baseList = [2, 3, 4, 5];
+      $userBaseCollections = $this->asArray()->select('id')->where('userId', $userId)->whereIn('baseid', $baseList)->findAll();
+      foreach($userBaseCollections as $collection)
+      {
+        $collectionalbum->removeCollectionByAlbum($collection["id"], $albumId);
+      }
+
+      $userCollection = $this->asArray()->select('id')->where(['userId' => $userId, 'baseid' => 2])->first();
+      $collectionalbum->insertAlbumCollection($userCollection["id"], $albumId);
+    }
+    elseif($state == "waiting") # add to only waiting collection
+    {
+      $baseList = [2, 3, 4, 5];
+      $userBaseCollections = $this->asArray()->select('id')->where('userId', $userId)->whereIn('baseid', $baseList)->findAll();
+      foreach($userBaseCollections as $collection)
+      {
+        $collectionalbum->removeCollectionByAlbum($collection["id"], $albumId);
+      }
+
+      $userCollection = $this->asArray()->select('id')->where(['userId' => $userId, 'baseid' => 3])->first();
+      $collectionalbum->insertAlbumCollection($userCollection["id"], $albumId);
+    }
+    elseif($state == "completed") # add to only completed collection
+    {
+      $baseList = [2, 3, 4, 5];
+      $userBaseCollections = $this->asArray()->select('id')->where('userId', $userId)->whereIn('baseid', $baseList)->findAll();
+      foreach($userBaseCollections as $collection)
+      {
+        $collectionalbum->removeCollectionByAlbum($collection["id"], $albumId);
+      }
+
+      $userCollection = $this->asArray()->select('id')->where(['userId' => $userId, 'baseid' => 4])->first();
+      $collectionalbum->insertAlbumCollection($userCollection["id"], $albumId);
+    }
+    elseif($state == "dumped") # add to only dumped collection
+    {
+      $baseList = [2, 3, 4, 5];
+      $userBaseCollections = $this->asArray()->select('id')->where('userId', $userId)->whereIn('baseid', $baseList)->findAll();
+      foreach($userBaseCollections as $collection)
+      {
+        $collectionalbum->removeCollectionByAlbum($collection["id"], $albumId);
+      }
+
+      $userCollection = $this->asArray()->select('id')->where(['userId' => $userId, 'baseid' => 5])->first();
+      $collectionalbum->insertAlbumCollection($userCollection["id"], $albumId);
+    }
+
+
+  }
 
 	
 }
