@@ -76,28 +76,10 @@ class Search extends Model
 
 
 
-	/* -------------------------------------------------------------------------- */
-	/*                     get the album's state by user                          */
-	/* -------------------------------------------------------------------------- */
+	
 
-	public function getAlbumStateByUser($userId = false, $albumId = false)
-	{
-		# If this function is called without values for albumId, throws a error page back.
-		if(($albumId === false) || ($albumId === NULL) || !is_numeric($albumId) || ($userId === false) || ($userId === NULL) || !is_numeric($userId))
-		{
-			throw new \CodeIgniter\Exceptions\PageNotFoundException();
-		}
-		
-		$state = $this->asArray()->select('state')->from('statusalbum')->where(['album.id' => $albumId, 'album.id' => 'statusalbum.albumId', 'statusalbum.userId' => $userId], NULL, FALSE)->first();
-		
-		if(!empty($state)){
-			return $state;
-		}
-		else
-		{
-			return [];
-		}
-	}
+
+	
 
 
 

@@ -4,6 +4,8 @@ use App\Models\User;
 use App\Models\Review;
 use App\Models\Ranking;
 use App\Models\Collection;
+use App\Models\StatusAlbum;
+
 
 class DataManipulation extends BaseController
 {
@@ -89,6 +91,41 @@ class DataManipulation extends BaseController
       return redirect()->to(base_url('search/showalbum/'.$this->request->getVar("albumid")));
     }
   }
+
+
+
+
+  /* -------------------------------------------------------------------------- */
+  /*                          changes the album state                           */
+  /* -------------------------------------------------------------------------- */
+
+  public function changeAlbumState()
+  {
+
+    if(!$this->validate([
+      "albumid"               =>           "required",
+      "statevalue"            =>           "required|in_list[0,1,2,3,4]",
+		]) || !$this->session->has("userAccount"))
+		{
+      // echo $this->validator->listErrors();
+			return redirect()->to(base_url());
+		}
+		else
+		{
+      $user = $this->session->get("userAccount");
+      $albumId = $this->request->getVar("albumid");
+      $stateValue = $this->request->getVar("statevalue");
+
+      $status = new StatusAlbum();
+      $status->updateAlbumState($user["id"], $albumId, $stateValue);
+
+      return redirect()->to(base_url('search/showalbum/'.$albumId));          
+    }
+  }
+
+
+
+
 
 
     
@@ -213,7 +250,6 @@ class DataManipulation extends BaseController
       
     }
   }
-
 
 
 

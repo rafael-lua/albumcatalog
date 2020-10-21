@@ -114,6 +114,25 @@ function addCollectionModal()
 					<div class="is-flex is-flex-direction-row-reverse">
 						<button class="button is-small is-inverted is-primary is-light mx-2" onclick="addCollectionModal();"><strong>Colecionar</strong></button>
 						<button class="button is-small is-inverted is-info is-light mx-2" onclick="reviewModal();"><strong>Escrever Crítica</strong></button>
+						
+						<form action="<?php echo base_url('changestate');?>" method="post">
+						<?= csrf_field() ?>
+						<input type="text" name="albumid" value="<?php echo esc($albumId); ?>" hidden />
+							<div class="field mx-2">
+								<div class="control">
+									<div class="select is-small is-info">
+										<select class="has-text-weight-bold has-text-success" name="statevalue" onchange="this.form.submit()">
+											<option class="has-text-info" value="0" <?php if($userAlbumState == "none"){echo esc("selected");} ?>>Nenhum Status</option>
+											<option class="has-text-info" value="1" <?php if($userAlbumState == "wanting"){echo esc("selected");} ?>>Pretende Ouvir</option>
+											<option class="has-text-info" value="2" <?php if($userAlbumState == "waiting"){echo esc("selected");} ?>>Esperando Lançar</option>
+											<option class="has-text-info" value="3" <?php if($userAlbumState == "completed"){echo esc("selected");} ?>>Completo</option>
+											<option class="has-text-info" value="4" <?php if($userAlbumState == "dumped"){echo esc("selected");} ?>>Abandonado</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</form>
+
 					</div>				
 				</div>
 

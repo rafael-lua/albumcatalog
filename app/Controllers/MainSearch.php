@@ -6,6 +6,7 @@ use App\Models\Search;
 use App\Models\User;
 use App\Models\Review;
 use App\Models\Ranking;
+use App\Models\StatusAlbum;
 use App\Models\Collection;
 
 class MainSearch extends BaseController
@@ -279,6 +280,7 @@ class MainSearch extends BaseController
 		$search = new Search();
 		$reviews = new Review();
 		$rakings = new Ranking();
+		$status = new StatusAlbum();
 
 		$data = [];
 
@@ -309,11 +311,12 @@ class MainSearch extends BaseController
 
 			foreach($data["userCollections"] as &$collection)
 			{
-				$collection["state"] = [];
-				$collection["state"] = array_merge($collection["state"], $search->getAlbumStateByUser($data["userAccount"]["id"], $albumId));
 				$collection["checked"] = $collections->checkAlbumCollection($collection["id"], $albumId);
 			}
 			unset($collection);
+
+			$data["userAlbumState"] = $status->getAlbumStateByUser($data["userAccount"]["id"], $albumId);
+			
 		
 		}
 		

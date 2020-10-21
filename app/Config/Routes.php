@@ -49,6 +49,8 @@ $routes->post('updaterating', 'DataManipulation::updateRanking');
 $routes->get('updaterating', 'Mainpage::redirectHome');
 $routes->post('updatereview', 'DataManipulation::updateReview');
 $routes->get('updatereview', 'Mainpage::redirectHome');
+$routes->post('changestate', 'DataManipulation::changeAlbumState');
+$routes->get('changestate', 'Mainpage::redirectHome');
 $routes->post('updatecollection', 'DataManipulation::updateCollection');
 $routes->get('updatecollection', 'Mainpage::redirectHome');
 $routes->post('insertcollection', 'DataManipulation::createCollection');
