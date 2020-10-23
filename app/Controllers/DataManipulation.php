@@ -166,9 +166,9 @@ class DataManipulation extends BaseController
         $colletionGenres = $this->request->getVar("genres[]");
       } 
       
-      $newCollectionId = $collections->insertCollection($user["id"], $collectionTitle, $collectionVisibility, $colletionGenres);
+      $collections->insertCollection($user["id"], $collectionTitle, $collectionVisibility, $colletionGenres);
 
-      return redirect()->to(base_url('collection/'.$newCollectionId));      
+      return redirect()->to(base_url('painel'));        
       
     }
   }
@@ -269,10 +269,12 @@ class DataManipulation extends BaseController
 		}
 		else
 		{
+      $userAccount = $this->session->get("userAccount");
+
       $collectionid = $this->request->getVar("collectionid");
 
       $collections = new Collection();
-      $collections->toggleVisible($collectionid);
+      $collections->toggleVisible($collectionid, $userAccount["id"]);
 
       return redirect()->to(base_url('painel'));      
       

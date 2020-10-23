@@ -5,6 +5,7 @@ use CodeIgniter\Model;
 use App\Models\User;
 use App\Models\CollectionAlbum;
 use App\Models\CollectionGenre;
+use App\Models\Activity;
 
 /*
 
@@ -123,6 +124,9 @@ class Collection extends Model
       $collectiongenre->insertCollectionGenre($collectionId, $genreName);
     }
 
+    $activities = new Activity();
+    $activities->insertActivity($userId, "create-collection", false, false, $collectionId);
+
     return $collectionId;
 
   }
@@ -130,7 +134,7 @@ class Collection extends Model
 
 
   /* -------------------------------------------------------------------------- */
-  /*                       create a new user's collection                       */
+  /*                         update a  user's collection                        */
   /* -------------------------------------------------------------------------- */
   public function updateCollection($collectionId = false, $title = "", $genres = [])
 	{
@@ -189,11 +193,11 @@ class Collection extends Model
   /* -------------------------------------------------------------------------- */
   /*                       toggles the collection visibility                    */
   /* -------------------------------------------------------------------------- */
-  public function toggleVisible($collectionId = false)
+  public function toggleVisible($collectionId = false, $userId = false)
 	{
 
     # If this function is called without values for collectionId, throws a error page back.
-		if(($collectionId === false) || ($collectionId === NULL) || !is_numeric($collectionId))
+		if(($collectionId === false) || ($collectionId === NULL) || !is_numeric($collectionId) || ($userId === false) || ($userId === NULL) || !is_numeric($userId))
 		{
 			throw new \CodeIgniter\Exceptions\PageNotFoundException();
     }
@@ -204,16 +208,63 @@ class Collection extends Model
     {
       $data = [ 'visible' => 'hide' ]; 
       $this->update($collectionId, $data);
+
+      $activities = new Activity();
+      $activities->updateVisibility($userId, $collectionId, 1);
     }
     elseif($colletionVibility["visible"] == "hide")
     {
       $data = [ 'visible' => 'show' ]; 
       $this->update($collectionId, $data);
+     
+      $activities = new Activity();
+      $activities->updateVisibility($userId, $collectionId, 0);
     }
+
+    
     
 
   }
 
+
+  /* -------------------------------------------------------------------------- */
+  /*                         checks collection visibility                       */
+  /* -------------------------------------------------------------------------- */
+  public function getVisible($collectionId = false)
+	{
+
+    # If this function is called without values for collectionId, throws a error page back.
+		if(($collectionId === false) || ($collectionId === NULL) || !is_numeric($collectionId))
+		{
+			throw new \CodeIgniter\Exceptions\PageNotFoundException();
+    }
+    
+    $colletionVibility = $this->asArray()->select('visible')->where('id', $collectionId)->first();
+
+    return $colletionVibility["visible"];
+    
+
+  }
+
+
+  /* -------------------------------------------------------------------------- */
+  /*                         returns the collection name                        */
+  /* -------------------------------------------------------------------------- */
+  public function getCollectionName($collectionId = false)
+	{
+
+    # If this function is called without values for collectionId, throws a error page back.
+		if(($collectionId === false) || ($collectionId === NULL) || !is_numeric($collectionId))
+		{
+			throw new \CodeIgniter\Exceptions\PageNotFoundException();
+    }
+    
+    $colletionName = $this->asArray()->select('title')->where('id', $collectionId)->first();
+
+    return $colletionName["title"];
+    
+
+  }
 
 
   /* -------------------------------------------------------------------------- */

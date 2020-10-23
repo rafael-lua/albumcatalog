@@ -70,7 +70,7 @@ function collectionEditModal(collection_id, collection_title, collection_genres)
   <!-- Left side -->
   <div class="level-right">
     <div class="level-item">
-      <a class="has-text-info"><strong><i class="fas fa-cog"></i> OPTIONS</strong></a>
+      <a class="has-text-info"><strong><i class="fas fa-cog mx-1"></i>OPÇÕES</strong></a>
     </div>
   </div>
 </nav>
@@ -109,7 +109,10 @@ function collectionEditModal(collection_id, collection_title, collection_genres)
 
   <div class="column px-6 py-6">
     <div class="box">
-      <div class="block mb-1"><strong>ATIVIDADES</strong></div>
+      <div class="is-flex is-justify-content-space-between is-align-content-center">
+        <div class="block mb-1 mx-1"><strong>ÚTLTIMAS ATIVIDADES</strong></div>
+        <button class="button is-small is-link mx-1">Listar Todas</button>
+      </div>
       <table class="table is-striped is-hoverable is-fullwidth">
 
         <thead>
@@ -123,7 +126,7 @@ function collectionEditModal(collection_id, collection_title, collection_genres)
           <?php for($i = 1; $i <= 5; $i++) : ?>
             <tr>
               <th>07/09/0709</th>
-              <td>Activity description goes here</td>
+              <td><small>Activity description goes here</small></td>
             </tr>
           <?php endfor; ?>
         </tbody>

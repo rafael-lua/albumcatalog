@@ -4,6 +4,7 @@ use CodeIgniter\Model;
 
 use App\Models\Search;
 use App\Models\Collection;
+use App\Models\Activity;
 
 ###
 # A model to work with ranking data.
@@ -91,6 +92,8 @@ class Ranking extends Model
 			throw new \CodeIgniter\Exceptions\PageNotFoundException();
 		}
 
+		$activities = new Activity();
+
 		/* ------------------ check if user already rated the album ----------------- */
 		$rating_exist = $this->select('userId')->where(['userId' => $userId, 'albumId' => $albumId])->countAllResults();
 		if($rating_exist <= 0)
@@ -104,6 +107,8 @@ class Ranking extends Model
 
 			$collections = new Collection();
 			$collections->updateAlbumStateCollection($albumId, $userId, "ranking", "+");
+
+			$activities->insertActivity($userId, "rank-album", $albumId, $note);
 
 		}
 		elseif($note == 0)
@@ -119,6 +124,8 @@ class Ranking extends Model
 
 			$collections = new Collection();
 			$collections->updateAlbumStateCollection($albumId, $userId, "ranking", "+");
+
+			$activities->insertActivity($userId, "rank-album", $albumId, $note);
 		}
 
 	}

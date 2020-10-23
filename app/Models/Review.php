@@ -1,6 +1,7 @@
 <?php namespace App\Models;
 
 use CodeIgniter\Model;
+use App\Models\Activity;
 
 use App\Models\Collection;
 
@@ -14,7 +15,7 @@ class Review extends Model
 	protected $primaryKey = "id";
 	protected $returnType = "array";
 	
-	protected $allowedFields = ['userId', 'albumId', 'wording', 'title'];
+	protected $allowedFields = ['userId', 'albumId', 'wording', 'title', 'creationDate'];
 	
 	
 
@@ -89,19 +90,26 @@ class Review extends Model
 			throw new \CodeIgniter\Exceptions\PageNotFoundException();
 		}
 
+		$activities = new Activity();
+
 		$review_exist = $this->select('userId')->where(['userId' => $userId, 'albumId' => $albumId])->countAllResults();
 		if($review_exist <= 0)
 		{
+			$dateNow = date("Y-m-d");
+
 			$data = [
 				'userId' => $userId,
 				'albumId' => $albumId,
 				'wording' => $wording,
-				'title' => $title
+				'title' => $title,
+				'creationDate' => $dateNow
 			];
 			$this->insert($data);
 
 			$collections = new Collection();
 			$collections->updateAlbumStateCollection($albumId, $userId, "review", "+");
+
+			$activities->insertActivity($userId, "review-album", $albumId);
 		}
 
 	}
@@ -118,6 +126,8 @@ class Review extends Model
 			throw new \CodeIgniter\Exceptions\PageNotFoundException();
 		}
 
+		$activities = new Activity();
+
 		$review_exist = $this->select('userId')->where(['userId' => $userId, 'albumId' => $albumId])->countAllResults();
 		if($review_exist > 0)
 		{
@@ -125,6 +135,8 @@ class Review extends Model
 			
 			$collections = new Collection();
 			$collections->updateAlbumStateCollection($albumId, $userId, "review", "+");
+
+			$activities->insertActivity($userId, "review-album", $albumId);
 		}
 	}
 
