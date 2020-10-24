@@ -298,11 +298,12 @@ class Collection extends Model
 	/*                     add the album to the collections                       */
 	/* -------------------------------------------------------------------------- */
 
-	public function addAlbumCollection($collectionIds = false, $albumId = false, $userCollections = false)
+	public function addAlbumCollection($collectionIds = false, $albumId = false, $userCollections = false, $userId = false)
 	{
 		# If this function is called without values for albumId, throws a error page back.
     if(($collectionIds === false) || ($collectionIds === NULL) || 
     ($albumId === false) || ($albumId === NULL) || !is_numeric($albumId) || 
+    ($userId === false) || ($userId === NULL) || !is_numeric($userId) || 
     ($userCollections === false) || ($userCollections === NULL))
 		{
 			throw new \CodeIgniter\Exceptions\PageNotFoundException();
@@ -317,11 +318,18 @@ class Collection extends Model
 
     if(!empty($collectionIds))
     {
+      $activities = new Activity();
+      
       foreach($collectionIds as $collectionId)
       {
         $collectionalbum->insertAlbumCollection($collectionId, $albumId);
+
+        $activities->insertActivity($userId, "add-collection", $albumId, false, $collectionId);
       }
     }
+
+
+
   }
   
 
@@ -399,6 +407,9 @@ class Collection extends Model
 
       $userCollection = $this->asArray()->select('id')->where(['userId' => $userId, 'baseid' => 2])->first();
       $collectionalbum->insertAlbumCollection($userCollection["id"], $albumId);
+
+      $activities = new Activity();
+      $activities->insertActivity($userId, "want-collection", $albumId, false, $userCollection["id"]);
     }
     elseif($state == "waiting") # add to only waiting collection
     {
@@ -411,6 +422,9 @@ class Collection extends Model
 
       $userCollection = $this->asArray()->select('id')->where(['userId' => $userId, 'baseid' => 3])->first();
       $collectionalbum->insertAlbumCollection($userCollection["id"], $albumId);
+
+      $activities = new Activity();
+      $activities->insertActivity($userId, "wait-collection", $albumId, false, $userCollection["id"]);
     }
     elseif($state == "completed") # add to only completed collection
     {
@@ -423,6 +437,9 @@ class Collection extends Model
 
       $userCollection = $this->asArray()->select('id')->where(['userId' => $userId, 'baseid' => 4])->first();
       $collectionalbum->insertAlbumCollection($userCollection["id"], $albumId);
+
+      $activities = new Activity();
+      $activities->insertActivity($userId, "complete-collection", $albumId, false, $userCollection["id"]);
     }
     elseif($state == "dumped") # add to only dumped collection
     {
@@ -435,6 +452,9 @@ class Collection extends Model
 
       $userCollection = $this->asArray()->select('id')->where(['userId' => $userId, 'baseid' => 5])->first();
       $collectionalbum->insertAlbumCollection($userCollection["id"], $albumId);
+
+      $activities = new Activity();
+      $activities->insertActivity($userId, "dump-collection", $albumId, false, $userCollection["id"]);
     }
 
 

@@ -243,7 +243,7 @@ class DataManipulation extends BaseController
       
       $collections = new Collection();
       $userCollections = $collections->getCollectionByUser($userAccount["id"]);
-      $collections->addAlbumCollection($collectionIds, $albumId, $userCollections);
+      $collections->addAlbumCollection($collectionIds, $albumId, $userCollections, $userAccount["id"]);
               
 
       return redirect()->to(base_url('search/showalbum/'.$albumId));      

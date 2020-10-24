@@ -139,6 +139,76 @@ class Activity extends Model
 			];
 			$this->insert($data);
     }
+    elseif($type == "add-collection")
+    {
+      $dateNow = date("Y-m-d");
+
+      $data = [
+				'userId' => $userId,
+				'number' => $lastActivity + 1,
+				'descri' => "Adicionou o álbum " . $albumName . " à coleção " . $collectionName,
+				'hide' => $hide,
+        'occurredDate' => $dateNow,
+        'collectionReference' => $collectionId
+			];
+			$this->insert($data);
+    }
+    elseif($type == "want-collection")
+    {
+      $dateNow = date("Y-m-d");
+
+      $data = [
+				'userId' => $userId,
+				'number' => $lastActivity + 1,
+				'descri' => "Pretende escutar o álbum " . $albumName,
+				'hide' => $hide,
+        'occurredDate' => $dateNow,
+        'collectionReference' => $collectionId
+			];
+			$this->insert($data);
+    }
+    elseif($type == "complete-collection")
+    {
+      $dateNow = date("Y-m-d");
+
+      $data = [
+				'userId' => $userId,
+				'number' => $lastActivity + 1,
+				'descri' => "Completou o álbum " . $albumName,
+				'hide' => $hide,
+        'occurredDate' => $dateNow,
+        'collectionReference' => $collectionId
+			];
+			$this->insert($data);
+    }
+    elseif($type == "dump-collection")
+    {
+      $dateNow = date("Y-m-d");
+
+      $data = [
+				'userId' => $userId,
+				'number' => $lastActivity + 1,
+				'descri' => "Abandonou o álbum " . $albumName,
+				'hide' => $hide,
+        'occurredDate' => $dateNow,
+        'collectionReference' => $collectionId
+			];
+			$this->insert($data);
+    }
+    elseif($type == "wait-collection")
+    {
+      $dateNow = date("Y-m-d");
+
+      $data = [
+				'userId' => $userId,
+				'number' => $lastActivity + 1,
+				'descri' => "Esperando lançar o álbum " . $albumName,
+				'hide' => $hide,
+        'occurredDate' => $dateNow,
+        'collectionReference' => $collectionId
+			];
+			$this->insert($data);
+    }
 
 
     # Check if user has more than 100 activities. If it has, delete the oldest one. 
