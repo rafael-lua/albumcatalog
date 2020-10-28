@@ -31,7 +31,7 @@ class Database extends \CodeIgniter\Database\Config
 	 */
 	public $default = [
 		'DSN'      => '',
-		'hostname' => 'localhost',
+		'hostname' => 'db',
 		'username' => 'studentweb',
 		'password' => 'studentweb',
 		'database' => 'catalogo',
