@@ -221,6 +221,8 @@ function addCollectionModal()
 <?php endif; ?>
 
 
+
+
 <?php
 /* -------------------------------------------------------------------------- */
 /*                               Show album page                              */
@@ -231,21 +233,23 @@ function addCollectionModal()
 ?>
 
 
+
+
 <section class="section" id="albumSection">
-	<div class="columns is-centered is-vcentered mx-5">
+	<div class="columns is-centered  mx-5">
 
 		<div class="column is-half">
 			
 			<p class="is-italic is-size-1 has-text-weight-bold has-text-black-ter" style="line-height: 0.5em;">
 				<i class="fas fa-star is-size-1" style="color: #ffcc00;"></i>
 				<?php echo esc($albumData["album"]["rating"]); ?>
+				<span class="is-size-6 mx-3 has-text-info">#1 MELHORES DO ANO</span>
 			</p>				
 			
 			<hr style="width: 75%;" class="has-background-grey-lighter">
 		
-			<h1 class="title is-1 has-text-weight-bold">
+			<h1 class="title is-3 has-text-weight-bold">
 				<?php echo esc($albumData["album"]["name"]);?>
-				<span class="has-text-grey-light is-italic is-size-6"><?php echo "(id: ".esc($albumId).")"; ?></span>
 			</h1>
 
 			<p class="is-size-5 has-text-weight-bold mt-1 is-italic">Artista(s)</p>
@@ -270,14 +274,14 @@ function addCollectionModal()
 				?>
 			</p>	
 								
-			<p class="is-size-5 has-text-weight-bold mt-2 is-italic">Ano</p>
+			<p class="is-size-6 has-text-weight-bold mt-2 is-italic">Ano</p>
 			<p class="is-size-6">
 				<?php					
 					echo esc($albumData["album"]["year"]);	
 				?>
 			</p>
 		
-			<p class="is-size-5 has-text-weight-bold mt-2 is-italic">Estúdio(s)</p>
+			<p class="is-size-6 has-text-weight-bold mt-2 is-italic">Estúdio(s)</p>
 			<p class="is-size-6">
 			<?php 					
 					$studiosName = "";
@@ -299,9 +303,9 @@ function addCollectionModal()
 				?>
 			</p>
 
-			<p class="is-size-5 has-text-weight-bold mt-2 is-italic">Gênero(s)</p>
+			<p class="is-size-6 has-text-weight-bold mt-2 is-italic">Gênero(s)</p>
 			<p class="is-size-6">
-				<nav class="breadcrumb has-bullet-separator" aria-label="breadcrumbs">
+				<nav class="breadcrumb has-bullet-separator mb-1" aria-label="breadcrumbs">
 					<ul>
 						<?php foreach($albumData["genre"] as $genre) : ?>
 							<li><a href="#"><?php echo esc($genre["name"]);?></a></li>
@@ -310,10 +314,44 @@ function addCollectionModal()
 				</nav>
 			</p>
 
+			<p class="is-size-6 has-text-weight-bold mt-2 is-italic">Duração Total</p>
+			<p class="is-size-6">
+				00:00:00
+			</p>
+
+			<p class="is-size-6 has-text-weight-bold mt-2 is-italic">Número De Faixas</p>
+			<p class="is-size-6">
+				5
+			</p>
+
+			<p class="is-size-6 has-text-weight-bold mt-2 is-italic">Melhores De Todos Os Tempos</p>
+			<p class="is-size-6">
+				#50
+			</p>
+
+			<p class="is-size-6 has-text-weight-bold mt-2 is-italic">Melhores Do Ano</p>
+			<p class="is-size-6">
+				#1
+			</p>
+
+			<p class="is-size-6 has-text-weight-bold mt-2 is-italic">Mais Populares</p>
+			<p class="is-size-6">
+				#3
+			</p>
+
 		</div>
 
 		<div class="column is-half">
+			
+			<figure class="image px-6 py-6">
+				<img src="http://localhost:5000/img/coverexample.png">
+			</figure>
+			
 			<div class="box">
+				<div class="container has-text-centered">
+					<p class="is-size-5 has-text-weight-bold">LISTA DE MÚSICAS</p>
+				</div>
+					
 				<table class="table is-striped is-hoverable is-fullwidth">
 
 					<thead>
