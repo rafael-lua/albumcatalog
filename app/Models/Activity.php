@@ -25,12 +25,16 @@ class Activity extends Model
   
   public function getUserActivity($userId = false)
   {
-    # If this function is called without values for albumId, throws a error page back.
+    # If this function is called without values for userId, throws a error page back.
 		if(($userId === false) || ($userId === NULL) || !is_numeric($userId))
 		{
 			throw new \CodeIgniter\Exceptions\PageNotFoundException();
     }
     
+    return $this->asArray()->select('number, occurredDate, descri, hide')
+                        ->where('userId', $userId)
+                        ->orderBy('number', 'DESC')
+                        ->findAll();
 
   }
 

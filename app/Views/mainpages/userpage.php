@@ -1,5 +1,11 @@
 <script>
 
+function activityModal() 
+{
+  let element = document.getElementById("activity-modal");
+  element.classList.toggle("is-active");
+}
+
 function collectionModal() 
 {
   let element = document.getElementById("collection_modal");
@@ -111,7 +117,7 @@ function collectionEditModal(collection_id, collection_title, collection_genres)
     <div class="box">
       <div class="is-flex is-justify-content-space-between is-align-content-center">
         <div class="block mb-1 mx-1"><strong>ÚTLTIMAS ATIVIDADES</strong></div>
-        <button class="button is-small is-link mx-1">Listar Todas</button>
+        <button onclick="activityModal();" class="button is-small is-link mx-1" <?php if(empty($userActivities)){echo esc("disabled");} ?>>Listar Todas</button>
       </div>
       <table class="table is-striped is-hoverable is-fullwidth">
 
@@ -119,16 +125,20 @@ function collectionEditModal(collection_id, collection_title, collection_genres)
           <tr>
             <th style="width:15%"></th>
             <th></th>
+            <th style="width:5%"></th>
           </tr>
         </thead>
 
         <tbody>
-          <?php for($i = 1; $i <= 5; $i++) : ?>
-            <tr>
-              <th>07/09/0709</th>
-              <td><small>Activity description goes here</small></td>
-            </tr>
-          <?php endfor; ?>
+          <?php $count = 1; foreach($userActivities as $activity) : ?>
+            <?php if(($activity["hide"] != 1) && ($count <= 5)) : ?>
+              <tr>
+                <th><small><em><?php echo esc($activity["occurredDate"]); ?></em></small></th>
+                <td><?php echo esc($activity["descri"]); ?></td>
+                <td>#<?php echo esc($activity["number"]); ?></td>
+              </tr>
+            <?php $count++; endif; ?>
+          <?php endforeach; ?>
         </tbody>
       
       </table>
@@ -137,6 +147,51 @@ function collectionEditModal(collection_id, collection_title, collection_genres)
   </div>
 
 </div>
+
+
+<?php if(!empty($userActivities)) : ?>
+  <div class="modal" id="activity-modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title has-text-weight-bold is-size-5">ATIVIDADES <small>(Últimas 100)</small></p>
+        <button class="delete" aria-label="close" onclick="activityModal();"></button>
+      </header>
+      
+      <section class="modal-card-body">
+        <table class="table is-striped is-hoverable is-fullwidth">
+
+          <thead>
+            <tr>
+              <th style="width:15%">Data</th>
+              <th>Atividade</th>
+              <th style="width:5%">ID</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <?php foreach($userActivities as $activity) : ?>
+              <?php if($activity["hide"] != 1) : ?>
+                <tr>
+                  <th class="is-size-7 pt-3"><em><?php echo esc($activity["occurredDate"]); ?></em></th>
+                  <td><?php echo esc($activity["descri"]); ?></td>
+                  <td>#<?php echo esc($activity["number"]); ?></td>
+                </tr>
+              <?php endif; ?>
+            <?php endforeach; ?>
+          </tbody>
+
+        </table>        
+      </section>
+
+      <footer class="modal-card-foot">
+        
+      </footer>
+      
+    </div>
+  </div>
+<?php endif; ?>
+
 
 <hr>
 

@@ -1,11 +1,10 @@
 <?php namespace App\Controllers;
 
-
-
 use App\Models\User;
 use App\Models\Review;
 use App\Models\Ranking;
 use App\Models\Collection;
+use App\Models\Activity;
 use App\Models\Search;
 
 class Accounts extends BaseController
@@ -93,8 +92,10 @@ class Accounts extends BaseController
 			$rankings = new Ranking();
 			$albums = new Search();
 			$collections = new Collection();
+			$activities = new Activity();
 
 			$data["userCollections"] = $collections->getCollectionByUser($data["userAccount"]["id"]);
+			$data["userActivities"] = $activities->getUserActivity($data["userAccount"]["id"]);
 			
 			$data["lastReview"]	= $reviews->getUserAlbumReviewRecent($data["userAccount"]["id"]);		
 			$data["lastReview"]["album"] = $albums->getAlbumName($data["lastReview"]["albumId"]);
