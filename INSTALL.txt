@@ -64,7 +64,17 @@
 
 
 
+----- || Remoção do Docker || -----
 
+
+
+	Não sendo mais necessário:
+
+	Um simples ctrl+c no terminal ou encerramento do Docker deverá parar os todos containers. 
+	A desinstalação do Docker Desktop irá remover todas	as imagens e containers existentes automaticamente.
+	Para o Linux, siga as instruções de acordo com a distro relevante, como por exemplo Ubuntu:
+	https://docs.docker.com/engine/install/ubuntu/#uninstall-docker-engine
+	Imagens e containers não são automaticamente removidos, por isso é necessário um passo extra como descrito.
 	
 	
 		
