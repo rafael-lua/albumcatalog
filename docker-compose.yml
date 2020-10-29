@@ -7,7 +7,7 @@ services:
     restart: always
     command: --default-authentication-plugin=mysql_native_password
     environment:
-      MYSQL_ROOT_PASSWORD: rafael79   # Sets the root's password
+      MYSQL_ROOT_PASSWORD: catalogo   # Sets the root's password
       MYSQL_DATABASE: catalogo        # Creates a initial database
       MYSQL_USER: studentweb          # Will create this user and grant master access to the created database
       MYSQL_PASSWORD: studentweb      # User's password

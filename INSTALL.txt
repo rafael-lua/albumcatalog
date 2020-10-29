@@ -1,0 +1,70 @@
+
+----- || PROJETO DE CATÁLOGO PARA ÁLBUNS MUSICAIS || -----
+
+
+
+	Por Rafael de Oliveira (github.com/rafael-lua)
+	Website usando PHP com CodeIgniter4, MySQL, Bulma.io e Docker
+	# 2020
+
+
+
+----- || Instruções de Implementação || -----
+
+
+
+	O website foi migrado para um ambiente de desenvolvimento Docker. 
+	Docker é uma tecnologia de conteinerização, estabelecendo um ambiente que é completamente 
+	independente do sistema operacional. Entre seus maiores benefícios está garantir que um projeto 
+	funcione em qualquer sistema, em qualquer máquina, sem que seja necessário nenhuma adaptação ou 
+	preparação com dependências e configurações. É diferente de máquina virtual, pois não cria outros sistemas 
+	operacionais, Docker usa do próprio sistema operacional do usuário e cria containers independentes. 
+	É fácil de instalar, é extremamente leve e facilita todo processo de deploy e desenvolvimento.
+
+	# Requerimentos #
+
+	Docker - https://docs.docker.com/engine/install/	(Para Linux, Windows e MacOS)
+	
+	# Instruções #
+
+	Para rodar o website é muito simples. Uma vez que o Docker esteja instalado, abra um terminal (Eu usei Cmder 
+	no windows) e navegue até a pasta raiz do projeto (catalogo) onde o arquivo docker-compose se encontra:
+
+		catalogo:
+			app/
+			public/
+			INSTALL.TXT
+			docker-compose.yml
+			...
+	
+	Estando dentro desse diretório, basta executar o comando: docker-compose up
+
+	O Docker irá fazer tudo, desde puxar/baixar as imagens necessárias, montar as imagens e os containers,
+	configurar e executar. A primeira vez pode levar um pouco mais de tempo principalmente para inicializar 
+	o banco de dados. Terminado todos os processos (O banco de dados reportará no terminal algo similar a: database 
+	system is ready to accept connections), o website está pronto para ser acessado.
+
+
+
+----- || Instruções de Acesso || -----
+
+
+
+	Banco de dados:
+		Exposto em 				= localhost:9090
+		Acesso mestre 		=	root / catalogo	(System: MySQL; Server: db; Database: Pode deixar vazio;)
+		O banco já vem com a base de dados catalogo, mas vazio. Selecione o catalogo, clique em Import e 
+		selecione o arquivo catalogo.sql de teste provido junto ao catalogo e execute a importação.
+
+	Website:
+		Exposto em 				= localhost:5000
+		Nesse ponto tudo já deve estar funcionando e acessível. NOTA: O Docker Desktop (Wiundows/MacOS) pode causar
+		um custo de performance aos acessos e coleta de dados ao banco, porém essa perda em performance não deve 
+		acontecer em ambientes linux, que são os ambientes que serão usados em produção.
+
+
+
+
+	
+	
+		
