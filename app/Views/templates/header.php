@@ -9,7 +9,7 @@
 	<!-- Para referência ao css, usar o link-tag: https://codeigniter.com/user_guide/helpers/html_helper.html -->
 	<!-- <?php echo link_tag('css/style.css'); ?> -->
 	
-	<script src="js/scripts.js"></script>
+	<script src="http://localhost:5000/js/scripts.js"></script>
 
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
 	<script src="https://kit.fontawesome.com/14e494ac10.js" crossorigin="anonymous"></script>	 
