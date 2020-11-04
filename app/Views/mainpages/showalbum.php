@@ -238,6 +238,39 @@ function addCollectionModal()
 <section class="section" id="albumSection">
 	<div class="columns is-centered  mx-5">
 
+	<div class="column is-half">
+			
+			<figure class="image px-6 py-6">
+				<img src="http://localhost:5000/img/coverexample.png">
+			</figure>
+			
+			<div class="box">
+				<div class="container has-text-centered">
+					<p class="is-size-5 has-text-weight-bold">LISTA DE MÚSICAS</p>
+				</div>
+					
+				<table class="table is-striped is-hoverable is-fullwidth">
+
+					<thead>
+						<tr>
+							<th>Faixa</th>
+							<th style="width:15%">Duração</th>
+						</tr>
+					</thead>
+
+					<tbody>
+						<?php foreach($albumData["music"] as $music) : ?>
+							<tr>
+								<th><?php echo esc($music["name"]); ?></th>
+								<td><?php echo esc($music["duration"]); ?></td>
+							</tr>
+						<?php endforeach; ?>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+
 		<div class="column is-half">
 			
 			<p class="is-italic is-size-1 has-text-weight-bold has-text-black-ter" style="line-height: 0.5em;">
@@ -341,37 +374,7 @@ function addCollectionModal()
 
 		</div>
 
-		<div class="column is-half">
-			
-			<figure class="image px-6 py-6">
-				<img src="http://localhost:5000/img/coverexample.png">
-			</figure>
-			
-			<div class="box">
-				<div class="container has-text-centered">
-					<p class="is-size-5 has-text-weight-bold">LISTA DE MÚSICAS</p>
-				</div>
-					
-				<table class="table is-striped is-hoverable is-fullwidth">
-
-					<thead>
-						<tr>
-							<th>Faixa</th>
-							<th style="width:15%">Duração</th>
-						</tr>
-					</thead>
-
-					<tbody>
-						<?php foreach($albumData["music"] as $music) : ?>
-							<tr>
-								<th><?php echo esc($music["name"]); ?></th>
-								<td><?php echo esc($music["duration"]); ?></td>
-							</tr>
-						<?php endforeach; ?>
-					</tbody>
-				</table>
-			</div>
-		</div>
+		
 		
 	</div>
 </section>
