@@ -164,22 +164,22 @@ function selectRatingFilterValue(a)
 				<!-- Left column -->
         <nav class="panel is-info">
 
-					<p class="panel-heading">Filters</p>
+					<p class="panel-heading">Filtros</p>
 
 					<!-- <form id="main_search_form"> -->
 
 						<div class="panel-block">
 							<div class="field is-grouped" style="margin: auto;">
 								<div class="control">
-									<button type="submit" class="button is-link is-outlined is-rounded">Apply</button>
+									<button type="submit" class="button is-link is-outlined is-rounded">Aplicar</button>
 								</div>
 								<div class="control">
-									<button type="submit" form="clean_search_reset" class="button is-danger is-outlined is-rounded" <?php if(!isset($currentSearch)){echo esc("disabled");} ?>>Reset</button>
+									<button type="submit" form="clean_search_reset" class="button is-danger is-outlined is-rounded" <?php if(!isset($currentSearch)){echo esc("disabled");} ?>>Resetar</button>
 								</div>
 							</div>						
 						</div>
 
-						<p class="panel-block"><strong>Rating</strong></p>
+						<p class="panel-block"><strong>Nota</strong></p>
 						<div class="panel-block">
 							<div class="dropdown mx-1" id="ratingFilterToggle"> <!-- "is-active" toggle -->
 								<div class="dropdown-trigger">
@@ -263,7 +263,7 @@ function selectRatingFilterValue(a)
 							Estúdios
 						</label>
 
-						<p class="panel-block"><strong>Genre</strong></p>
+						<p class="panel-block"><strong>Gênero</strong></p>
 						<label class="panel-block">
 							<input type="checkbox" name="genreFilter[]" value="rock" <?php if(isset($filterValues["checkedGenre"]) && in_array("rock", $filterValues["checkedGenre"])){echo esc("checked");} ?>>
 							Rock
@@ -393,13 +393,13 @@ function selectRatingFilterValue(a)
 										<li id="order-rating">
 											<button name="rating_sort" value="<?php if(isset($orderValues["ratingNext"])){echo esc($orderValues["ratingNext"]);}else{echo esc("ratingDesc");} ?>" type="submit" form="main_search_form" class="button is-<?php if(isset($orderValues["ratingColor"])){echo esc($orderValues["ratingColor"]);}else{echo esc("info");} ?> is-light is-small mx-1">
 												<i class="fas <?php if(isset($orderValues["ratingSortIcon"])){echo esc($orderValues["ratingSortIcon"]);}else{echo esc("fa-sort-down");} ?> fa-lg mr-1" style="color: hsl(141, 71%, 48%); display: <?php if(isset($orderValues["ratingDisplayIcon"])){echo esc($orderValues["ratingDisplayIcon"]);}else{echo esc("none");} ?>;"></i>
-												<small><strong>Rating</strong></small>
+												<small><strong>Nota</strong></small>
 											</button>
 										</li>
 										<li id="order-year">
 											<button name="year_sort" value="<?php if(isset($orderValues["yearNext"])){echo esc($orderValues["yearNext"]);}else{echo esc("yearDesc");} ?>" type="submit" form="main_search_form" class="button is-<?php if(isset($orderValues["yearColor"])){echo esc($orderValues["yearColor"]);}else{echo esc("info");} ?> is-light is-small mx-1">
 												<i class="fas <?php if(isset($orderValues["yearSortIcon"])){echo esc($orderValues["yearSortIcon"]);}else{echo esc("fa-sort-down");} ?> fa-lg mr-1" style="color: hsl(141, 71%, 48%); display: <?php if(isset($orderValues["yearDisplayIcon"])){echo esc($orderValues["yearDisplayIcon"]);}else{echo esc("none");} ?>;"></i>
-												<small><strong>Year</strong></small>
+												<small><strong>Ano</strong></small>
 											</button>
 										</li>
 									</ul>

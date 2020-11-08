@@ -98,10 +98,13 @@ class Ranking extends Model
 		$rating_exist = $this->select('userId')->where(['userId' => $userId, 'albumId' => $albumId])->countAllResults();
 		if($rating_exist <= 0)
 		{
+			$dateNow = date("Y-m-d");
+
 			$data = [
 				'userId' => $userId,
 				'albumId' => $albumId,
-				'note' => $note
+				'note' => $note,
+				'rankingDate' => $dateNow
 			];
 			$this->insert($data);
 
@@ -120,7 +123,9 @@ class Ranking extends Model
 		}
 		else
 		{
-			$this->where(['userId' => $userId, 'albumId' => $albumId])->set(['note' => $note])->update();
+			$dateNow = date("Y-m-d");
+
+			$this->where(['userId' => $userId, 'albumId' => $albumId])->set(['note' => $note, 'rankingDate' => $dateNow])->update();
 
 			$collections = new Collection();
 			$collections->updateAlbumStateCollection($albumId, $userId, "ranking", "+");

@@ -92,14 +92,13 @@ function collectionEditModal(collection_id, collection_title, collection_genres)
             <i class="fas fa-user fa-4x"></i>
           </div>
           <div class="media-content">
-            <p class="title is-4"><strong>Nome do usuário</strong></p>
+            <p class="title is-4"><strong>Rafael Oliveira</strong></p>
             <p class="subtitle is-6 has-text-info"><em>@<?php echo esc($userAccount["username"]); ?></em></p>
           </div>
         </div>
 
         <div class="content">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque aliquam mi lorem, nec lacinia 
-          nisi accumsan nec. Praesent cursus orci varius pellentesque dapibus.
+          Eu sou aficcionado por músicas de todos os gêneros. 
           <hr>
           <a><i class="fab fa-itunes-note fa-lg mr-1"></i>
           <i class="fab fa-twitter fa-lg mr-1"></i>

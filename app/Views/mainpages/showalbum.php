@@ -236,13 +236,18 @@ function addCollectionModal()
 
 
 <section class="section" id="albumSection">
+	
+	<div class="is-mobile" style="min-width: 200px; max-width: 300px; margin: auto;">
+		<figure class="image mb-5">
+			<img src="http://localhost:5000/img/gorillaz.jpg" style="margin: auto;">
+		</figure>
+	</div>
+
 	<div class="columns is-centered  mx-5">
 
-	<div class="column is-half">
+		<div class="column is-half">
 			
-			<figure class="image px-6 py-6">
-				<img src="http://localhost:5000/img/coverexample.png">
-			</figure>
+			
 			
 			<div class="box">
 				<div class="container has-text-centered">
@@ -349,12 +354,12 @@ function addCollectionModal()
 
 			<p class="is-size-6 has-text-weight-bold mt-2 is-italic">Duração Total</p>
 			<p class="is-size-6">
-				00:00:00
+				00:50:43
 			</p>
 
 			<p class="is-size-6 has-text-weight-bold mt-2 is-italic">Número De Faixas</p>
 			<p class="is-size-6">
-				5
+				15
 			</p>
 
 			<p class="is-size-6 has-text-weight-bold mt-2 is-italic">Melhores De Todos Os Tempos</p>
@@ -382,7 +387,7 @@ function addCollectionModal()
 
 
 
-<hr>
+<hr class="my-1">
 
 
 
