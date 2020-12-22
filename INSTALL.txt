@@ -54,7 +54,7 @@
 		Exposto em 				= localhost:9090
 		Acesso mestre 		=	root / catalogo	(System: MySQL; Server: db; Database: Pode deixar vazio;)
 		O banco já vem com a base de dados catalogo, mas vazio. Selecione o catalogo, clique em Import e 
-		selecione o arquivo catalogo.sql de teste provido junto ao catalogo e execute a importação.
+		selecione o arquivo catalogo.sql de teste provido junto ao projeto (pasta tests) e execute a importação.
 
 	Website:
 		Exposto em 				= localhost:5000
